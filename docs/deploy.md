@@ -42,6 +42,31 @@ every push to `master`:
 A pull request never deploys. Its run still uploads the built site as the
 `github-pages` artifact, which you can download from the run to inspect.
 
+## Relationship to layer5io/docs workflows
+
+The site borrows workflow patterns from `layer5io/docs`, but only where they
+match Blowhorn's build and hosting model. The comparison for issue #425 made
+these decisions:
+
+- Keep `site.yml` as the only production build and deployment workflow.
+  Layer5's `hugo.yaml` is not copied: `site.yml` already uses the repository's
+  pinned Go, Node.js and Hugo toolchain, runs the repository checks, uploads a
+  Pages artifact and deploys it from `master` with GitHub's Pages actions.
+- Keep the existing `label-commenter.yml`, `labeler.yml` and `slack.yml`
+  workflows instead of adding copies from Layer5.
+- Do not port `cloud-release-docs.yml`,
+  `meshery-extension-release-docs.yml`, `discussion-data-files-update.yml`,
+  `feature-list.yml`, `generate-keys.yml` or `generate-pricing-list.yml`.
+  They dispatch Meshery and Kanvas release notes, fetch Meshery discussion
+  data or generate Meshery documentation from Google Sheets, and have no
+  Blowhorn equivalent.
+- Adapt the Copilot pull-request handler to Blowhorn separately, with its
+  repository and bot checks retained and its actions pinned.
+- Treat the Layer5 pull-request preview workflows as a pattern, not a direct
+  port. They publish to a `gh-pages` branch, while this repository publishes
+  Pages from a workflow artifact. Preview publication therefore waits for a
+  maintainer-selected host; the production deployment model stays unchanged.
+
 ### Verify a deployment
 
 ```bash
