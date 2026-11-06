@@ -1,0 +1,56 @@
+name: Copilot PR Handler
+
+# Copilot coding agent opens draft pull requests whose workflows can wait for
+# approval. This privileged workflow runs only trusted code from master: it
+# never checks out or executes the pull request head.
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to process
+        required: true
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: copilot-pr-handler-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  handle:
+    name: Mark ready and approve workflows
+    if: >-
+      github.repository == 'blowhorn-ai/blowhorn-site' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event.pull_request.user.login == 'copilot-swe-agent[bot]'
+      )
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      # pull_request_target is privileged. Pin the checkout to the trusted base
+      # branch explicitly; never replace this with the pull request head.
+      - name: Check out trusted handler
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+          persist-credentials: false
+
+      - name: Handle Copilot pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
+        run: make copilot-pr-handle PR_NUMBER="$PR_NUMBER"

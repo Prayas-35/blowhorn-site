@@ -1,0 +1,76 @@
+"""Tests for the Copilot pull-request handler."""
+
+import os
+import sys
+import unittest
+from unittest import mock
+
+sys.path.insert(0, os.path.dirname(__file__))
+import copilot_pr_handler as handler  # noqa: E402
+
+
+class HandlerTest(unittest.TestCase):
+    def test_marks_draft_ready_and_approves_only_matching_sha(self):
+        calls = []
+
+        def request(method, path, body=None):
+            calls.append((method, path, body))
+            if path.endswith("/pulls/42"):
+                return {
+                    "draft": True,
+                    "node_id": "PR_node",
+                    "head": {"sha": "abc123"},
+                }
+            if path == "/graphql":
+                return {"data": {"markPullRequestReadyForReview": {}}}
+            if "/actions/runs?" in path:
+                return {
+                    "workflow_runs": [
+                        {"id": 10, "head_sha": "abc123"},
+                        {"id": 11, "head_sha": "different"},
+                    ]
+                }
+            if path.endswith("/actions/runs/10/approve"):
+                return {}
+            self.fail(f"unexpected request: {method} {path}")
+
+        marked_ready, approved = handler.handle_pull_request(
+            42, handler.EXPECTED_REPOSITORY, request
+        )
+
+        self.assertTrue(marked_ready)
+        self.assertEqual([10], approved)
+        self.assertTrue(any(path == "/graphql" for _, path, _ in calls))
+        self.assertFalse(any("/runs/11/approve" in path for _, path, _ in calls))
+
+    def test_ready_pr_skips_graphql_and_handles_no_pending_runs(self):
+        def request(method, path, body=None):
+            if path.endswith("/pulls/7"):
+                return {"draft": False, "head": {"sha": "def456"}}
+            if "/actions/runs?" in path:
+                return {"workflow_runs": []}
+            self.fail(f"unexpected request: {method} {path}")
+
+        marked_ready, approved = handler.handle_pull_request(
+            7, handler.EXPECTED_REPOSITORY, request
+        )
+
+        self.assertFalse(marked_ready)
+        self.assertEqual([], approved)
+
+    def test_rejects_another_repository_before_api_access(self):
+        request = mock.Mock()
+        with self.assertRaisesRegex(RuntimeError, "unexpected repository"):
+            handler.handle_pull_request(1, "someone/fork", request)
+        request.assert_not_called()
+
+    def test_missing_head_sha_fails_closed(self):
+        def request(method, path, body=None):
+            return {"draft": True, "node_id": "PR_node", "head": {}}
+
+        with self.assertRaisesRegex(RuntimeError, "no head SHA"):
+            handler.handle_pull_request(9, handler.EXPECTED_REPOSITORY, request)
+
+
+if __name__ == "__main__":
+    unittest.main()

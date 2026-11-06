@@ -60,12 +60,31 @@ these decisions:
   They dispatch Meshery and Kanvas release notes, fetch Meshery discussion
   data or generate Meshery documentation from Google Sheets, and have no
   Blowhorn equivalent.
-- Adapt the Copilot pull-request handler to Blowhorn separately, with its
-  repository and bot checks retained and its actions pinned.
+- `copilot-pr-handler.yml` adapts Layer5's Copilot pull-request handler with a
+  Blowhorn repository guard, the `copilot-swe-agent[bot]` author check and
+  pinned actions.
 - Treat the Layer5 pull-request preview workflows as a pattern, not a direct
   port. They publish to a `gh-pages` branch, while this repository publishes
   Pages from a workflow artifact. Preview publication therefore waits for a
   maintainer-selected host; the production deployment model stays unchanged.
+
+### Copilot pull-request handler
+
+[`copilot-pr-handler.yml`](../.github/workflows/copilot-pr-handler.yml) runs
+when `copilot-swe-agent[bot]` opens, updates or reopens a pull request against
+`master`. It marks a draft ready for review, then approves any workflow runs
+waiting for approval at that pull request's exact head SHA. A maintainer can
+also run it manually with a pull request number.
+
+The handler needs `actions: write` to approve runs, `pull-requests: write` to
+mark a draft ready and `contents: read` to check out its helper. It uses the
+run's `GITHUB_TOKEN`; this repository does not need a separate access-token
+secret. Because `pull_request_target` is privileged, its checkout is pinned to
+`master`, credentials are not persisted, and it never checks out or executes
+the pull request head. Repository logic lives in
+`.github/scripts/copilot_pr_handler.py`, runs through
+`make copilot-pr-handle PR_NUMBER=<number>` and is covered by
+`make test-scripts`.
 
 ### Verify a deployment
 

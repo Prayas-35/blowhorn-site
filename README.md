@@ -92,6 +92,7 @@ Every CI step that runs repository logic is a make target, and the workflow call
 | `docs-sync-merge` | merge the sync pull request once its site checks pass, then start the `master` site run that deploys ([docs/deploy.md](docs/deploy.md#product-docs-sync)) | `sync-docs.yml` |
 | `site-internal-poll` | decide whether to redeploy internal.blowhorn.ai: always on push or manual run; on schedule, only when blowhorn `master` changed a path the internal build mounts in the last 2 hours ([docs/deploy.md](docs/deploy.md#shipping-an-update)) | `internal-site-auto.yml` |
 | `product-ci SUITE=python\|desktop` | run the private product repo's CI on a checkout of it, printing only step results and pass/fail counts (output stays in a private log; public logs never show product code) | `product-ci.yml` |
+| `copilot-pr-handle PR_NUMBER=...` | mark a Copilot coding agent draft PR ready and approve pending workflow runs for its current head; requires `GH_TOKEN` and `GITHUB_REPOSITORY` | `copilot-pr-handler.yml` |
 
 Each check target builds for production first, so it also runs on its own. `labeler.yml`, `label-commenter.yml` and `slack.yml` only call third-party actions and run no repository logic, so they have no target.
 
@@ -116,6 +117,7 @@ The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-ful
 | [`sync-docs.yml`](.github/workflows/sync-docs.yml) | Manual, or `repository_dispatch` (`sync-docs`) from product CI | Checks out the product docs at the requested ref, opens or updates the `docs-sync` pull request (`docs: sync from <ref>`), starts the site checks on it itself (`gh workflow run site.yml`), merges it once those checks pass, and starts the `master` run that deploys. |
 | [`internal-site.yml`](.github/workflows/internal-site.yml) | Manual (`make site-internal-deploy`), `repository_dispatch` (`deploy-internal-site`) from the product repo, or called by `internal-site-auto.yml` | Builds the internal site from a read-only checkout of the product repo and deploys it to internal.blowhorn.ai behind Cloudflare Access ([docs/deploy.md](docs/deploy.md#internal-site-hosting-internalblowhornai-cloudflare-access)). |
 | [`internal-site-auto.yml`](.github/workflows/internal-site-auto.yml) | Pushes to `master` on the internal build's paths, every 15 minutes, manual runs | Calls `internal-site.yml` on a site-side push, or when its poll finds a product-repo change under the internal mounts. |
+| [`copilot-pr-handler.yml`](.github/workflows/copilot-pr-handler.yml) | Copilot coding agent PRs opened, updated or reopened; manual runs | Marks a Copilot draft ready for review and approves pending workflow runs for its current head. It runs trusted `master` code under `pull_request_target`, never the PR head. |
 
 <div>&nbsp;</div>
 
