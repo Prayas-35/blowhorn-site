@@ -100,7 +100,12 @@ def validate(root, run, pr, repository):
     for path in public.rglob("*"):
         if path.is_symlink() or path.name.lower() == ".git" or not (path.is_file() or path.is_dir()):
             raise ValueError("unsafe file in preview artifact")
-    current = pr.get("state") == "open" and pr.get("head", {}).get("sha") == meta["sha"]
+    # Full HTML/JS shares the production origin. Do not automatically publish
+    # arbitrary fork content; use an in-repository branch after maintainer review.
+    trusted_head = (run.get("head_repository", {}).get("full_name") == repository
+                    and pr.get("head", {}).get("repo", {}).get("full_name") == repository)
+    current = (trusted_head and pr.get("state") == "open"
+               and pr.get("head", {}).get("sha") == meta["sha"])
     return {"action": meta["action"], "pr_number": meta["number"], "sha": meta["sha"],
             "deploy": str(current).lower()}
 
@@ -109,7 +114,8 @@ def expired_previews(previews, limit):
     if limit < 1:
         raise ValueError("preview retention must be positive")
     valid = [(timestamp, name) for timestamp, name in previews if PR_DIRECTORY.fullmatch(name)]
-    return [name for _, name in sorted(valid, reverse=True)[limit:]]
+    newest = sorted(valid, key=lambda item: (item[0], int(item[1][3:])), reverse=True)
+    return [name for _, name in newest[limit:]]
 
 
 def output(values):

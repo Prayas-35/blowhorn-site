@@ -30,9 +30,9 @@ class PreviewTests(unittest.TestCase):
         for name, value in {"action": "synchronize", "number": "42", "sha": self.sha}.items():
             (self.root / "pr" / name).write_text(value + "\n")
         self.run = {"event": "pull_request", "path": ".github/workflows/build-site-preview.yml",
-                    "head_sha": self.sha, "repository": {"full_name": "blowhorn-ai/blowhorn-site"},
+                    "head_sha": self.sha, "head_repository": {"full_name": "blowhorn-ai/blowhorn-site"}, "repository": {"full_name": "blowhorn-ai/blowhorn-site"},
                     "pull_requests": [{"number": 42}]}
-        self.pr = {"number": 42, "state": "open", "head": {"sha": self.sha},
+        self.pr = {"number": 42, "state": "open", "head": {"sha": self.sha, "repo": {"full_name": "blowhorn-ai/blowhorn-site"}},
                    "base": {"ref": "master", "repo": {"full_name": "blowhorn-ai/blowhorn-site"}}}
 
     def validate(self):
@@ -70,6 +70,13 @@ class PreviewTests(unittest.TestCase):
         self.pr["state"] = "open"
         self.pr["head"]["sha"] = "b" * 40
         self.assertEqual(self.validate()["deploy"], "false")
+
+    def test_foreign_head_repository_cannot_publish_on_production_origin(self):
+        for target in (self.run["head_repository"], self.pr["head"]["repo"]):
+            target["full_name"] = "fork/blowhorn-site"
+            self.run["pull_requests"] = []
+            self.assertEqual(self.validate()["deploy"], "false")
+            target["full_name"] = "blowhorn-ai/blowhorn-site"
 
     def test_wrong_target_branch_is_rejected(self):
         self.pr["base"]["ref"] = "other"
@@ -130,6 +137,9 @@ class PreviewTests(unittest.TestCase):
         previews = [(n, f"pr-{n}") for n in range(1, 9)]
         self.assertEqual(self.preview.expired_previews(previews, 6), ["pr-2", "pr-1"])
         self.assertEqual(self.preview.expired_previews(previews[:6], 6), [])
+
+    def test_retention_timestamp_ties_prefer_higher_pr_number(self):
+        self.assertEqual(self.preview.expired_previews([(1, "pr-9"), (1, "pr-10")], 1), ["pr-9"])
 
     def test_retention_ignores_non_pr_directories(self):
         previews = [(1, "pr-1"), (2, "pr-2"), (3, "not-a-pr"), (4, "pr-../escape")]

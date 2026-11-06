@@ -42,6 +42,8 @@ every push to `master`:
    `keep_files: true` preserves `pr-preview/` when production is updated.
    Like layer5io/docs, this also retains deleted production files; removing
    an obsolete published file requires deliberate cleanup on `gh-pages`.
+   If production publishing loses a concurrent `gh-pages` push, rerun `Site`
+   on `master`; unlike retention, the production publisher does not retry.
 
 ### Pull request deployment previews
 
@@ -64,8 +66,11 @@ The preview flow mirrors [layer5io/docs](https://github.com/layer5io/docs):
    runs through `workflow_run` on trusted default-branch code. It validates
    the artifact metadata against the originating run and live PR before
    deploying, skips closed or superseded heads, and never executes artifact
-   code. Fork builds receive no write token; only the post-build workflow
-   can write `gh-pages` and PR comments.
+   code. Only in-repository PR branches deploy automatically. Fork builds
+   receive no write token or live preview: arbitrary fork HTML/JS must not
+   run on the production origin. A maintainer can review the change and
+   bring it to an in-repository branch. Only the post-build workflow can
+   write `gh-pages` and PR comments.
 4. `rossjrw/pr-preview-action` publishes `public/` under `pr-preview/pr-N/`
    on `gh-pages`. A sticky PR comment links to
    `https://blowhorn.ai/pr-preview/pr-N/` and identifies the commit. The
