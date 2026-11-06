@@ -114,7 +114,7 @@ BIN_DIR ?= .bin
 # actionlint from PATH when installed; otherwise a pinned copy is downloaded into $(BIN_DIR).
 ACTIONLINT ?= $(shell command -v actionlint 2>/dev/null)
 # Workflows owned by this repo. Template workflows (labeler and friends) are left as-is.
-WORKFLOWS ?= .github/workflows/site.yml .github/workflows/publish-dmg.yml .github/workflows/sync-docs.yml .github/workflows/cloud-auth-smoke.yml .github/workflows/product-ci.yml .github/workflows/internal-site.yml .github/workflows/internal-site-auto.yml .github/workflows/publish-blowhorn-axi.yml
+WORKFLOWS ?= .github/workflows/site.yml .github/workflows/build-site-preview.yml .github/workflows/deploy-site-preview.yml .github/workflows/publish-dmg.yml .github/workflows/sync-docs.yml .github/workflows/cloud-auth-smoke.yml .github/workflows/product-ci.yml .github/workflows/internal-site.yml .github/workflows/internal-site-auto.yml .github/workflows/publish-blowhorn-axi.yml
 # A blowhorn checkout for `make docs-sync` (the sync-docs.yml
 # workflow checks the product repo out at this path).
 SOURCE_DIR ?= product
@@ -180,6 +180,18 @@ build: check-go check-deps
 ## Build the site for a deploy preview.
 build-preview: check-go check-deps
 	npm run build:preview
+
+## Save the originating pull request action, number and head SHA for the preview artifact.
+site-preview-metadata:
+	python3 .github/scripts/site_preview.py save
+
+## Validate the downloaded preview against its workflow run and the current open PR.
+site-preview-validate:
+	python3 .github/scripts/site_preview.py validate
+
+## Keep the six most recently updated previews on gh-pages; retry concurrent pushes.
+site-preview-prune:
+	python3 .github/scripts/site_preview.py prune
 
 ## Build blowhorn.ai for production with optional base URL (what CI deploys).
 site-build: check-go check-deps
@@ -525,6 +537,9 @@ clean:
 	setup \
 	build \
 	build-preview \
+	site-preview-metadata \
+	site-preview-validate \
+	site-preview-prune \
 	build-production \
 	site-build \
 	site \

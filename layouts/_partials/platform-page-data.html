@@ -29,7 +29,7 @@
 {{- $rec := false -}}
 {{- range $data.pages }}{{ if eq .platform $id }}{{ $rec = . }}{{ end }}{{ end -}}
 {{- if not $rec }}{{ errorf "platform-page: no record for platform %q in data/platform_pages.json" $id }}{{ end -}}
-{{- if ne $page.RelPermalink ($rec.route | relURL) }}{{ errorf "platform-page: %s is served at %q but its record says route %q" $page.File.Path $page.RelPermalink $rec.route }}{{ end -}}
+{{- if ne $page.RelPermalink ($rec.route | strings.TrimPrefix "/" | relURL) }}{{ errorf "platform-page: %s is served at %q but its record says route %q" $page.File.Path $page.RelPermalink $rec.route }}{{ end -}}
 
 {{- $row := false -}}
 {{- range hugo.Data.integrations.platforms }}{{ if eq .id $id }}{{ $row = . }}{{ end }}{{ end -}}
