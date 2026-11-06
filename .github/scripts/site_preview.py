@@ -102,8 +102,8 @@ def validate(root, run, pr, repository):
             raise ValueError("unsafe file in preview artifact")
     # Full HTML/JS shares the production origin. Do not automatically publish
     # arbitrary fork content; use an in-repository branch after maintainer review.
-    trusted_head = (run.get("head_repository", {}).get("full_name") == repository
-                    and pr.get("head", {}).get("repo", {}).get("full_name") == repository)
+    trusted_head = ((run.get("head_repository") or {}).get("full_name") == repository
+                    and (pr.get("head", {}).get("repo") or {}).get("full_name") == repository)
     current = (trusted_head and pr.get("state") == "open"
                and pr.get("head", {}).get("sha") == meta["sha"])
     return {"action": meta["action"], "pr_number": meta["number"], "sha": meta["sha"],

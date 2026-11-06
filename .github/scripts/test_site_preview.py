@@ -78,6 +78,13 @@ class PreviewTests(unittest.TestCase):
             self.assertEqual(self.validate()["deploy"], "false")
             target["full_name"] = "blowhorn-ai/blowhorn-site"
 
+    def test_deleted_head_repository_is_skipped_without_a_traceback(self):
+        self.run["head_repository"] = None
+        self.assertEqual(self.validate()["deploy"], "false")
+        self.run["head_repository"] = {"full_name": "blowhorn-ai/blowhorn-site"}
+        self.pr["head"]["repo"] = None
+        self.assertEqual(self.validate()["deploy"], "false")
+
     def test_wrong_target_branch_is_rejected(self):
         self.pr["base"]["ref"] = "other"
         with self.assertRaises(ValueError):
