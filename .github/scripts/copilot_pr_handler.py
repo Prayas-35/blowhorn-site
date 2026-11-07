@@ -12,6 +12,7 @@ import urllib.request
 
 EXPECTED_REPOSITORY = "blowhorn-ai/blowhorn-site"
 API_ROOT = "https://api.github.com"
+RUNS_PAGE_SIZE = 100
 
 
 def api_request(method: str, path: str, body: dict | None = None) -> dict:
@@ -64,7 +65,7 @@ def handle_pull_request(
         node_id = pr.get("node_id")
         if not node_id:
             raise RuntimeError(f"pull request #{pr_number} has no GraphQL node ID")
-        request(
+        result = request(
             "POST",
             "/graphql",
             {
@@ -80,15 +81,36 @@ def handle_pull_request(
                 "variables": {"pullRequestId": node_id},
             },
         )
+        try:
+            is_draft = result["data"]["markPullRequestReadyForReview"][
+                "pullRequest"
+            ]["isDraft"]
+        except (KeyError, TypeError):
+            is_draft = None
+        if is_draft is not False:
+            raise RuntimeError(
+                f"ready-for-review mutation did not confirm PR #{pr_number} is ready"
+            )
         marked_ready = True
 
-    query = urllib.parse.urlencode({"status": "action_required", "per_page": 100})
-    runs = request("GET", f"/repos/{owner}/{repo}/actions/runs?{query}")
-    pending = [
-        run
-        for run in runs.get("workflow_runs", [])
-        if run.get("head_sha") == head_sha
-    ]
+    pending = []
+    page = 1
+    while True:
+        query = urllib.parse.urlencode(
+            {
+                "status": "action_required",
+                "per_page": RUNS_PAGE_SIZE,
+                "page": page,
+            }
+        )
+        runs = request("GET", f"/repos/{owner}/{repo}/actions/runs?{query}")
+        page_runs = runs.get("workflow_runs")
+        if not isinstance(page_runs, list):
+            raise RuntimeError("workflow-runs response has no run list")
+        pending.extend(run for run in page_runs if run.get("head_sha") == head_sha)
+        if len(page_runs) < RUNS_PAGE_SIZE:
+            break
+        page += 1
 
     approved = []
     for run in pending:

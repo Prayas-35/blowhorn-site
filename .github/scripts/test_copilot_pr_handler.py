@@ -3,6 +3,7 @@
 import os
 import sys
 import unittest
+import urllib.parse
 from unittest import mock
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -22,7 +23,13 @@ class HandlerTest(unittest.TestCase):
                     "head": {"sha": "abc123"},
                 }
             if path == "/graphql":
-                return {"data": {"markPullRequestReadyForReview": {}}}
+                return {
+                    "data": {
+                        "markPullRequestReadyForReview": {
+                            "pullRequest": {"isDraft": False}
+                        }
+                    }
+                }
             if "/actions/runs?" in path:
                 return {
                     "workflow_runs": [
@@ -57,6 +64,72 @@ class HandlerTest(unittest.TestCase):
 
         self.assertFalse(marked_ready)
         self.assertEqual([], approved)
+
+    def test_paginates_pending_runs_and_approves_a_second_page_match(self):
+        run_pages = []
+
+        def request(method, path, body=None):
+            if path.endswith("/pulls/12"):
+                return {"draft": False, "head": {"sha": "page-two-sha"}}
+            if "/actions/runs?" in path:
+                query = urllib.parse.parse_qs(urllib.parse.urlsplit(path).query)
+                page = int(query["page"][0])
+                run_pages.append(page)
+                if page == 1:
+                    return {
+                        "workflow_runs": [
+                            {"id": run_id, "head_sha": "another-sha"}
+                            for run_id in range(handler.RUNS_PAGE_SIZE)
+                        ]
+                    }
+                if page == 2:
+                    return {
+                        "workflow_runs": [{"id": 200, "head_sha": "page-two-sha"}]
+                    }
+            if path.endswith("/actions/runs/200/approve"):
+                return {}
+            self.fail(f"unexpected request: {method} {path}")
+
+        marked_ready, approved = handler.handle_pull_request(
+            12, handler.EXPECTED_REPOSITORY, request
+        )
+
+        self.assertFalse(marked_ready)
+        self.assertEqual([200], approved)
+        self.assertEqual([1, 2], run_pages)
+
+    def test_ready_mutation_must_confirm_draft_is_false(self):
+        for result in (
+            {
+                "data": {
+                    "markPullRequestReadyForReview": {
+                        "pullRequest": {"isDraft": True}
+                    }
+                }
+            },
+            {"data": {"markPullRequestReadyForReview": {}}},
+            {
+                "data": {
+                    "markPullRequestReadyForReview": {"pullRequest": None}
+                }
+            },
+        ):
+            with self.subTest(result=result):
+                def request(method, path, body=None):
+                    if path.endswith("/pulls/13"):
+                        return {
+                            "draft": True,
+                            "node_id": "PR_node",
+                            "head": {"sha": "abc123"},
+                        }
+                    if path == "/graphql":
+                        return result
+                    self.fail(f"unexpected request: {method} {path}")
+
+                with self.assertRaisesRegex(RuntimeError, "did not confirm"):
+                    handler.handle_pull_request(
+                        13, handler.EXPECTED_REPOSITORY, request
+                    )
 
     def test_rejects_another_repository_before_api_access(self):
         request = mock.Mock()
