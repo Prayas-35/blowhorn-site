@@ -1,0 +1,312 @@
+{
+  "$schema": "../schemas/platform_page.schema.json",
+  "contract": {
+    "reviewerNote": {
+      "mark": "Reviewer note",
+      "text": "Preview: not final, and not linked from the site."
+    },
+    "continuity": {
+      "heading": "One place for every activity",
+      "intro": "Start in the app, then follow it there with everything else: once or recurring, past and upcoming.",
+      "caption": "Illustration of the Activities model: the platform and the type are filters on one list.",
+      "filters": {
+        "title": "Filters",
+        "applied": "Applied",
+        "time": "Time",
+        "past": "Past",
+        "upcoming": "Upcoming",
+        "recurrence": "Recurrence",
+        "any": "Any",
+        "platform": "Platform",
+        "type": "Activity type"
+      },
+      "columns": {
+        "when": "When",
+        "activity": "Activity",
+        "recurrence": "Recurrence",
+        "status": "Status"
+      },
+      "now": "Now",
+      "rows": [
+        {
+          "when": "Last week",
+          "time": "past",
+          "recurrence": "Once",
+          "status": "Sent"
+        },
+        {
+          "when": "Yesterday",
+          "time": "past",
+          "recurrence": "Weekly",
+          "status": "Sent"
+        },
+        {
+          "when": "Tomorrow",
+          "time": "upcoming",
+          "recurrence": "Weekly",
+          "status": "Scheduled"
+        },
+        {
+          "when": "Next week",
+          "time": "upcoming",
+          "recurrence": "Once",
+          "status": "Scheduled"
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "platform": "x",
+      "route": "/preview/platforms/x/",
+      "head": {
+        "eyebrow": "X / Activities",
+        "headline": "Make your next move on X.",
+        "lede": "Publish a post, join a conversation or amplify an idea, from your own browser, as you.",
+        "description": "Post, respond or amplify on X from your own browser with Blowhorn. A preview of the X platform page."
+      },
+      "start": {
+        "label": "Get the browser extension"
+      },
+      "activities": [
+        {
+          "id": "post",
+          "action": "post",
+          "label": "Post",
+          "intent": "Share an update in your voice."
+        },
+        {
+          "id": "respond",
+          "action": "reply",
+          "label": "Respond",
+          "intent": "Add something useful to a conversation."
+        },
+        {
+          "id": "amplify",
+          "action": "amplify",
+          "label": "Amplify",
+          "intent": "Pass along a post you believe in."
+        }
+      ],
+      "local": {
+        "heading": "Only on your computer",
+        "intro": "Your login stays home.",
+        "choose": "Choose a scene",
+        "replay": "Replay",
+        "reach": "Reach",
+        "boundary": {
+          "text": "The extension acts as you, in your own signed-in browser: the tabs you have open, on the sites Blowhorn acts on, with the sessions you made by hand.",
+          "quote": "the tabs you have open, on the sites Blowhorn acts on, with the sessions you made by hand",
+          "source": "/docs/explanation/your-own-chrome/"
+        },
+        "diagram": {
+          "computer": "This computer",
+          "extension": "Blowhorn extension",
+          "sessions": "Your signed-in sessions",
+          "profiles": [
+            "Profile 1",
+            "Profile 2",
+            "Profile 3",
+            "Profile 4"
+          ],
+          "out": "On X"
+        },
+        "crew": [
+          {
+            "src": "assets/brand/cast/icons/recruit-chick-laptop-lap.webp"
+          },
+          {
+            "src": "assets/brand/cast/icons/trench-trooper.webp"
+          },
+          {
+            "src": "assets/brand/cast/icons/mouse-marine.webp"
+          }
+        ],
+        "scenes": [
+          {
+            "id": "amplify",
+            "action": "amplify",
+            "join": "description",
+            "label": "Amplify",
+            "title": "Amplify as every you",
+            "lede": "One post, and each of your profiles acts on it in its own signed-in session.",
+            "out": "A retweet or a quote",
+            "beats": [],
+            "sourced": {
+              "text": "Add your words and it goes out as a quote; leave them empty and it is a retweet.",
+              "quote": "X | post URL | your words | quote",
+              "source": "/docs/how-to/publish/amplify-a-post/"
+            },
+            "link": {
+              "label": "Amplify an existing post",
+              "href": "/docs/how-to/publish/amplify-a-post/"
+            }
+          },
+          {
+            "id": "follow",
+            "action": "follow",
+            "join": "limits",
+            "label": "Follow",
+            "title": "Follow with a local memory",
+            "lede": "Every follow is written to a log on this computer, one log for each profile.",
+            "out": "A follow, logged here",
+            "beats": [
+              "Name a target account, or pick its followers."
+            ],
+            "link": {
+              "label": "The X limits, in the docs",
+              "href": "/docs/reference/platforms/x/"
+            }
+          },
+          {
+            "id": "dry-fire",
+            "action": null,
+            "label": "Dry fire (desktop)",
+            "title": "Dry fire before deploy",
+            "lede": "Rehearse an order in the Blowhorn desktop app before it goes out. Nothing is posted.",
+            "out": "Stops before composing",
+            "relay": "Desktop app",
+            "beats": [
+              "Each platform is walked in turn. Nothing was posted."
+            ],
+            "sourced": {
+              "text": "Today, the desktop app opens the profile's browser, checks the sign-in and stops before composing.",
+              "quote": "checks the sign-in and stops before composing",
+              "source": "/docs/reference/use-the-desktop-app/"
+            },
+            "planned": {
+              "mark": "Extension flow planned",
+              "text": "Planned, not shipped yet: the same kind of dry run from the browser extension itself."
+            },
+            "link": {
+              "label": "Dry fire in the desktop app",
+              "href": "/docs/reference/use-the-desktop-app/"
+            }
+          }
+        ]
+      },
+      "matrix": {
+        "heading": "Everything Blowhorn does on X",
+        "intro": "The same list the X docs show.",
+        "columns": {
+          "action": "Action",
+          "does": "What it does",
+          "limits": "Limits and notes",
+          "cli": "In the CLI"
+        },
+        "none": "None listed"
+      },
+      "roe": {
+        "heading": "Rules of engagement",
+        "intro": "One choice sets your pace and daily caps on X.",
+        "defaultMark": "Default",
+        "unit": "posts a day on X",
+        "presets": [
+          {
+            "label": "Safety on",
+            "means": "slow and careful",
+            "stat": "12",
+            "quote": "on X it is 12 posts a day",
+            "source": "/docs/how-to/settings/choose-your-rules-of-engagement/#safety-on-cautious-one-thing-at-a-time-nights-off"
+          },
+          {
+            "label": "Weapons tight",
+            "means": "normal pace, within the platform's own limits",
+            "stat": "25",
+            "default": true,
+            "quote": "on X it is 25 posts a day",
+            "source": "/docs/how-to/settings/choose-your-rules-of-engagement/#weapons-tight-standard-half-the-ceiling-with-the-guardrails-on"
+          },
+          {
+            "label": "Weapons free",
+            "means": "fast, and more noticeable to the platform",
+            "stat": "50",
+            "quote": "on X it is 50 posts a day",
+            "source": "/docs/how-to/settings/choose-your-rules-of-engagement/#weapons-free-brisk-fast-while-you-watch"
+          }
+        ],
+        "notes": [
+          {
+            "text": "Nothing goes past a limit X publishes.",
+            "quote": "Where a platform publishes its own limit for an account, nothing in Blowhorn goes past it",
+            "source": "/docs/how-to/settings/choose-your-rules-of-engagement/#a-limit-the-platform-publishes-is-the-one-hard-stop"
+          },
+          {
+            "text": "A new profile or computer runs Safety on for its first 14 days.",
+            "quote": "A new profile or computer still runs under Safety on for its first 14 days.",
+            "source": "/docs/how-to/settings/choose-your-rules-of-engagement/#which-choice-wins"
+          }
+        ],
+        "link": {
+          "label": "Choose your rules of engagement",
+          "href": "/docs/how-to/settings/choose-your-rules-of-engagement/"
+        }
+      },
+      "fieldManual": {
+        "heading": "From the Field Manual",
+        "intro": "What X's own ranking code rewards, with a source for every claim.",
+        "label": "Field Manual",
+        "facts": [
+          {
+            "title": "Replies outrank likes",
+            "text": "In X's 2023 published weights, a reply the author engages with scored 75. A like scored 0.5.",
+            "quote": "In the 2023 weights, a predicted reply scored 13.5, a reply the author then engages with scored 75, opening the conversation and replying or liking scored 11, and a like scored 0.5",
+            "source": "/field-manual/x/#what-xs-ranking-rewards"
+          },
+          {
+            "title": "Your posts compete with each other",
+            "text": "Each post after your first is scored down, to a floor.",
+            "quote": "Each post after an author's first is multiplied by a decaying factor, down to a floor",
+            "source": "/field-manual/x/#what-sinks-a-post-on-x"
+          }
+        ],
+        "link": {
+          "label": "Read the X field manual",
+          "href": "/field-manual/x/"
+        }
+      },
+      "usage": {
+        "heading": "Run it from your tools",
+        "intro": "Real setups from the docs. Copy one.",
+        "items": [
+          {
+            "id": "mcp",
+            "label": "MCP",
+            "title": "Connect an assistant",
+            "file": "MCP entry",
+            "lang": "json",
+            "code": "{\n  \"mcpServers\": {\n    \"blowhorn\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"blowhorn-mcp\"]\n    }\n  }\n}",
+            "source": "/docs/how-to/set-up/connect-mcp-client/#start-it-with-npx",
+            "sourceLabel": "Connect an AI assistant over MCP"
+          },
+          {
+            "id": "cli",
+            "label": "CLI",
+            "title": "See your rules on X",
+            "file": "terminal",
+            "lang": "bash",
+            "code": "blowhorn risk show --profile personal --platform x --json",
+            "source": "/docs/reference/cli/risk/#blowhorn-risk-show",
+            "sourceLabel": "blowhorn risk reference"
+          },
+          {
+            "id": "skill",
+            "label": "Agent skill",
+            "title": "Teach an agent once",
+            "file": ".claude/skills/blowhorn/SKILL.md",
+            "lang": "markdown",
+            "code": "---\nname: blowhorn\ndescription: Schedule, queue and amplify social posts with the blowhorn CLI\n---\n\nRead before you write:\n- blowhorn schedule list --json\n- blowhorn content list --pending --json\n- blowhorn schedule status --json\n\nWrite with the fingerprint you just read:\n- blowhorn content upsert --payload '<json>' --row N --expected-fingerprint <fp> --json\n\nPreview anything that publishes with --dry-run first.\nIf anything looks wrong: blowhorn schedule pause --all --reason \"<why>\"",
+            "source": "/agents/claude-code/",
+            "sourceLabel": "Blowhorn for Claude Code"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Every action on every platform",
+          "href": "/integrations/actions/"
+        }
+      ]
+    }
+  ]
+}

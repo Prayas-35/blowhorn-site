@@ -544,8 +544,14 @@ own-window` (`side-tab`, or `default` to clear it); see
 
 If Blowhorn's Chrome work lives on its own macOS desktop instead of beside
 your tabs, setup finds or makes that desktop for you, so you never have to
-open Mission Control and create one yourself. Setup runs only when you
-start it, never during a run, and it works in this order:
+open Mission Control and create one yourself. Start it on a Mac from
+Settings, in the Blowhorn's desktop card: **Set up Blowhorn's desktop**. The
+card shows where the desktop stands, in plain words, once setup has run. The
+same setup from a terminal is `blowhorn chrome spaces-setup` (`--create ask`,
+`guided` or `never`, `--no-reuse` to make a new desktop, `--json` for the
+result the app stores). Off macOS the card says this is a Mac feature and
+offers no button. Setup runs only when you start it, never during a run, and
+it works in this order:
 
 1. **Reuse.** If a second desktop or display already exists, setup
    offers it. This is a read-only check and asks nothing of you.
@@ -565,9 +571,11 @@ start it, never during a run, and it works in this order:
 You can also set setup to guided-only (never touch Accessibility) or to
 never (never create, never open Mission Control). If the desktop is
 later deleted, runs never recreate it: they fall back to beside and
-post one notification whose button re-runs setup. Where setup's choice
-lives is per computer, not per account: a desktop belongs to the
-computer it was made on, so it is recorded there and never synced.
+say setup is needed again. Setup's result is recorded on this computer
+in `chrome-spaces-status.json`, under the app's data folder, and never
+synced: a desktop belongs to the computer it was made on. A notification
+whose click re-runs setup is planned for the run path; until a run reports a
+missing desktop, Settings is where setup runs again.
 
 Automatic creation needs one Accessibility grant, which System Settings
 lists as Blowhorn (Privacy & Security, Accessibility). Blowhorn asks for
@@ -744,30 +752,56 @@ account in your Blowhorn account.
 
 ```bash
 blowhorn chrome create-profile
+blowhorn chrome create-profile --sign-in linkedin
 blowhorn chrome create-profile --json
+blowhorn chrome create-profile --profile-directory 'Blowhorn 2'
 ```
 
 Gives Blowhorn a Google Chrome profile of its own, for a Chrome that has
-only its main profile. It asks Google Chrome to open a new window in the
-profile directory `Blowhorn`, with the same handoff as `open-profile`
+only its main profile. It asks Google Chrome to open a new window in a
+Blowhorn profile directory, with the same handoff as `open-profile`
 (`open -na "Google Chrome" --args --profile-directory=Blowhorn
---new-window chrome://newtab/` on macOS). Chrome makes that profile the
+--new-window chrome://newtab/` on macOS). With no directory it opens the
+first unused Blowhorn directory in `Local State`: `Blowhorn`, else
+`Blowhorn 2`, `Blowhorn 3`, and so on. A directory outside that family
+is refused and nothing opens, so the command never touches a profile of
+yours. Chrome makes that profile the
 first time and opens the same one every time after, so running it again
-makes no second profile. That held in a live check on Google Chrome 156,
+for the same directory makes no second profile. That held in a live check
+on Google Chrome 156,
 both with Chrome already running and with Chrome quit. Chrome gives the
 new profile a default name, `Person 1` in that check (the number can
 differ on your computer), and the desktop shows the profile as
-**Blowhorn's profile**. It maps nothing, reads no store and drives
+**Blowhorn's profile** (numbered past the first). It maps nothing, reads
+no store and drives
 nothing in the window: you sign in there to the sites Blowhorn should
 use, then `blowhorn chrome discover` (the desktop's **Discover**)
 finds the profile and its accounts. Setup's **Set up Blowhorn's
-profile** runs it.
+profile** runs it, and setup offers it both when Chrome has only its main
+profile and when it has several profiles already. Profiles' **Add a Google
+Chrome profile** runs it too, with an optional label that becomes the new
+card's Blowhorn profile name when you turn that card on. The label lives
+in the app only: Chrome's own files are never written.
 
-With `--json` it prints `ok`, `dry_run`, `directory` (`Blowhorn`),
+After the window opens, it reads `Local State` back until a short bounded
+wait (10 seconds) runs out, so the answer says whether Chrome listed the
+profile (`confirmed`): a missing directory after the wait is a named
+failure, not a silent spinner, though the window was opened. A `Local State`
+it cannot read at all - corrupt or unreadable - ends the wait at once
+instead of paying it out; a file that is only missing so far keeps waiting,
+the same as a readable file that does not list the profile yet. With
+`--sign-in <platform>` the window opens on that platform's sign-in page
+instead of a new tab, so setup can guide the sign-in in that window, one
+platform at a time, without a mapping: the profile is not mapped yet at
+that point.
+
+With `--json` it prints `ok`, `dry_run`, `directory` (the directory
+opened),
 `already_listed` (whether `Local State` listed the directory before this
-run; `null` when that file could not be read), `url`, `opened`, and
-`detail`, which says why the window did not open. Nothing after the open
-is read back, so it never claims Chrome made the profile. No Google
+run; `null` when that file could not be read), `confirmed` (whether
+`Local State` listed it after the open), `platform` (the `--sign-in`
+platform, or `null`), `url`, `opened`, and `detail`, which says why the
+window did not open, or why the profile was not confirmed. No Google
 Chrome is refused before anything opens, and a window Chrome could not be
 asked to open exits 1.
 
@@ -793,6 +827,13 @@ It reads only this allowlist, and nothing else in Chrome's directory:
   Reddit and Slack only whether a session cookie is **present** -
   never its value, and never the encrypted value of anything. Hacker
   News's session cookie is not read at all.
+- Each profile's `Cookies`, for the same session cookies: the
+  `expires_utc` **timestamp** of the session cookie, reported per
+  platform as `session_expires_at` (ISO-8601 UTC, `null` when the
+  cookie is a session cookie with no expiry, or when the platform has
+  no session cookie in the allowlist - Bluesky and Hacker News).
+  The timestamp is metadata, never a cookie value: GitHub's expiry
+  comes from `user_session`, not from `dotcom_user`.
 
 No history, no LevelDB, no other profile file. A database Chrome has
 locked or that does not parse reads as "not found", never as an error.
@@ -806,7 +847,13 @@ only), `several` (with the candidates), `none` (with the refusal's
 sentence) or `no-email` - plus `proposed_slug` and `slug_state` (`free`,
 `own`, `taken`, `invalid`) for the profile a confirm would create.
 Discovery writes nothing to Chrome, and the social links it shows are
-never treated as permission to post.
+never treated as permission to post. The discovery card reads
+`session_expires_at` for each signed-in platform: a session whose
+expiry is ahead reads "Signed in as `<identifier>`", and a session that
+is expired, expiring within 7 days, or whose expiry could not be read
+reads "Session found, may be expired." The expiry is not yet stored
+in your Blowhorn account: persisting it on the session account is a
+follow-up that needs its storage change approved first.
 
 For LinkedIn, X and Reddit the account is the browser sign-in, so
 discovery records it in your Blowhorn account. For each Chrome profile
@@ -906,6 +953,40 @@ code is 0 when at least one assignment landed, 1 when none did, and 3
 on a store outage. A profile recorded not in use has `mapped` null.
 `--dry-run` runs every check and writes nothing. No pairing page is
 opened; pairing happens on the first run or through `blowhorn chrome map`.
+
+## `blowhorn chrome remember`
+
+```bash
+cat choices.json | blowhorn chrome remember --payload-stdin [--dry-run] --json
+```
+
+Remembers the confirm screen's choices as they stand, before Confirm -
+what setup sends each time you flip a switch there, and what Profiles
+sends when you change an account there. The document is read from stdin
+(`--payload-stdin` is required) and has the same shape as confirm's, with
+only the choices in it:
+
+```json
+{"assignments": [{"directory": "Profile 2", "profile": "ada", "in_use": true,
+  "platforms": {"linkedin": {"attach": true}, "x": {"attach": false}}}]}
+```
+
+Per assignment: the Blowhorn profile the card is for (`profile`, the
+proposed slug when the profile does not exist yet), whether the Chrome
+profile is in use (`in_use`, omitted means in use), and each account the
+card shows a switch for (`platforms`, `attach: false` records that
+account not in use, `true` clears a recorded refusal for it). A platform
+left out is left as it was recorded. Nothing is created, mapped or
+written to your Blowhorn account: this only records what the screen
+shows, in `.blowhorn.chrome-not-in-use.json` beside the config file, so
+the next `chrome discover` starts a turned-off account off and an
+account it has never seen on, and the choice survives an app restart.
+It never touches `defaults.exclude`: adding or removing a name there is
+Confirm's, when the choice is confirmed. No store is read, so it works
+before sign-in. Each assignment answers for itself in `results`, so a
+partial remember is a successful remember: the exit code is 0 when at
+least one assignment landed and 1 when none did. `--dry-run` runs every
+check and writes nothing.
 
 ## One run per profile and platform
 

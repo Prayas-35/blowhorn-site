@@ -1,13 +1,15 @@
 {{- /* The site header: lockup, primary navigation and the Download button.
   Five groups open a panel under the bar (Product, Solutions, Compare, Resources,
-  Trust); Am I a Bot? (the free Blowhorn Tells check, with a Free pill),
-  and Pricing are plain links. Below 1080px a Menu button opens the
-  same groups as a sheet, and Download leaves the bar to close the sheet as its
-  last item. Behaviour in assets/js/nav.js: click, Enter or Space
-  opens a group, Escape closes it, a mouse can also hover. Without the script,
-  hover and keyboard focus still open each panel, and on small screens the
-  groups are listed open. Off the home page the section links lead back to the
-  home page's sections. */ -}}
+  Trust); Pricing is a plain link. The free Am I a Bot? check lives in the
+  yellow announcement bar (with its Free pill) and in the Resources menu.
+  The Product panel's Browser extension card shows the Google Chrome logo
+  (assets/platforms/google-chrome-logo.svg), same asset as /download/.
+  Below 1080px a Menu button opens the same groups as a sheet, and Download
+  leaves the bar to close the sheet as its last item. Behaviour in
+  assets/js/nav.js: click, Enter or Space opens a group, Escape closes it,
+  a mouse can also hover. Without the script, hover and keyboard focus still
+  open each panel, and on small screens the groups are listed open. Off the
+  home page the section links lead back to the home page's sections. */ -}}
 {{- $home := cond .IsHome "" ("" | relURL) -}}
 {{- $useCases := site.Data.use_cases.use_cases -}}
 {{- $solutions := site.Data.solutions.solutions -}}
@@ -48,7 +50,10 @@
                       <span class="mm-card-arrow" aria-hidden="true"></span>
                     </a></li>
                     <li><a class="mm-card card-stamp" href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">
-                      {{ partial "interface-art.html" "extension" }}
+                      <span class="mm-card-art">
+                        {{ partial "interface-art.html" "extension" }}
+                        <img class="mm-card-chrome" src="{{ "assets/platforms/google-chrome-logo.svg" | relURL }}" alt="" width="28" height="28">
+                      </span>
                       <span class="mm-card-title">Browser extension</span>
                       <span class="mm-card-desc">Blowhorn inside your own browser, where the work happens</span>
                       <span class="mm-card-arrow" aria-hidden="true"></span>
@@ -185,7 +190,6 @@
                 </ul>
               </div>
             </li>
-            <li class="mm-item"><a class="mm-top mm-top-tells" href="{{ $tellsURL }}"><span class="mm-top-label">{{ $tells.nav.label }} <span class="mm-pill">{{ $tells.nav.pill }}</span></span></a></li>
             <li class="mm-item"><a class="mm-top" href="{{ "pricing/" | relURL }}">Pricing</a></li>
             <li class="mm-item mm-item-download"><a class="button button-primary mm-download" href="{{ "download/" | relURL }}">Download</a></li>
           </ul>

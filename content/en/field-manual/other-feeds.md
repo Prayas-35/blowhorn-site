@@ -10,6 +10,13 @@ layout: field-manual
 weight: 60
 checked: 28 October 2026
 lastmod: 2026-10-28
+
+plate:
+  file: fm-other-feeds-open.webp
+  alt: "Open Field Manual with a woodcut of distant signal fires on night hills"
+  caption: "Education only: Blowhorn does not post to these feeds."
+  w: 1280
+  h: 720
 ---
 
 ## YouTube

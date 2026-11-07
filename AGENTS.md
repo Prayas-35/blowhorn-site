@@ -14,14 +14,15 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 ## Website, documentation, and feature updates
 
-- Website and documentation updates: make them to the best of your ability, push when ready, and merge the PR when ready.
-- New or augmented features: update their associated tests, update internal and external documentation, then run the changes through No Mistakes at a maximum of three turns.
+- Website and documentation updates: make them to the best of your ability, run `make check`, push, open the PR and merge it when ready. Never run them through No Mistakes (Lee, 6 Nov 2026).
+- Code that is not the website (the `signup-worker/` and `internal-worker/` Workers, `.github/scripts/`, workflows, the Makefile): update its tests and its internal and external documentation, then run the change through No Mistakes at a maximum of three turns.
 
 ## Building the site locally
 
 blowhorn.ai is Hugo with Docsy as a Hugo module, built like layer5io/docs. Run
 `make setup` once (npm install) for the pinned toolchain (the dependency check
-also accepts system `hugo` and `postcss`), then `make site`
+also accepts system `hugo` and `postcss`), install PyYAML for the script tests (README),
+then `make site`
 (live reload, http://localhost:1313) or `make site-build` (writes `public/`).
 `make check` is exactly what CI runs. Go must be on PATH: Hugo fetches Docsy through it.
 
@@ -47,10 +48,14 @@ Examples live in `data/action_examples.json` ([docs/action-examples.md](docs/act
 Platform docs pages render actions through `{{< supported-actions "id" >}}` (`layouts/_partials/supported-actions.html`); `make check-platform-docs` fails a missing page, a skipped table, or a hand-written action list.
 The central action matrix (`/integrations/actions/`, `layouts/action-matrix.html`) and the docs all-actions table (`{{< all-actions >}}`, `layouts/_partials/action-table.html`) both render from `layouts/_partials/action-matrix.html`: rows are `data/actions.json` (grouped by its `groups`), columns are `data/integrations.json` platforms, page copy is `data/integrations.json` `matrix`. Status is shown by exception: no "Supported" label or check anywhere; a supported cell is a neutral dot, a coming-soon platform gets one clock on its logo. `make check-action-matrix` fails drift or a dead `#action-<id>` link.
 The Signal hero demo is `data/hero_demo.json`.
+Platform product pages (`/preview/platforms/<id>/`, noindex, X first) render `data/platform_pages.json` (a shared contract plus one record per platform; actions, limits and the local stage's amplify and follow lines from the platform YAML and `data/action_examples.json`; every other fact quotes a public page, checked verbatim) through `layouts/platform-page.html`. The one primary call to action installs the browser extension (the download page's Web Store link), with no note under it; reviewer text is an annotation (coral, mono, marked), never a caption; the local-action stage is local only and has no composer or form. `make check-platform-pages` builds the page and runs its script ([docs/platform-pages.md](docs/platform-pages.md)).
 Every link to Blowhorn Tells (the free "Am I a Bot?" check) is built by
 `layouts/_partials/tells-link.html` from `data/tells.json`, with UTM tags and a
 placement; never hard-code a Tells URL in a template. `make check-tells` fails a
 lost placement or a mistagged link ([docs/tells.md](docs/tells.md)).
+Every docs page also shows a contact-support card under the Tells card
+(`docs-support-card.html`, `data/support.json`); both use the `docs-rail-card`
+classes that show one copy per width ([docs/tells.md](docs/tells.md)).
 
 Role pages (`/for/<slug>/`), use-case pages (`/use-cases/<slug>/`) and
 solution pages (`/solutions/<slug>/`, one per category of tool replaced) are
@@ -175,13 +180,21 @@ and dark, no horizontal scroll from 320 px).
   another branch), work there, and release it with `treehouse return <path>` once the change
   has merged. `treehouse status` lists the pool. Never make one with `git worktree add` or a
   second clone.
-- **Land every change through no-mistakes, at most three runs per pull request.** Commit in
+- **Website and documentation changes skip no-mistakes.** Layouts, content, styles, data
+  files and their schemas, and these docs: commit in the worktree, run `make check`, push the
+  branch, open the pull request with `gh-axi pr create` and merge it. A pull request that also
+  touches code outside the website follows the next rule.
+- **Other code lands through no-mistakes, at most three runs per pull request.** Commit in
   the worktree, then run `no-mistakes axi run --intent "<goal>"` (a clone without a
   `no-mistakes` remote needs `no-mistakes init` once). `no-mistakes axi status` shows the step
   and its findings, and `no-mistakes axi respond` answers a review gate. The pipeline reviews,
   tests, pushes and opens the pull request. After the third run, merge the pull request as it
   stands and open an issue for anything still flagged. A run that stopped on a usage limit
   counts; one cancelled before it did anything does not.
+- **`make check` locally needs PyYAML** for the script tests (`test_check_api_reference`).
+  CI's runner has it and `make setup` does not install it; the install line, including the
+  Homebrew variant (PEP 668 refuses a plain `pip install`), is in the README's
+  [Working on the site](README.md#working-on-the-site).
 
 ## Maintaining this file
 

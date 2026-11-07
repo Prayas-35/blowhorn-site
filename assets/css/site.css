@@ -525,6 +525,22 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
 .mm-card-title { grid-row: 2; grid-column: 1; font-size: 15px; line-height: 21px; font-weight: 700; padding-right: var(--space-6); }
 .mm-card:hover .mm-card-title { color: var(--link); }
 .mm-card-desc { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+/* Chrome logo on the Browser extension card: same asset and drop-shadow
+   treatment as .download-icon on /download/, sized for the miniature art. */
+.mm-card-art { position: relative; display: block; }
+.mm-card-chrome {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(30, 33, 23, 0.28));
+  pointer-events: none;
+}
+@media (max-width: 1079px) {
+  .mm-card-chrome { width: 22px; height: 22px; right: 4px; bottom: 4px; }
+}
 /* The arrow rides the title's row (the title keeps room for it), never the art. */
 .mm-card-arrow {
   grid-row: 2; grid-column: 1; justify-self: end; align-self: center; width: 22px; height: 22px; border-radius: var(--radius-pill);
@@ -554,7 +570,8 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
 @media (max-width: 1079px) {
   .mm-cards { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
   .mm-card { grid-template-columns: auto minmax(0, 1fr); column-gap: var(--space-3); align-items: center; padding: var(--space-3); }
-  .mm-card .iface-art { grid-row: span 2; width: 92px; }
+  .mm-card > .iface-art,
+  .mm-card > .mm-card-art { grid-row: span 2; width: 92px; }
   .mm-card-title { grid-row: 1; grid-column: 2; }
   .mm-card-desc { grid-column: 2; }
   .mm-card-arrow { display: none; }
@@ -3244,6 +3261,9 @@ a.agent-tile { padding-right: var(--space-6); }
    the guide pages. Tokens only. */
 .fm-page { padding-top: var(--space-8); }
 .fm-hero > * + * { margin-top: var(--space-4); }
+.fm-plate { margin-top: var(--space-6); max-width: 40rem; }
+.fm-plate img { display: block; width: 100%; height: auto; border-radius: var(--radius-md); background: #000; }
+.fm-plate figcaption { margin-top: var(--space-2); }
 .fm-section { margin-top: var(--space-12); }
 .fm-section .section-head + * { margin-top: var(--space-6); }
 .fm-prose { margin-top: var(--space-12); }
@@ -3548,10 +3568,12 @@ a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("/
 
 /* ---------- Blowhorn Tells, the free Am I a Bot? check (data/tells.json) ----------
    One look for every place the site points at Tells: a slim bar above the
-   header, a Free pill on the header item, the home page band, the callout on
-   compare, /ai/ and /agents/, and the card on /download/thanks/. Sleeper Cell's
-   art keeps its black ground in a rounded frame, like the cast pages. The docs
-   card lives with the docs layout (assets/scss/_styles_project.scss). */
+   header (message + Am I a Bot?/Free CTA centered as a group; dismiss pinned
+   far right and separated), the Resources menu entry, the home page band, the
+   callout on compare, /ai/ and /agents/, and the card on /download/thanks/.
+   Sleeper Cell's art keeps its black ground in a rounded frame, like the cast
+   pages. The docs card lives with the docs layout
+   (assets/scss/_styles_project.scss). */
 .tells-bar {
   background: var(--yellow);
   color: var(--on-yellow);
@@ -3559,49 +3581,135 @@ a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("/
 }
 /* Dismissed: tells-bar-head.html sets this before first paint. */
 html[data-tells-bar="off"] .tells-bar { display: none; }
+/* Three columns: equal side lanes keep the message+CTA group optically
+   centered; the dismiss control sits in the right lane, clear of the CTA. */
 .tells-bar-inner {
-  position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(32px, 1fr) auto minmax(32px, 1fr);
   align-items: center;
+  column-gap: var(--space-2);
   min-height: 40px;
   padding-block: var(--space-2);
-  padding-right: calc(var(--gutter) + var(--space-8));
+  padding-inline: var(--gutter);
 }
-.tells-bar-text { margin: 0; font-size: 13px; line-height: 18px; font-weight: 500; }
-.tells-bar-link,
+/* Message immediately followed by the CTA; the pair is the centered group.
+   Never wrap: one horizontal line at every width, including 320. */
+.tells-bar-cluster {
+  grid-column: 2;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px var(--space-2);
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+.tells-bar-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tells-bar-text-short { display: none; }
+@media (max-width: 719px) {
+  .tells-bar-text-full { display: none; }
+  .tells-bar-text-short { display: inline; }
+  .tells-bar-cluster { gap: 6px; }
+  .tells-bar-cta { padding-inline: 4px; }
+}
+/* One clickable cluster: label + Free pill. Free appears only in the pill. */
+.tells-bar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px 2px 6px;
+  border-radius: var(--radius-md);
+  color: var(--on-yellow);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tells-bar-cta-label {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: var(--stroke-hairline);
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+}
+.tells-bar-pill {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--teal-deep);
+  color: var(--white);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+@media (prefers-color-scheme: dark) {
+  .tells-bar-pill { background: var(--teal-bright); color: var(--near-black); }
+}
+/* Hover / focus: underline the label, darken and lift the pill; keep ink on yellow. */
+.tells-bar-cta:hover,
+.tells-bar-cta:focus-visible {
+  color: var(--on-yellow);
+  text-decoration: none;
+}
+.tells-bar-cta:hover .tells-bar-cta-label,
+.tells-bar-cta:focus-visible .tells-bar-cta-label {
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+.tells-bar-cta:hover .tells-bar-pill,
+.tells-bar-cta:focus-visible .tells-bar-pill {
+  background: color-mix(in srgb, var(--teal-deep) 82%, var(--near-black));
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(30, 33, 23, 0.22);
+}
+@media (prefers-color-scheme: dark) {
+  .tells-bar-cta:hover .tells-bar-pill,
+  .tells-bar-cta:focus-visible .tells-bar-pill {
+    background: color-mix(in srgb, var(--teal-bright) 86%, var(--white));
+  }
+}
+.tells-bar :focus-visible { outline-color: var(--on-yellow); }
+.tells-bar-cta:focus-visible {
+  outline: 2px solid var(--on-yellow);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tells-bar-pill { transition: none; }
+  .tells-bar-cta:hover .tells-bar-pill,
+  .tells-bar-cta:focus-visible .tells-bar-pill { transform: none; }
+}
+/* Docs card link (separate from the bar CTA): keep its own underline treatment. */
 .tells-docs-card-link a {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   font-weight: 600;
   white-space: nowrap;
+  color: var(--link);
   text-decoration: underline;
   text-decoration-thickness: var(--stroke-hairline);
   text-underline-offset: 3px;
 }
-/* The bar sits on brand yellow: dark ink keeps the link AA (9.4:1) in every
-   theme, separate from the docs card which keeps the themed link color. */
-.tells-bar-link { color: var(--on-yellow); }
-.tells-bar-link:hover { text-decoration-thickness: 2px; }
-.tells-docs-card-link a { color: var(--link); }
-.tells-docs-card-link a:hover { color: var(--link-hover); }
-/* The global link rules strip underlines and tint hover/focus colors; on the
-   yellow bar the dark ink stays and the focus ring goes dark too. */
-.tells-bar-link:hover,
-.tells-bar-link:focus-visible { color: var(--on-yellow); text-decoration: underline; }
-.tells-bar :focus-visible { outline-color: var(--on-yellow); }
-.tells-bar-link svg,
+.tells-docs-card-link a:hover { color: var(--link-hover); text-decoration-thickness: 2px; }
 .tells-docs-card-link svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--stroke-icon); stroke-linecap: round; stroke-linejoin: round; }
 @media (prefers-reduced-motion: no-preference) {
-  .tells-bar-link svg,
   .tells-docs-card-link svg { transition: transform 160ms ease; }
-  .tells-bar-link:hover svg,
   .tells-docs-card-link a:hover svg { transform: translateX(2px); }
 }
+/* Dismiss in the right lane, separated from the centered CTA. */
 .tells-bar-close {
-  position: absolute;
-  top: 50%;
-  right: calc(var(--gutter) - var(--space-2));
+  grid-column: 3;
+  justify-self: end;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3613,30 +3721,10 @@ html[data-tells-bar="off"] .tells-bar { display: none; }
   background: transparent;
   color: var(--on-yellow);
   cursor: pointer;
-  transform: translateY(-50%);
 }
 .tells-bar-close[hidden] { display: none; }
 .tells-bar-close:hover { background: color-mix(in srgb, var(--on-yellow) 14%, transparent); color: var(--on-yellow); }
 .tells-bar-close svg { fill: none; stroke: currentColor; stroke-width: var(--stroke-icon); stroke-linecap: round; }
-@media (min-width: 720px) {
-  .tells-bar-inner { justify-content: center; padding-left: calc(var(--gutter) + var(--space-8)); text-align: center; }
-}
-
-/* Header item: the label with a small Free pill. */
-.mm-top-label { display: inline-flex; align-items: center; gap: 6px; }
-.mm-pill {
-  padding: 0 6px;
-  border-radius: var(--radius-pill);
-  background: var(--teal-deep);
-  color: var(--white);
-  font-size: 11px;
-  line-height: 16px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-@media (prefers-color-scheme: dark) {
-  .mm-pill { background: var(--teal-bright); color: var(--near-black); }
-}
 
 /* Home band (layouts/_partials/home/tells.html) and the callout
    (layouts/_partials/tells-callout.html). */

@@ -87,7 +87,7 @@ Kept at the end, and named: the store connection file an older version
 wrote (`~/.config/blowhorn/store.yaml`; Blowhorn no longer reads it), the rest of the app's state
 under `~/Library/Application Support/Blowhorn` (its preferences, its engine
 record and, for the engine the app carries, that engine's folder `home/`),
-Blowhorn's own Chrome trees, the per-user Library state, the checkout's
+Blowhorn's own Chrome trees and service sockets (`~/.blowhorn`), the per-user Library state, the checkout's
 `data/cache/` (which holds each profile's runtime state on this computer), and
 the scheduler pause file. A `data/profiles/` folder left by an older version is
 never named and never touched: your profiles live in your Blowhorn account.

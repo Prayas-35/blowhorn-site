@@ -97,9 +97,17 @@ function jsonResponse(request, status, body) {
   });
 }
 
-function pageResponse(request, status, title, body) {
+export function safeHtml(content) {
+  return { html: String(content ?? '') };
+}
+
+export function pageResponse(request, status, title, body) {
+  const safeTitle = escHtml(title);
+  const safeBody = (typeof body === 'object' && body !== null && 'html' in body)
+    ? body.html
+    : escHtml(body);
   return new Response(
-    `<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="utf-8"><title>${title}</title></head>\n<body>\n<main>\n<h1>${title}</h1>\n<p>${body}</p>\n</main>\n</body>\n</html>\n`,
+    `<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="utf-8"><title>${safeTitle}</title></head>\n<body>\n<main>\n<h1>${safeTitle}</h1>\n<p>${safeBody}</p>\n</main>\n</body>\n</html>\n`,
     {
       status,
       headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', ...corsHeaders(request) },
@@ -107,8 +115,23 @@ function pageResponse(request, status, title, body) {
   );
 }
 
-function safeBackLink(sourcePage) {
-  if (typeof sourcePage === 'string' && sourcePage.startsWith('/') && !sourcePage.startsWith('//')) {
+export function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function safeBackLink(sourcePage) {
+  if (
+    typeof sourcePage === 'string'
+    && sourcePage.startsWith('/')
+    && !sourcePage.startsWith('//')
+    && !sourcePage.startsWith('/\\')
+    && !/[\s"'<>\\]/.test(sourcePage)
+  ) {
     return `${SITE_ORIGIN}${sourcePage}`;
   }
   return SITE_ORIGIN;
@@ -147,11 +170,13 @@ function isFormPost(request) {
 
 function fail(request, status, message, sourcePage) {
   if (isFormPost(request)) {
+    const link = escHtml(safeBackLink(sourcePage));
+    const safeMsg = escHtml(message);
     return pageResponse(
       request,
       status,
       'Something went wrong',
-      `${message} <a href="${safeBackLink(sourcePage)}">Go back</a> and try again.`,
+      safeHtml(`${safeMsg} <a href="${link}">Go back</a> and try again.`),
     );
   }
   return jsonResponse(request, status, { ok: false, error: message });
@@ -244,7 +269,7 @@ export function createHandler(db) {
         request,
         200,
         'Confirm unsubscribe',
-        `Click below to confirm unsubscribing from Blowhorn updates.<br><br>\n<form method="POST" action="/api/unsubscribe">\n<input type="hidden" name="token" value="${token}">\n<button type="submit">Confirm unsubscribe</button>\n</form>`,
+        safeHtml(`Click below to confirm unsubscribing from Blowhorn updates.<br><br>\n<form method="POST" action="/api/unsubscribe">\n<input type="hidden" name="token" value="${token}">\n<button type="submit">Confirm unsubscribe</button>\n</form>`),
       );
     }
 

@@ -9,6 +9,13 @@ layout: field-manual
 weight: 30
 checked: 13 October 2026
 lastmod: 2026-10-13
+
+plate:
+  file: fm-reddit-open.webp
+  alt: "Open Field Manual with a woodcut of a town-square debate"
+  caption: "No Reddit logo in the art."
+  w: 1280
+  h: 720
 ---
 
 ## Roll call of the fallen

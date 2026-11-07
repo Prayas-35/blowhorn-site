@@ -1,0 +1,858 @@
+/* Platform product pages (layouts/platform-page.html, docs/platform-pages.md).
+   Figma 902:114 (X) on the shared contract 902:111. Most colours, radii and shadows
+   are tokens from site.css (static/assets/brand/tokens.json), and spacing reads the
+   rhythm tokens (DESIGN.md, "Whitespace and rhythm"). Card looks come from cards.css.
+   This file also holds a page-scoped palette for the rules-of-engagement gauge
+   (#501): blue, green, then Blowhorn coral. Motion is finite and off under
+   prefers-reduced-motion. */
+
+/* Page-scoped colour (#501). The brand tokens have no blue or green step, so the
+   rules of engagement gauge takes two page values from here. Coral is the brand's
+   own token. Dark values lift each step for a dark ground. */
+.pp {
+  --pp-blue: #2563EB;
+  --pp-green: #15803D;
+  --pp-coral: var(--coral);
+}
+
+.pp [hidden] { display: none !important; }
+
+/* ---------- Top: breadcrumb and the preview notice ---------- */
+.pp-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  padding-top: var(--space-8);
+}
+.pp-crumbs ol { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: 0; margin: 0; list-style: none; color: var(--ink-muted); }
+.pp-crumbs a { display: inline-flex; align-items: center; min-height: var(--space-6); }
+.pp-crumbs li + li::before { content: "/"; margin-right: var(--space-2); color: var(--line-strong); }
+.pp-crumbs [aria-current] { color: var(--ink); }
+/* The one reviewer annotation (contract.reviewerNote). An annotation, never a
+   caption: mono type, the alternate (coral) colour and its explicit mark in a box,
+   with an even dashed edge on every side (DESIGN.md Cards rule 1). Coral shade on
+   the light page and coral on the dark one both hold AA for this size. */
+.pp-annot {
+  --annot: var(--coral-shade);
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: var(--stroke-hairline) dashed var(--annot);
+  border-radius: var(--radius-sm);
+  color: var(--annot);
+  font-family: var(--font-mono);
+}
+.pp-annot .pp-annot-mark { color: var(--annot); font-weight: 600; }
+.pp-annot-mark { padding: 0 var(--space-1); border: var(--stroke-hairline) solid var(--annot); border-radius: 2px; }
+@media (prefers-color-scheme: dark) {
+  .pp-annot { --annot: var(--coral); }
+  .pp {
+    --pp-blue: #7CAEFF;
+    --pp-green: #4ADE80;
+  }
+}
+
+/* ---------- Hero ----------
+   Copy, the activity selector and Start, then a decorative orbit vignette (the
+   laptop cutout on rings, with the platform logo on a white tile). Desktop: copy
+   left, orbit right. Phone: one column, Start in the first screen, the orbit after
+   it. The orbit is never a call to action and never a draft. */
+.pp-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "pick" "go" "orbit";
+  gap: var(--space-8);
+  padding-block: var(--head-gap) var(--section-y);
+}
+.pp-hero-head { grid-area: head; }
+.pp-pick { grid-area: pick; }
+.pp-go { grid-area: go; }
+.pp-hero-head > .label + * { margin-top: var(--eyebrow-gap); }
+.pp-hero-head .body-lg { margin-top: var(--intro-gap); max-width: 30rem; }
+.pp-hero-head .display { max-width: 12ch; }
+.pp-orbit { grid-area: orbit; position: relative; height: 300px; min-width: 0; overflow: hidden; }
+.pp-orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 var(--stroke-hairline) var(--teal-bright);
+}
+.pp-orbit-ring-a { width: 280px; height: 280px; opacity: 0.55; }
+.pp-orbit-ring-b { width: 380px; height: 380px; opacity: 0.25; box-shadow: inset 0 0 0 var(--stroke-hairline) var(--line-strong); }
+.pp-orbit-tile {
+  position: absolute;
+  top: 6%;
+  right: 6%;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-soft);
+}
+.pp-orbit-crew {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(200px, 56%);
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+}
+@media (min-width: 900px) {
+  .pp-hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-areas: "head orbit" "pick orbit" "go orbit";
+    align-items: center;
+    column-gap: var(--space-12);
+  }
+  .pp-orbit { height: 440px; }
+  .pp-orbit-ring-a { width: 340px; height: 340px; }
+  .pp-orbit-ring-b { width: 460px; height: 460px; }
+  .pp-orbit-tile { width: 84px; height: 84px; }
+  .pp-orbit-crew { width: 240px; }
+}
+
+/* The selector: a radio group drawn as one underlined row. The mark under the
+   checked type is the selected-tab mark (structure, DESIGN.md Cards rule 1). */
+.pp-choices {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  max-width: 28rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: inset 0 calc(-1 * var(--stroke-hairline)) 0 0 var(--line);
+}
+.pp-choice {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-2);
+  color: var(--ink-muted);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.pp-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.pp-choice span { position: relative; }
+.pp-choice:hover { color: var(--ink); }
+.pp-choice:has(input:checked) { color: var(--ink); }
+.pp-choice::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: var(--link);
+  transform: scaleX(0);
+}
+.pp-choice:has(input:checked)::after { transform: scaleX(1); }
+.pp-choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pp-choice::after { transition: transform 180ms ease-out; }
+}
+
+.pp-intents { margin: var(--space-4) 0 0; padding: 0; list-style: none; max-width: 30rem; }
+.pp-intents li + li { margin-top: var(--space-2); }
+.pp-intent { color: var(--ink); }
+.pp-intent-for { color: var(--ink-wordmark); }
+/* Without script the selector cannot act, so every intent shows as a list. */
+.pp:not(.is-enhanced) .pp-choices { display: none; }
+.pp.is-enhanced .pp-intent-for {
+  position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Start is the page's one real action, so it reads at body-UI size (20px), not the
+   14px button size. It may wrap onto two lines at 320 px rather than overflow. */
+.pp-go .button {
+  min-width: 9.5rem;
+  min-height: 56px;
+  padding: var(--space-3) var(--space-6);
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  white-space: normal;
+  text-align: center;
+}
+
+/* ---------- Sections ---------- */
+.pp-section { padding-block: var(--section-y); }
+.pp-section + .pp-section,
+.pp-hero + .pp-section {
+  background-image: linear-gradient(90deg, transparent, var(--line) 18%, var(--line) 82%, transparent);
+  background-size: min(100%, var(--measure)) 1px;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+/* ---------- Only on your computer: the local-action stage ----------
+   Section two, straight after the hero: a near-black theatre with cream type,
+   yellow labels and teal routes. The relay (the extension) is the focal medallion;
+   the computer sits left, the signed-in profiles fan out right, the outcome lands
+   along the route at the bottom. Cutouts float on the route with no box behind
+   them. Scenes are text first; the theatre is decorative (aria-hidden) and appears
+   only once the script runs (.is-enhanced). Motion is one finite entrance per play
+   (routes draw, spokes grow, profiles rise) and a finite transition when the
+   ledger straightens; nothing loops. Off under reduced motion; solid edges under
+   high contrast. Transparent cutouts only (static/assets/brand/cast/icons/). */
+.pp-local {
+  margin-top: var(--section-y);
+  padding-block: var(--section-y);
+  background: var(--near-black);
+  color: var(--cream);
+  overflow: hidden;
+}
+.pp-local .label,
+.pp-local .caption { color: var(--yellow); }
+.pp-local .muted,
+.pp-local .body-lg,
+.pp-local .pp-boundary,
+.pp-local .pp-reach-line,
+.pp-local .pp-boundary a,
+.pp-local .pp-sourced a,
+.pp-local .pp-more a { color: var(--cream); }
+.pp-local :focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+.pp-local-head { display: grid; gap: var(--space-4); max-width: 46rem; }
+.pp-local-head .display { color: var(--cream); }
+.pp-local-head .body-lg { max-width: 36rem; }
+.pp-reach { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); margin: 0; }
+.pp-reach-line { font-weight: 600; text-wrap: balance; }
+
+.pp-stage { margin-top: var(--space-8); }
+.pp-scene-choices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.pp-scene-choices .label { margin-right: var(--space-2); }
+.pp-scene-choice {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--teal-bright);
+  color: var(--cream);
+  font-weight: 600;
+  cursor: pointer;
+}
+.pp-scene-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.pp-scene-choice span { position: relative; }
+.pp-scene-choice:has(input:checked) { background: var(--yellow); color: var(--near-black); box-shadow: none; }
+.pp-scene-choice:has(input:focus-visible) { outline: 2px solid var(--yellow); outline-offset: 3px; }
+.pp-local:not(.is-enhanced) .pp-scene-choices,
+.pp-local:not(.is-enhanced) .pp-replay,
+.pp-local:not(.is-enhanced) .pp-rig { display: none; }
+.pp-replay {
+  margin-top: var(--space-4);
+  min-height: 44px;
+  padding-inline: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--cream);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--cream);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pp-replay:hover { background: var(--teal-shade); }
+
+/* The theatre. A fixed-height stage: a radial relay glow and faint contour rings
+   behind it, then absolutely placed parts. --ox and --oy are the relay's centre
+   (the fan's origin). Desktop 460px; phone 480px. */
+.pp-rig { margin-top: var(--space-6); }
+.pp-theatre {
+  position: relative;
+  height: 460px;
+  overflow: hidden;
+  --ox: 50%;
+  --oy: 42%;
+}
+.pp-theatre::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(circle at var(--ox) var(--oy), var(--teal-deep) 0, transparent 44%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.pp-theatre::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(circle at var(--ox) var(--oy), transparent 0 72px, var(--teal-bright) 73px 74px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+.pp-routes { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.pp-route {
+  fill: none;
+  stroke: var(--teal-bright);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
+}
+.pp-routes-narrow { display: none; }
+.pp-route-name { position: absolute; margin: 0; color: var(--cream); font-weight: 600; white-space: nowrap; }
+.pp-name-computer { left: 3%; top: 4%; }
+.pp-name-sessions { right: 3%; top: 4%; text-align: right; }
+
+.pp-crew { position: absolute; height: auto; object-fit: contain; pointer-events: none; }
+.pp-crew-computer { left: 2%; top: 14%; width: 190px; }
+.pp-crew-guard { display: none; left: 2%; top: 64%; width: 130px; }
+
+.pp-relay {
+  position: absolute;
+  left: var(--ox);
+  top: var(--oy);
+  z-index: 2;
+  display: grid;
+  place-items: end center;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  padding-bottom: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, var(--teal-bright) 0, var(--teal-deep) 58%, var(--near-black) 100%);
+  box-shadow: 0 0 0 3px var(--mint), 0 0 0 10px var(--teal-deep), 0 22px 48px var(--near-black);
+}
+.pp-crew-relay { left: 50%; top: -92px; width: 150px; transform: translateX(-50%); }
+.pp-relay-name { margin: 0; color: var(--cream); font-weight: 600; text-align: center; white-space: nowrap; }
+/* One relay name per scene (data-scene-relay): the dry fire names the desktop app,
+   the other scenes the extension. The trooper cutout is the extension's, so it is
+   hidden for the dry fire. */
+.pp-relay-name { display: none; }
+.pp-local[data-scene="amplify"] [data-scene-relay="amplify"],
+.pp-local[data-scene="follow"] [data-scene-relay="follow"],
+.pp-local[data-scene="dry-fire"] [data-scene-relay="dry-fire"] { display: block; }
+.pp-local[data-scene="dry-fire"] .pp-crew-relay { display: none; }
+
+/* The planned tag sits beside the diagram, on the dry fire only. */
+.pp-planned-tag { display: none; margin: 0 0 var(--space-3); font-weight: 600; }
+.pp-local .pp-planned-tag { color: var(--coral); }
+.pp-local[data-scene="dry-fire"] [data-scene-planned="dry-fire"] { display: block; }
+
+/* The fan. Each profile is one spoke: a line from the relay outward at its own
+   angle (--a) and length (--r), with the slip held upright at the end. The angles
+   and lengths are per child, in CSS, never inline. */
+.pp-fan { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; list-style: none; }
+.pp-spoke {
+  position: absolute;
+  left: var(--ox);
+  top: var(--oy);
+  width: 0;
+  height: 0;
+  transform: translate(0, 0) rotate(var(--a));
+}
+.pp-spoke::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: var(--r);
+  height: 2px;
+  background: var(--teal-bright);
+  transform-origin: 0 50%;
+}
+.pp-slip {
+  position: absolute;
+  left: var(--r);
+  top: 0;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  width: 170px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--charcoal);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--yellow), 0 12px 28px var(--near-black);
+  color: var(--cream);
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(calc(-1 * var(--a))) skewX(-6deg);
+}
+.pp-slip-log { display: none; height: 4px; border-radius: var(--radius-pill); background: var(--teal-bright); }
+.pp-spoke:nth-child(1) { --a: -30deg; --r: 270px; --lx: 300px; --ly: -96px; }
+.pp-spoke:nth-child(2) { --a: -10deg; --r: 250px; --lx: 300px; --ly: -32px; }
+.pp-spoke:nth-child(3) { --a: 10deg; --r: 250px; --lx: 300px; --ly: 32px; }
+.pp-spoke:nth-child(4) { --a: 30deg; --r: 270px; --lx: 300px; --ly: 96px; }
+
+.pp-out {
+  position: absolute;
+  left: 50%;
+  top: 88%;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+  min-width: 240px;
+  padding: 12px 18px;
+  border-radius: var(--radius-lg);
+  background: var(--charcoal);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--teal-bright);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+.pp-out-name { margin: 0; color: var(--yellow); font-weight: 600; }
+.pp-out-for { display: none; margin: 0; color: var(--cream); font-weight: 600; }
+
+/* Scene overlays: the fan straightens into a ledger, the guard appears, the route
+   to the outcome breaks in coral for the dry fire. */
+.pp-local[data-scene="amplify"] .pp-slip { box-shadow: 0 0 0 2px var(--yellow), 0 12px 28px var(--near-black); }
+.pp-local[data-scene="amplify"] [data-scene-out="amplify"],
+.pp-local[data-scene="follow"] [data-scene-out="follow"],
+.pp-local[data-scene="dry-fire"] [data-scene-out="dry-fire"] { display: block; }
+.pp-local[data-scene="follow"] .pp-spoke {
+  transform: translate(var(--lx), var(--ly)) rotate(0deg);
+}
+.pp-local[data-scene="follow"] .pp-spoke::before { opacity: 0; }
+.pp-local[data-scene="follow"] .pp-slip {
+  width: 240px;
+  transform: translate(calc(-50% - var(--r)), -50%) rotate(0deg);
+}
+.pp-local[data-scene="follow"] .pp-slip-log { display: block; }
+.pp-local[data-scene="follow"] .pp-crew-guard { display: block; }
+.pp-local[data-scene="dry-fire"] .pp-spoke { opacity: 0.4; }
+.pp-local[data-scene="dry-fire"] .pp-route-out { stroke: var(--coral); stroke-dasharray: 0.12 0.08; }
+.pp-local[data-scene="dry-fire"] .pp-out { box-shadow: 0 0 0 2px var(--coral); }
+
+/* Each scene's text: one panel at a time once the script runs. */
+.pp-panels { display: grid; gap: var(--space-6); margin-top: var(--space-8); }
+.pp-panel { display: grid; gap: var(--space-3); max-width: 42rem; }
+.pp-panel[hidden] { display: none !important; }
+.pp-panel .h3 { color: var(--cream); }
+.pp-panel-lede { color: var(--cream); }
+.pp-fact { color: var(--cream); padding-top: var(--space-3); box-shadow: inset 0 var(--stroke-hairline) 0 0 var(--teal-bright); }
+.pp-fact-mark { color: var(--yellow); margin-right: var(--space-2); }
+.pp-beats { margin: 0; padding: 0; list-style: none; color: var(--cream); }
+.pp-beats li + li { margin-top: var(--space-2); }
+.pp-sourced a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+.pp-planned { color: var(--cream); }
+.pp-planned-mark {
+  display: inline-block;
+  margin-right: var(--space-2);
+  padding: 0 var(--space-1);
+  border: var(--stroke-hairline) solid var(--coral);
+  border-radius: 2px;
+  color: var(--coral);
+}
+.pp-local .pp-more { margin-top: 0; }
+.pp-boundary { margin-top: var(--space-8); max-width: 42rem; }
+
+/* Medium (640-1039): the stage is 608-975 px wide, too narrow for the desktop fan
+   and ledger. Shorter spokes, narrower slips, and a ledger offset that clears the
+   relay (its rim is 100 px from the centre) and stays inside the stage. */
+@media (min-width: 640px) and (max-width: 1039px) {
+  .pp-slip { width: 150px; }
+  .pp-spoke:nth-child(1) { --a: -30deg; --r: 230px; --lx: 200px; --ly: -96px; }
+  .pp-spoke:nth-child(2) { --a: -10deg; --r: 216px; --lx: 200px; --ly: -32px; }
+  .pp-spoke:nth-child(3) { --a: 10deg; --r: 216px; --lx: 200px; --ly: 32px; }
+  .pp-spoke:nth-child(4) { --a: 30deg; --r: 230px; --lx: 200px; --ly: 96px; }
+  .pp-local[data-scene="follow"] .pp-slip { width: 180px; }
+}
+
+/* Narrow: the theatre keeps its own proportions (480px high), the relay and the
+   profiles move left and in, the computer sits top left, the outcome sits low. */
+@media (max-width: 639px) {
+  .pp-theatre { height: 480px; --ox: 36%; --oy: 46%; }
+  .pp-routes-wide { display: none; }
+  .pp-routes-narrow { display: block; }
+  .pp-name-computer { left: 40%; top: 4%; }
+  .pp-name-sessions { display: none; }
+  .pp-crew-computer { left: 0; top: 2%; width: 96px; }
+  .pp-relay { width: 124px; height: 124px; padding-bottom: 14px; }
+  .pp-relay-name { font-size: 0.8125rem; }
+  .pp-crew-relay { top: -58px; width: 96px; }
+  /* Guard: left edge, 60% down, 96 px wide. Clear of the relay rim (its nearest
+     point stays more than 60 px from the centre at 320 px) and of the outcome. */
+  .pp-crew-guard { width: 96px; left: 0; top: 60%; }
+  .pp-spoke:nth-child(1) { --a: -30deg; --r: 128px; --lx: 123px; --ly: -64px; }
+  .pp-spoke:nth-child(2) { --a: -10deg; --r: 116px; --lx: 123px; --ly: -28px; }
+  .pp-spoke:nth-child(3) { --a: 10deg; --r: 116px; --lx: 123px; --ly: 8px; }
+  .pp-spoke:nth-child(4) { --a: 30deg; --r: 128px; --lx: 123px; --ly: 44px; }
+  .pp-slip { width: 100px; padding: 6px 8px; font-size: 0.8125rem; }
+  .pp-local[data-scene="follow"] .pp-slip { width: 100px; }
+  /* Outcome: anchored to the bottom edge, so its real height (68 px measured with
+     the longest scene text at 320 px) can never push it past the theatre. */
+  .pp-out { top: auto; bottom: var(--space-3); min-width: 0; width: 88%; transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pp-local.is-playing .pp-route { animation: pp-draw 900ms ease-out 1 both; }
+  .pp-local.is-playing .pp-spoke::before { animation: pp-grow 600ms ease-out 1 both; }
+  .pp-local.is-playing .pp-slip { animation: pp-fade 420ms ease-out 240ms 1 both; }
+  .pp-local.is-playing .pp-relay { animation: pp-fade 480ms ease-out 1 both; }
+  .pp-local.is-playing .pp-out { animation: pp-fade 480ms ease-out 360ms 1 both; }
+  .pp-spoke,
+  .pp-slip { transition: transform 520ms ease-out, opacity 300ms ease-out, width 300ms ease-out; }
+}
+@keyframes pp-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pp-grow { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes pp-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Action matrix: visible at load, a tinted band ----------
+   A real table at every width, so its two-axis semantics never depend on CSS. On
+   a narrow screen the table keeps its width and its wrapper scrolls sideways
+   (a focusable, labelled region), so the page itself never overflows. The row
+   bound to the picked type gets a full-row tint, never an edge stripe. */
+.pp-band {
+  padding-block: var(--section-y);
+  background: var(--surface-tint);
+}
+.pp-matrix-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+}
+.pp-related { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); margin: 0; padding: 0; list-style: none; }
+.pp-matrix-scroll {
+  margin-top: var(--head-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--glass-edge), var(--glass-shadow);
+}
+.pp-matrix-scroll:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.pp-matrix {
+  width: 100%;
+  min-width: 52rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+.pp-matrix th,
+.pp-matrix td {
+  padding: var(--space-4);
+  vertical-align: top;
+  color: var(--ink);
+}
+.pp-matrix thead th {
+  padding-block: var(--space-3);
+  color: var(--ink-muted);
+  font-size: inherit;
+  font-weight: 600;
+  box-shadow: inset 0 calc(-1 * var(--stroke-hairline)) 0 0 var(--line);
+}
+.pp-matrix tbody tr + tr > * { box-shadow: inset 0 var(--stroke-hairline) 0 0 var(--line); }
+.pp-matrix tbody td { color: var(--ink-muted); }
+.pp-row.is-picked > * { background: color-mix(in srgb, var(--surface-tint) 70%, var(--surface)); }
+.pp-row.is-picked td { color: var(--ink); }
+.pp-cell-action { white-space: nowrap; }
+.pp-action-name { font-weight: 600; }
+.pp-type {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+}
+.pp-cli {
+  font-family: var(--font-mono);
+  overflow-wrap: break-word;
+  color: var(--ink);
+}
+/* A command wraps only between whole tokens, never after the hyphen of a flag;
+   the spans leave the copied text unchanged. */
+.pp-tok { white-space: nowrap; }
+.pp-matrix thead th:nth-child(1) { width: 13%; }
+.pp-matrix thead th:nth-child(2) { width: 30%; }
+.pp-matrix thead th:nth-child(3) { width: 25%; }
+
+/* ---------- Rules of engagement: an open numbered gauge, no frame ---------- */
+/* The gauge is three horizontal bars, one per level, as Lee asked: 01 blue, 02 green,
+   03 coral (--lvl). Each row has a level dot and a bar whose fill is the level
+   colour, longer at each level. No vertical rule. */
+.pp-gauge { margin: var(--head-gap) 0 0; padding: 0; list-style: none; border-top: var(--stroke-hairline) solid var(--line-strong); }
+.pp-gauge li + li { border-top: var(--stroke-hairline) solid var(--line); }
+.pp-gauge li { --lvl: var(--pp-blue); }
+.pp-gauge li:nth-child(2) { --lvl: var(--pp-green); }
+.pp-gauge li:nth-child(3) { --lvl: var(--pp-coral); }
+.pp-preset-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(6rem, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding-block: var(--space-4);
+  color: var(--ink);
+  text-decoration: none;
+}
+.pp-preset-link:hover .pp-stat-n { color: var(--link); }
+.pp-preset-link:focus-visible { outline-offset: 2px; border-radius: var(--radius-sm); }
+.pp-gauge-no {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+.pp-gauge-no::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--lvl);
+}
+.pp-stat-n { color: var(--ink); font-variant-numeric: tabular-nums; }
+.pp-preset-body { display: grid; gap: var(--space-1); min-width: 0; }
+.pp-preset-top { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.pp-default { color: var(--ink-muted); }
+.pp-stat-u { color: var(--ink); }
+.pp-means { color: var(--ink-muted); }
+.pp-gauge-bar {
+  grid-column: 1 / -1;
+  position: relative;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-tint);
+}
+.pp-gauge-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w);
+  border-radius: inherit;
+  background: var(--lvl);
+}
+.pp-gauge li:nth-child(1) { --w: 24%; }
+.pp-gauge li:nth-child(2) { --w: 50%; }
+.pp-gauge li:nth-child(3) { --w: 100%; }
+.pp-roe-notes { margin: var(--space-6) 0 0; padding: 0; list-style: none; max-width: var(--text-measure); }
+.pp-roe-notes li + li { margin-top: var(--space-2); }
+.pp-roe-notes a { color: var(--ink); text-decoration-color: var(--line-strong); }
+.pp-roe-notes a:hover { color: var(--link); }
+.pp-more { margin-top: var(--space-6); }
+/* Real action links (section actions such as "Choose your rules of engagement",
+   setup source links, and the matrix's "Keep reading" links): body-UI size (18px),
+   never the 14px caption size. Hero Start has its own rule (.pp-go .button). */
+.pp-more a,
+.pp-use-src a,
+.pp-related a { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; }
+
+/* ---------- Field Manual: one editorial two-column briefing ---------- */
+.pp-brief { display: grid; gap: var(--space-8); margin: var(--head-gap) 0 0; }
+@media (min-width: 760px) {
+  .pp-brief { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-12); }
+  .pp-fm-item + .pp-fm-item { box-shadow: inset var(--stroke-hairline) 0 0 0 var(--line-strong); padding-left: var(--space-12); }
+}
+.pp-fm-item { display: grid; gap: var(--space-3); color: var(--ink); text-decoration: none; }
+.pp-fm-item:hover .pp-fm-title { color: var(--link); }
+.pp-fm-item:focus-visible { outline-offset: 4px; border-radius: var(--radius-sm); }
+.pp-fm-title { color: var(--ink-wordmark); }
+.pp-fm-text { color: var(--ink-muted); max-width: var(--text-measure); }
+
+/* ---------- Setups rail ----------
+   A native scroll area with snap points. Without script it scrolls by touch,
+   trackpad or arrow keys (it is focusable); the script adds previous and next. */
+.pp-rail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+}
+.pp-rail-controls { display: flex; align-items: center; gap: var(--space-2); }
+.pp-rail-count { margin-right: var(--space-2); color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+@media (min-width: 640px) { .pp-rail-count { min-width: 5rem; text-align: right; } }
+.pp-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 var(--stroke-hairline) var(--line-strong);
+  cursor: pointer;
+}
+.pp-icon-button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: var(--stroke-icon); stroke-linecap: round; stroke-linejoin: round; }
+.pp-icon-button:hover { background: var(--surface-raised); }
+.pp-icon-button[aria-disabled="true"] { color: var(--line-strong); background: transparent; box-shadow: inset 0 0 0 var(--stroke-hairline) var(--line); cursor: default; }
+.pp-icon-button:focus-visible { border-radius: var(--radius-pill); }
+
+.pp-rail {
+  position: relative;
+  margin-top: var(--head-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: var(--space-1) var(--space-1) var(--space-4);
+  border-radius: var(--radius-lg);
+}
+.pp.is-enhanced .pp-rail { scrollbar-width: none; }
+.pp.is-enhanced .pp-rail::-webkit-scrollbar { display: none; }
+.pp-rail:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .pp-rail { scroll-behavior: smooth; }
+}
+.pp-rail-track {
+  display: flex;
+  gap: var(--grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* A phone shows one setup and a peek of the next (the cue that the row scrolls),
+   with a trailing spacer so the last one can start at the left edge. A wider
+   rail shows a whole number (2), so every stop of the scroll range is a setup's
+   own left edge and Next never leaves one cut off at the left. Code needs the
+   width, so the rail never shows three. */
+.pp-slide {
+  flex: 0 0 86%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.pp-rail-track::after {
+  content: "";
+  flex: 0 0 calc(14% - var(--grid-gap));
+}
+@media (min-width: 900px) {
+  .pp-slide { flex-basis: calc((100% - var(--grid-gap)) / 2); }
+  .pp-rail-track::after { content: none; }
+}
+.pp-use { display: flex; flex-direction: column; }
+.pp-use .h3 { margin-top: var(--eyebrow-gap); }
+.pp-use .term { margin-top: var(--space-4); }
+.pp-use-src { margin-top: var(--space-3); }
+
+/* ---------- Activities continuity: an illustration, not the app's screen ---------- */
+.pp-activities { margin: var(--head-gap) 0 0; }
+.pp-activities-art {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: inset 0 0 0 var(--stroke-hairline) var(--line);
+}
+@media (min-width: 760px) {
+  .pp-activities-art { grid-template-columns: minmax(14rem, 2fr) minmax(0, 5fr); padding: var(--space-6); gap: var(--space-6); align-items: start; }
+}
+.pp-filters {
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--glass-edge), var(--glass-shadow);
+}
+.pp-filters > * + * { margin-top: var(--space-2); }
+.pp-filters-title { font-weight: 600; color: var(--ink-wordmark); }
+.pp-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.pp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-tint);
+  color: var(--ink);
+}
+.pp-chip svg, .pp-box svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.pp-filter-group { padding-top: var(--space-3); box-shadow: inset 0 var(--stroke-hairline) 0 0 var(--line); color: var(--ink); font-weight: 600; }
+.pp-check { display: flex; align-items: center; gap: var(--space-2); color: var(--ink); }
+.pp-box {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--teal-deep);
+  color: var(--white);
+}
+.pp-filter-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  box-shadow: inset 0 var(--stroke-hairline) 0 0 var(--line);
+  color: var(--ink);
+}
+.pp-list { padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); background: var(--surface); box-shadow: 0 0 0 var(--stroke-hairline) var(--glass-edge); }
+.pp-list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  color: var(--ink);
+}
+.pp-list-row + .pp-list-row { box-shadow: inset 0 var(--stroke-hairline) 0 0 var(--line); }
+.pp-col-rec { display: none; }
+@media (max-width: 399px) {
+  .pp-list-row { gap: var(--space-2); }
+  .pp-list-act .logo-tile { display: none; }
+}
+@media (min-width: 560px) {
+  .pp-list-row { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); }
+  .pp-col-rec { display: block; }
+}
+.pp-list-headrow { color: var(--ink-muted); }
+.pp-list-act { display: inline-flex; align-items: center; gap: var(--space-2); }
+.pp-list-row[data-time="past"] { color: var(--ink-muted); }
+.pp-list-row[data-time="past"] .pp-status { color: var(--ink-muted); }
+.pp-list-row[data-time="upcoming"] .pp-status { color: var(--link); font-weight: 600; }
+.pp-now {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--link);
+  font-weight: 600;
+}
+.pp-now::after { content: ""; flex: 1; height: 2px; border-radius: var(--radius-pill); background: var(--link); }
+.pp-activities-cap { margin-top: var(--space-4); color: var(--ink-muted); text-align: center; }
+
+@media (prefers-contrast: more) {
+  .pp-local { background: var(--near-black); }
+  .pp-theatre::before, .pp-theatre::after { display: none; }
+  .pp-route { stroke-width: 4; }
+  .pp-slip, .pp-out, .pp-relay { box-shadow: 0 0 0 2px var(--cream); }
+  .pp-gauge-bar { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); }
+}
+
+@media (forced-colors: active) {
+  .pp-choice::after, .pp-now::after, .pp-gauge-bar::after, .pp-gauge-no::before { background: CanvasText; }
+  .pp-filters, .pp-list, .pp-activities-art, .pp-slip, .pp-out, .pp-scene-choice { border: 1px solid CanvasText; }
+  .pp-route, .pp-spoke::before { stroke: CanvasText; background: CanvasText; }
+  .pp-scene-choice:has(input:checked) { background: Highlight; color: HighlightText; }
+  .pp-row.is-picked { outline: 2px solid Highlight; outline-offset: -2px; }
+}

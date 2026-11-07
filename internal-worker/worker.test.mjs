@@ -2,7 +2,7 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, createSign } from 'node:crypto';
-import { handle, ipAllowed, resetCertsCache, sortWorkloadTeammates, FLEET_SORT_JS } from './src/worker.js';
+import { handle, ipAllowed, resetCertsCache, sortWorkloadTeammates, FLEET_SORT_JS, csvCell } from './src/worker.js';
 
 const TEAM_HOST = 'example-team.cloudflareaccess.com';
 const TEAM = `https://${TEAM_HOST}`;
@@ -97,6 +97,30 @@ test('root serves the /internal/ contents page', async () => {
   const res = await handle(r, env, certsFetch);
   assert.equal(res.status, 200);
   assert.equal(await res.text(), 'asset:/internal/');
+});
+test('rotated signing key refetches certs when kid is not in cache and caches new key', async () => {
+  const { privateKey: k2Priv, publicKey: k2Pub } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const k2Jwk = { ...k2Pub.export({ format: 'jwk' }), kid: 'k2', alg: 'RS256' };
+
+  let fetchCount = 0;
+  const rotatingFetch = async (url) => {
+    fetchCount++;
+    const keys = fetchCount === 1 ? [jwk] : [jwk, k2Jwk];
+    return new Response(JSON.stringify({ keys }), { status: 200 });
+  };
+
+  // 1. Prime cache with k1
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': sign(good()) }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 1);
+
+  // 2. Request with rotated key k2: bypasses stale cache, fetches certs, and admits
+  const tokenK2 = sign(good(), k2Priv, 'k2');
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': tokenK2 }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 2);
+
+  // 3. Subsequent request with k2 uses the updated cache without extra network fetch
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': tokenK2 }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 2);
 });
 test('root without a token is denied', async () =>
   assert.equal(await status(new Request('https://internal.blowhorn.ai/')), 403));
@@ -286,4 +310,45 @@ test('fleet page tables get sortable headers', async () => {
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({ disk: [diskSnap], workload: [workloadSnap] }), certsFetch)).text();
   assert.match(html, /<script>[\s\S]*aria-sort[\s\S]*<\/script>/);
   assert.match(html, /data-v="/);
+});
+
+test('csvCell neutralizes formula injection triggers with a leading single quote', () => {
+  assert.equal(csvCell('=HYPERLINK("http://evil.com","Click")'), '"\'=HYPERLINK(""http://evil.com"",""Click"")"');
+  assert.equal(csvCell('+1+1@blowhorn.ai'), "'+1+1@blowhorn.ai");
+  assert.equal(csvCell('-5+2'), "'-5+2");
+  assert.equal(csvCell('@SUM(1,2)'), '"\'@SUM(1,2)"');
+  assert.equal(csvCell('\tTabbedValue'), "'\tTabbedValue");
+  assert.equal(csvCell('\rCarriageReturnStart'), '"\'\rCarriageReturnStart"');
+  assert.equal(csvCell('  =cmd'), "'  =cmd");
+  assert.equal(csvCell('   @calc'), "'   @calc");
+});
+
+test('csvCell neutralizes formula triggers that follow leading whitespace', () => {
+  assert.equal(csvCell(' =cmd'), "' =cmd");
+  assert.equal(csvCell('  +1+1'), "'  +1+1");
+  assert.equal(csvCell('   -5+2'), "'   -5+2");
+  assert.equal(csvCell(' \t=cmd'), "' \t=cmd");
+  assert.equal(csvCell(' @SUM(1,2)'), '"\' @SUM(1,2)"');
+  assert.equal(csvCell('\n=cmd'), '"\'\n=cmd"');
+});
+
+test('csvCell preserves normal values and quotes cells containing bare carriage returns', () => {
+  assert.equal(csvCell('hello world'), 'hello world');
+  assert.equal(csvCell('   leading space'), '   leading space');
+  assert.equal(csvCell('test@blowhorn.ai'), 'test@blowhorn.ai');
+  assert.equal(csvCell('line1\rline2'), '"line1\rline2"');
+  assert.equal(csvCell('comma,value'), '"comma,value"');
+  assert.equal(csvCell('quote "value"'), '"quote ""value"""');
+  assert.equal(csvCell(null), '');
+  assert.equal(csvCell(undefined), '');
+});
+
+test('fleet sort script normalizes storage units and disk table embeds byte keys', async () => {
+  assert.match(FLEET_SORT_JS, /MULT/);
+  assert.match(FLEET_SORT_JS, /\[kmgt]\?b/i);
+
+  const e = fleetEnv({ disk: [diskSnap], workload: [workloadSnap] });
+  const html = await (await handle(authed('/engineering/fleet/'), e, certsFetch)).text();
+  assert.match(html, /data-v="45000000000"/);
+  assert.match(html, /data-v="500000000000"/);
 });

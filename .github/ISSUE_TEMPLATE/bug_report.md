@@ -2,7 +2,9 @@
 name: 🐛 General Bug Report
 about: Report an issue to help improve Blowhorn.
 title: ''
-labels: 'kind/bug, help wanted'
+labels: 
+- 'kind/bug'
+- 'help wanted'
 assignees: ''
 ---
 ### Current Behavior

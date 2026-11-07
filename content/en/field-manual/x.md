@@ -9,6 +9,13 @@ layout: field-manual
 weight: 20
 checked: 28 October 2026
 lastmod: 2026-10-28
+
+plate:
+  file: fm-x-open.webp
+  alt: "Open Field Manual with a woodcut of a period printing press and ranked broadsheets"
+  caption: "No X logo in the art."
+  w: 1280
+  h: 720
 ---
 
 ## Roll call of the fallen

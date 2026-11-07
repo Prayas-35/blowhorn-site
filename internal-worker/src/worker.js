@@ -32,6 +32,8 @@
 const CERTS_TTL_MS = 10 * 60 * 1000;
 let certsCache = { url: '', keys: null, fetchedAt: 0 };
 
+const certsUrl = (teamDomain) => `https://${teamDomain}/cdn-cgi/access/certs`;
+
 const DENY_HEADERS = {
   'content-type': 'text/plain; charset=utf-8',
   'cache-control': 'no-store',
@@ -55,7 +57,7 @@ function decodeJson(part) {
 }
 
 async function accessKeys(teamDomain, fetchImpl) {
-  const url = `https://${teamDomain}/cdn-cgi/access/certs`;
+  const url = certsUrl(teamDomain);
   const now = Date.now();
   if (certsCache.url === url && certsCache.keys && now - certsCache.fetchedAt < CERTS_TTL_MS) {
     return certsCache.keys;
@@ -92,8 +94,14 @@ export async function verifyAccessToken(token, env, fetchImpl = fetch, nowSec = 
     return null;
   }
   if (header.alg !== 'RS256' || !header.kid) return null;
-  const keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
-  const jwk = keys.find((k) => k.kid === header.kid);
+  const hadCachedKeys = certsCache.url === certsUrl(env.TEAM_DOMAIN) && Boolean(certsCache.keys);
+  let keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
+  let jwk = keys.find((k) => k.kid === header.kid);
+  if (!jwk && hadCachedKeys) {
+    resetCertsCache();
+    keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
+    jwk = keys.find((k) => k.kid === header.kid);
+  }
   if (!jwk) return null;
   const key = await crypto.subtle.importKey(
     'jwk',
@@ -233,9 +241,17 @@ function escHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-function csvCell(v) {
-  const s = String(v ?? '');
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+/**
+ * Sanitizes and quotes cell values for CSV export (RFC 4180).
+ * Neutralizes spreadsheet formula injection (OWASP CWE-1236)
+ * by prepending a single quote to cells starting with =, +, -, @, \t, or \r.
+ */
+export function csvCell(v) {
+  let s = String(v ?? '');
+  if (/^\s*[=+@\t\r-]/.test(s)) {
+    s = `'${s}`;
+  }
+  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
 const ADMIN_HEADERS = {
@@ -358,7 +374,7 @@ function diskTable(snap) {
     .map((m) =>
       m.reachable
         ? `<tr><td>${escHtml(m.name)}</td><td>${escHtml(m.os)}</td><td class="n${m.used_pct >= 90 ? ' hot' : ''}">${escHtml(num(m.used_pct))}%</td>` +
-          `<td class="n">${fmtGB(m.free_bytes)}</td><td class="n">${fmtGB(m.size_bytes)}</td><td>${escHtml(m.mount)}</td></tr>`
+          `<td class="n" data-v="${escHtml(num(m.free_bytes))}">${fmtGB(m.free_bytes)}</td><td class="n" data-v="${escHtml(num(m.size_bytes))}">${fmtGB(m.size_bytes)}</td><td>${escHtml(m.mount)}</td></tr>`
         : `<tr><td>${escHtml(m.name)}</td><td colspan="5" class="stale">Unreachable: ${escHtml(m.error || 'no answer')}</td></tr>`,
     )
     .join('');
@@ -439,11 +455,18 @@ const FLEET_CSS =
 // in localStorage across refreshes (fleet-stats-sort).
 export const FLEET_SORT_JS = `(() => {
   const STORE = 'fleet-stats-sort';
+  const MULT = { b: 1, kb: 1e3, mb: 1e6, gb: 1e9, tb: 1e12 };
   const key = (td) => {
     if (!td) return null;
     const raw = (td.dataset.v ?? td.textContent).trim();
     if (raw === '' || raw === '-') return null;
-    return /^-?\\d+(\\.\\d+)?(%| GB)?$/.test(raw) ? parseFloat(raw) : raw.toLowerCase();
+    const m = raw.match(/^(-?\\d+(?:\\.\\d+)?)\\s*(%|[kmgt]?b)?$/i);
+    if (m) {
+      const n = parseFloat(m[1]);
+      const u = (m[2] || '').toLowerCase();
+      return u && MULT[u] ? n * MULT[u] : n;
+    }
+    return raw.toLowerCase();
   };
   const readStore = () => {
     try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch { return {}; }

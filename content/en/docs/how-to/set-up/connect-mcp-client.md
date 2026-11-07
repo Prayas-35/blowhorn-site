@@ -105,6 +105,19 @@ command in any entry on this page for `npx` with the arguments
 On a client's command line, the same swap is `-- npx -y blowhorn-mcp`.
 It still needs the Blowhorn app installed and opened once.
 
+To pin the launcher, add its version: `npx -y blowhorn-mcp@1.0.0`. The
+latest is 1.0.0. To check that the package you run is the one listed,
+run these two commands, which print the npm version and the registry entry:
+
+```sh
+npm view blowhorn-mcp version
+curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=blowhorn"
+```
+
+The registry entry `io.github.blowhorn-ai/blowhorn` is the listing; its
+`"isLatest": true` marks the current version. Both commands need network
+access and Node.js 20 or later for `npx`.
+
 ### Fallback: the app's own Python
 
 Use this only if your app is older than 1.61.0 and has no

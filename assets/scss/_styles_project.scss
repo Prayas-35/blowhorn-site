@@ -38,30 +38,42 @@
   }
 }
 
-// ---------- Blowhorn Tells card ----------
+// ---------- Docs rail cards: Blowhorn Tells, then support ----------
 
-// layouts/_partials/tells-docs-card.html renders twice: under the table of
-// contents (shown from 1280px, unless the column is collapsed) and at the
-// end of the page (everywhere else). Exactly one shows at any width. The
-// link and arrow share their style with the announcement bar (site.css).
-.tells-docs-card {
+// layouts/docs/baseof.html renders each rail card twice: under the table
+// of contents (shown from 1280px, unless the column is collapsed) and at
+// the end of the page (everywhere else). The docs-rail-card rules show
+// exactly one copy at any width. The Tells card (tells-docs-card.html) is
+// Field-toned; the support card (docs-support-card.html) below it is a
+// Dispatch card from cards.css, so the two never share a variant
+// (DESIGN.md, Cards). The Tells link and arrow share their style with the
+// announcement bar (site.css).
+.docs-rail-card {
   max-width: 24rem;
   margin-top: var(--space-12);
   padding: var(--space-4);
   border-radius: var(--radius-md);
+}
+
+.docs-rail-card + .docs-rail-card {
+  margin-top: var(--space-4);
+}
+
+.docs-rail-card > * {
+  margin: 0;
+}
+
+.docs-rail-card > * + * {
+  margin-top: var(--space-1);
+}
+
+.tells-docs-card {
   background: var(--surface-tint);
   color: var(--ink);
 }
 
-.tells-docs-card > * {
-  margin: 0;
-}
-
-.tells-docs-card > * + * {
-  margin-top: var(--space-1);
-}
-
-.tells-docs-card-title {
+.tells-docs-card-title,
+.docs-support-card-title {
   font-family: var(--font-display);
   font-size: 16px;
   line-height: 22px;
@@ -69,36 +81,56 @@
   color: var(--ink-wordmark);
 }
 
-.tells-docs-card-text {
+.tells-docs-card-text,
+.docs-support-card .docs-support-card-text {
   font-size: 13px;
   line-height: 18px;
 }
 
-.tells-docs-card .tells-docs-card-link {
+.tells-docs-card .tells-docs-card-link,
+.docs-support-card .docs-support-card-link {
   margin-top: var(--space-2);
   font-size: 14px;
   line-height: 20px;
 }
 
-.tells-docs-card-toc {
+// The address is the link text, in mono so it reads as an address. Like
+// every link on the site it carries no underline (site.css); Dispatch sets
+// --link and --link-hover for its own subtree (cards.css).
+.docs-support-card-link a {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--link);
+  overflow-wrap: anywhere;
+}
+
+.docs-support-card-link a:hover {
+  color: var(--link-hover);
+}
+
+.docs-rail-card-toc {
   display: none;
+}
+
+.td-toc + .docs-rail-card-toc {
   margin-top: var(--space-8);
 }
 
 @media (min-width: 1280px) {
-  .tells-docs-card-toc {
+  .docs-rail-card-toc {
     display: block;
   }
 
-  .tells-docs-card-end {
+  .docs-rail-card-end {
     display: none;
   }
 
-  .docs-wrap.toc-collapsed .tells-docs-card-toc {
+  .docs-wrap.toc-collapsed .docs-rail-card-toc {
     display: none;
   }
 
-  .docs-wrap.toc-collapsed .tells-docs-card-end {
+  .docs-wrap.toc-collapsed .docs-rail-card-end {
     display: block;
   }
 }

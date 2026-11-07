@@ -1,0 +1,390 @@
+{{- /* A platform product page, rendered from one record in data/platform_pages.json
+  (schemas/platform_page.schema.json) and that file's shared contract, joined with
+  the platform's canonical identity, actions and CLI lines by
+  layouts/_partials/platform-page-data.html, which fails the build on a mismatched
+  platform or action id. The page file is content/en/preview-platform-<id>.md
+  (front matter `platform: <id>`, a /preview/platforms/<id>/ url, noindex, out of the
+  sitemap, llms.txt and search, not linked from navigation). Docs: docs/platform-pages.md.
+
+  Anatomy (blowhorn-site#466; the local-action direction supersedes Figma 902:114,
+  which drew a draft-centred hero): a hero with the activity type selector and one
+  primary call to action (install the browser extension); then "Only on your
+  computer", the local-action stage: a live diagram of this computer, the extension
+  and your signed-in sessions, switched between three scenes (amplify, follow with
+  a local log, dry fire before deploy) with native radios and a replay button; the
+  action matrix; the rules of engagement; a Field Manual teaser; a rail of real
+  setups to copy; the Activities continuity illustration. Source order in the hero
+  is copy, selector, call to action, so a phone keeps the call to action in its
+  first screen. No note or caption sits under the call to action; the decorative orbit follows it on phones. The one
+  reviewer annotation (the contract's reviewerNote) is drawn as an annotation:
+  alternate colour, mono type and its explicit mark.
+
+  Facts are joined, not retyped: the reach line and each local scene's amplify and
+  follow text come from data/platforms/<id>.yaml through the partial; sourced quotes
+  (the dry fire and the boundary) are checked against their public pages.
+
+  Works without script: the activity selector is replaced by a static list of every
+  type's intent, the local stage shows its three scenes stacked as text (the
+  diagram and the replay button are hidden), the matrix is a plain table and the
+  setups rail is a native scroll area. assets/js/platform-page.js enhances in place
+  (.is-enhanced). No third-party script; motion is CSS transform, opacity and a
+  finite stroke animation, off under reduced motion. No infinite animation, so
+  nothing needs a pause control. The page has no form and no text field.
+
+  Hooks the script and .github/scripts/check_platform_pages.py read:
+  data-pp-choice (activity radios), data-pp-for (shown for one type), data-pp-row
+  (a matrix row bound to a type), data-pp-announce, data-pp-local (the stage;
+  its data-scene and data-pp-run are set by the script), data-pp-scene-choice
+  (scene radios), data-pp-scene-panel (one text panel per scene),
+  data-pp-replay, data-pp-stage-announce, data-pp-rig (the diagram, decorative),
+  data-pp-matrix, data-pp-rail, data-pp-slide, data-pp-prev, data-pp-next,
+  data-pp-rail-count, data-pp-rail-announce, data-pp-rail-controls. */ -}}
+{{ define "head" }}
+    {{- $d := partialCached "platform-page-data.html" . .RelPermalink }}
+    {{- $css := resources.Get "css/platform-page.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    {{- if not .Description }}
+    <meta name="description" content="{{ $d.rec.head.description }}">
+    {{- end }}
+{{- end }}
+
+{{ define "main" }}
+    {{- $d := partialCached "platform-page-data.html" . .RelPermalink }}
+    {{- $rec := $d.rec }}
+    {{- $c := $d.contract }}
+    {{- $first := index $d.activities 0 }}
+    {{- $logo := $d.logo | relURL }}
+    {{- $l := $d.local }}
+    <main id="main" class="pp" data-platform-page="{{ $d.id }}" data-pp-type="{{ $first.id }}">
+      <div class="wrap pp-top">
+        <nav class="pp-crumbs ui" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="{{ $d.catalogPath | relURL }}">Platforms</a></li>
+            <li aria-current="page">{{ $d.short }}</li>
+          </ol>
+        </nav>
+        {{- with $c.reviewerNote }}
+        <p class="pp-annot ui" data-pp-annotation><span class="pp-annot-mark label">{{ .mark }}</span> {{ .text }}</p>
+        {{- end }}
+      </div>
+
+      <section class="wrap pp-hero" aria-labelledby="pp-title">
+        <div class="pp-hero-head">
+          <p class="label">{{ $rec.head.eyebrow }}</p>
+          <h1 id="pp-title" class="display">{{ $rec.head.headline }}</h1>
+          <p class="body-lg muted">{{ $rec.head.lede }}</p>
+        </div>
+
+        <div class="pp-pick">
+          <fieldset class="pp-choices" data-pp-choices>
+            <legend class="visually-hidden">Choose an activity type on {{ $d.short }}</legend>
+            {{- range $i, $a := $d.activities }}
+            <label class="pp-choice ui">
+              <input type="radio" name="pp-type" value="{{ $a.id }}" data-pp-choice data-label="{{ $a.label }}" data-action="{{ $a.action }}"{{ if eq $i 0 }} checked{{ end }}>
+              <span>{{ $a.label }}</span>
+            </label>
+            {{- end }}
+          </fieldset>
+          <ul class="pp-intents">
+            {{- range $d.activities }}
+            <li class="pp-intent" data-pp-for="{{ .id }}" data-pp-intent><strong class="pp-intent-for">{{ .label }}.</strong> {{ .intent }}</li>
+            {{- end }}
+          </ul>
+          <p class="visually-hidden" data-pp-announce aria-live="polite"></p>
+        </div>
+
+        <div class="pp-go">
+          <a class="button button-primary" href="{{ $d.startHref }}" data-pp-start>{{ $rec.start.label }}</a>
+        </div>
+
+        <div class="pp-orbit" data-pp-orbit aria-hidden="true">
+          <span class="pp-orbit-ring pp-orbit-ring-a"></span>
+          <span class="pp-orbit-ring pp-orbit-ring-b"></span>
+          <span class="pp-orbit-tile"><img src="{{ $logo }}" alt="" width="44" height="44" decoding="async"></span>
+          <img class="pp-orbit-crew" src="{{ (index $l.crew 0).src | relURL }}" alt="" width="200" height="200" decoding="async">
+        </div>
+      </section>
+
+      {{- /* Only on your computer: the local-action stage. Section two, straight after
+        the hero. Every scene is text first; the diagram is decorative and only
+        appears once the script runs. The reach line and each scene's join are the
+        platform YAML's own words. */}}
+      <section class="pp-local" aria-labelledby="pp-local-title" data-pp-local>
+        <div class="wrap">
+          <div class="pp-local-head">
+            <h2 id="pp-local-title" class="display">{{ $l.heading }}</h2>
+            <p class="body-lg">{{ $l.intro }}</p>
+            <p class="pp-reach"><span class="label">{{ $l.reach }}</span> <span class="pp-reach-line">{{ $d.reach }}</span></p>
+          </div>
+
+          <div class="pp-stage">
+            <fieldset class="pp-scene-choices" data-pp-scene-choices>
+              <legend class="label">{{ $l.choose }}</legend>
+              {{- range $i, $s := $l.scenes }}
+              <label class="pp-scene-choice ui">
+                <input type="radio" name="pp-scene" value="{{ .id }}" data-pp-scene-choice data-title="{{ .title }}"{{ if eq $i 0 }} checked{{ end }}>
+                <span>{{ .label }}</span>
+              </label>
+              {{- end }}
+            </fieldset>
+            <button type="button" class="pp-replay ui" data-pp-replay>{{ $l.replay }}</button>
+
+            <div class="pp-rig" id="pp-rig" data-pp-rig aria-hidden="true">
+              {{- range $l.scenes }}{{ $sid := .id }}{{ with .planned }}
+              <p class="pp-planned-tag label" data-scene-planned="{{ $sid }}">{{ .mark }}</p>
+              {{- end }}{{ end }}
+              <div class="pp-theatre">
+                <p class="pp-route-name pp-name-computer ui">{{ $l.diagram.computer }}</p>
+                <img class="pp-crew pp-crew-computer" src="{{ (index $l.crew 0).src | relURL }}" alt="" width="190" height="190" loading="lazy" decoding="async">
+                <div class="pp-relay">
+                  <img class="pp-crew pp-crew-relay" src="{{ (index $l.crew 1).src | relURL }}" alt="" width="150" height="150" loading="lazy" decoding="async">
+                  {{- range $l.scenes }}
+                  <p class="pp-relay-name ui" data-scene-relay="{{ .id }}">{{ .relay | default $l.diagram.extension }}</p>
+                  {{- end }}
+                </div>
+                <p class="pp-route-name pp-name-sessions ui">{{ $l.diagram.sessions }}</p>
+                <ul class="pp-fan">
+                  {{- range $l.diagram.profiles }}
+                  <li class="pp-spoke"><span class="pp-slip ui">{{ . }}<span class="pp-slip-log" aria-hidden="true"></span></span></li>
+                  {{- end }}
+                </ul>
+                <img class="pp-crew pp-crew-guard" src="{{ (index $l.crew 2).src | relURL }}" alt="" width="150" height="150" loading="lazy" decoding="async">
+                <div class="pp-out">
+                  <p class="pp-out-name ui">{{ $l.diagram.out }}</p>
+                  {{- range $l.scenes }}
+                  <p class="pp-out-for ui" data-scene-out="{{ .id }}">{{ .out }}</p>
+                  {{- end }}
+                </div>
+                <svg class="pp-routes pp-routes-wide" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+                  <path class="pp-route" pathLength="1" d="M 15 30 Q 32 40 40 42"/>
+                  <path class="pp-route pp-route-out" pathLength="1" d="M 50 62 L 50 76"/>
+                </svg>
+                <svg class="pp-routes pp-routes-narrow" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+                  <path class="pp-route" pathLength="1" d="M 14 21 Q 20 36 30 44"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="pp-panels">
+              {{- range $l.scenes }}
+              <article class="pp-panel" data-pp-scene-panel="{{ .id }}" aria-labelledby="pp-panel-{{ .id }}">
+                <h3 id="pp-panel-{{ .id }}" class="h3">{{ .title }}</h3>
+                <p class="pp-panel-lede body-lg">{{ .lede }}</p>
+                {{- with .fact }}
+                <p class="pp-fact ui"><span class="pp-fact-mark label">{{ $d.short }}</span> {{ . }}</p>
+                {{- end }}
+                {{- with .beats }}
+                <ul class="pp-beats">
+                  {{- range . }}
+                  <li>{{ . }}</li>
+                  {{- end }}
+                </ul>
+                {{- end }}
+                {{- with .sourced }}
+                <p class="pp-sourced"><a href="{{ .source | relURL }}">{{ .text }}</a></p>
+                {{- end }}
+                {{- with .planned }}
+                <p class="pp-planned body"><span class="pp-planned-mark label">{{ .mark }}</span> {{ .text }}</p>
+                {{- end }}
+                {{- with .link }}
+                <p class="pp-more ui"><a href="{{ .href | relURL }}">{{ .label }}</a></p>
+                {{- end }}
+              </article>
+              {{- end }}
+            </div>
+            <p class="visually-hidden" data-pp-stage-announce aria-live="polite"></p>
+          </div>
+
+          <p class="pp-boundary body"><a href="{{ $l.boundary.source | relURL }}">{{ $l.boundary.text }}</a></p>
+        </div>
+      </section>
+
+      {{- $m := $rec.matrix }}
+      <section class="pp-band" aria-labelledby="pp-matrix-title">
+        <div class="wrap">
+          <div class="pp-matrix-head">
+            <div class="section-head">
+              <h2 id="pp-matrix-title" class="h2">{{ $m.heading }}</h2>
+              <p class="muted">{{ $m.intro }}</p>
+            </div>
+            <nav aria-label="Keep reading">
+              <ul class="pp-related ui">
+                <li><a href="{{ $d.docs | relURL }}">The {{ $d.short }} docs</a></li>
+                {{- range $rec.related }}
+                <li><a href="{{ .href | relURL }}">{{ .label }}</a></li>
+                {{- end }}
+              </ul>
+            </nav>
+          </div>
+          <div class="pp-matrix-scroll" role="group" aria-labelledby="pp-matrix-title" tabindex="0">
+          <table class="pp-matrix" data-pp-matrix>
+            <caption class="visually-hidden">{{ $m.heading }}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{{ $m.columns.action }}</th>
+                <th scope="col">{{ $m.columns.does }}</th>
+                <th scope="col">{{ $m.columns.limits }}</th>
+                <th scope="col">{{ $m.columns.cli }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{- range $d.actions }}
+              <tr class="pp-row{{ if and .activity (eq .activity $first.id) }} is-picked{{ end }}" data-action="{{ .id }}"{{ with .activity }} data-pp-row="{{ . }}"{{ end }}>
+                <th scope="row" class="pp-cell-action">
+                  <a class="pp-action-name" href="{{ printf "%s#%s" ($d.docs | relURL) .slug }}">{{ .name }}</a>
+                  {{- if and .type (ne .type .name) }}<span class="pp-type caption">{{ .type }}</span>{{ end }}
+                </th>
+                <td data-pp-col="does">{{ .description }}</td>
+                <td data-pp-col="limits">{{ with .limits }}{{ . }}{{ else }}<span class="muted">{{ $m.none }}</span>{{ end }}</td>
+                <td data-pp-col="cli">{{ if eq .cli.status "available" }}<code class="pp-cli">{{ range $i, $w := split .cli.command " " }}{{ if $i }} {{ end }}<span class="pp-tok">{{ $w }}</span>{{ end }}</code>{{ else }}<span class="muted">{{ .cli.notes }}</span>{{ end }}</td>
+              </tr>
+              {{- end }}
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </section>
+
+      {{- $r := $rec.roe }}
+      <section class="pp-section" aria-labelledby="pp-roe-title" data-pp-roe>
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="pp-roe-title" class="h2">{{ $r.heading }}</h2>
+            <p class="muted">{{ $r.intro }}</p>
+          </div>
+          {{- /* One Stamp card (facts and stats, DESIGN.md Cards) holds the three
+            presets as one stat row, split by neutral column rules. */}}
+          <ol class="pp-gauge">
+            {{- range $i, $p := $r.presets }}
+            <li class="pp-preset" data-pp-preset="{{ $p.label }}">
+              <a class="pp-preset-link" href="{{ $p.source | relURL }}">
+                <span class="pp-gauge-no caption" aria-hidden="true">{{ printf "%02d" (add $i 1) }}</span>
+                <span class="pp-stat-n display">{{ $p.stat }}</span>
+                <span class="pp-preset-body">
+                  <span class="pp-preset-top"><span class="label">{{ $p.label }}</span>{{ if $p.default }}<span class="pp-default caption">{{ $r.defaultMark }}</span>{{ end }}</span>
+                  <span class="pp-stat-u ui">{{ $r.unit }}</span>
+                  <span class="pp-means">{{ $p.means | strings.FirstUpper }}.</span>
+                </span>
+                <span class="pp-gauge-bar" aria-hidden="true"></span>
+              </a>
+            </li>
+            {{- end }}
+          </ol>
+          <ul class="pp-roe-notes">
+            {{- range $r.notes }}
+            <li><a href="{{ .source | relURL }}">{{ .text }}</a></li>
+            {{- end }}
+          </ul>
+          <p class="pp-more ui"><a href="{{ $r.link.href | relURL }}">{{ $r.link.label }}</a></p>
+        </div>
+      </section>
+
+      {{- $f := $rec.fieldManual }}
+      <section class="pp-section" aria-labelledby="pp-fm-title" data-pp-field-manual>
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="pp-fm-title" class="h2">{{ $f.heading }}</h2>
+            <p class="muted">{{ $f.intro }}</p>
+          </div>
+          <div class="pp-brief">
+            {{- range $x := $f.facts }}
+            <a class="pp-fm-item" href="{{ $x.source | relURL }}">
+              <span class="label">{{ $f.label }}</span>
+              <span class="h3 pp-fm-title">{{ $x.title }}</span>
+              <span class="pp-fm-text">{{ $x.text }}</span>
+            </a>
+            {{- end }}
+          </div>
+          <p class="pp-more ui"><a href="{{ $f.link.href | relURL }}">{{ $f.link.label }}</a></p>
+        </div>
+      </section>
+
+      {{- $u := $rec.usage }}
+      <section class="pp-section" aria-labelledby="pp-use-title" data-pp-usage>
+        <div class="wrap">
+          <div class="pp-rail-head">
+            <div class="section-head">
+              <h2 id="pp-use-title" class="h2">{{ $u.heading }}</h2>
+              <p class="muted">{{ $u.intro }}</p>
+            </div>
+            <div class="pp-rail-controls" data-pp-rail-controls hidden>
+              <p class="pp-rail-count caption" data-pp-rail-count></p>
+              <p class="visually-hidden" data-pp-rail-announce aria-live="polite"></p>
+              <button type="button" class="pp-icon-button" data-pp-prev aria-controls="pp-rail" aria-label="Previous setups">
+                <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12.5 15L7.5 10L12.5 5"/></svg>
+              </button>
+              <button type="button" class="pp-icon-button" data-pp-next aria-controls="pp-rail" aria-label="Next setups">
+                <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7.5 15L12.5 10L7.5 5"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pp-rail" id="pp-rail" data-pp-rail tabindex="0" role="group" aria-label="Setups, scroll sideways">
+            <ul class="pp-rail-track">
+              {{- range $u.items }}
+              <li class="pp-slide" data-pp-slide>
+                <article class="pp-use" data-pp-use="{{ .id }}" aria-labelledby="pp-use-{{ .id }}">
+                  <p class="label">{{ .label }}</p>
+                  <h3 id="pp-use-{{ .id }}" class="h3">{{ .title }}</h3>
+                  {{ partial "code-card.html" (dict "code" .code "title" .file "lang" .lang "prompt" (eq .lang "bash")) }}
+                  <p class="pp-use-src ui"><a href="{{ .source | relURL }}">{{ .sourceLabel }}</a></p>
+                </article>
+              </li>
+              {{- end }}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {{- $k := $c.continuity }}
+      {{- $kf := $k.filters }}
+      <section class="pp-section pp-continuity" aria-labelledby="pp-activities-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="pp-activities-title" class="h2">{{ $k.heading }}</h2>
+            <p class="muted">{{ $k.intro }}</p>
+          </div>
+          <figure class="pp-activities" aria-labelledby="pp-activities-cap">
+            <div class="pp-activities-art" aria-hidden="true">
+              <div class="pp-filters">
+                <p class="pp-filters-title ui">{{ $kf.title }}</p>
+                <p class="caption muted">{{ $kf.applied }}</p>
+                <p class="pp-chips">
+                  <span class="pp-chip caption">{{ $d.short }}<svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M3 3l6 6M9 3l-6 6"/></svg></span>
+                  <span class="pp-chip caption">{{ range $i, $a := $d.activities }}<span data-pp-for="{{ $a.id }}"{{ if ne $i 0 }} hidden{{ end }}>{{ $a.label }}</span>{{ end }}<svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M3 3l6 6M9 3l-6 6"/></svg></span>
+                </p>
+                <p class="pp-filter-group caption">{{ $kf.time }}</p>
+                <p class="pp-check caption"><span class="pp-box"><svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M2.5 6.2l2.4 2.4 4.6-5"/></svg></span>{{ $kf.past }}</p>
+                <p class="pp-check caption"><span class="pp-box"><svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M2.5 6.2l2.4 2.4 4.6-5"/></svg></span>{{ $kf.upcoming }}</p>
+                <p class="pp-filter-row caption"><span>{{ $kf.recurrence }}</span><span class="muted">{{ $kf.any }}</span></p>
+                <p class="pp-filter-row caption"><span>{{ $kf.platform }}</span><span class="muted">{{ $d.short }}</span></p>
+                <p class="pp-filter-row caption"><span>{{ $kf.type }}</span><span class="muted">{{ range $i, $a := $d.activities }}<span data-pp-for="{{ $a.id }}"{{ if ne $i 0 }} hidden{{ end }}>{{ $a.label }}</span>{{ end }}</span></p>
+              </div>
+              <div class="pp-list">
+                <p class="pp-list-row pp-list-headrow caption">
+                  <span>{{ $k.columns.when }}</span><span>{{ $k.columns.activity }}</span><span class="pp-col-rec">{{ $k.columns.recurrence }}</span><span>{{ $k.columns.status }}</span>
+                </p>
+                {{- $past := true }}
+                {{- range $k.rows }}
+                {{- if and $past (eq .time "upcoming") }}{{ $past = false }}
+                <p class="pp-now caption"><span>{{ $k.now }}</span></p>
+                {{- end }}
+                <p class="pp-list-row caption" data-time="{{ .time }}">
+                  <span>{{ .when }}</span>
+                  <span class="pp-list-act"><span class="logo-tile pp-tile-xs"><img src="{{ $logo }}" alt="" width="10" height="10"></span>{{ range $i, $a := $d.activities }}<span data-pp-for="{{ $a.id }}"{{ if ne $i 0 }} hidden{{ end }}>{{ $a.label }}</span>{{ end }}</span>
+                  <span class="pp-col-rec">{{ .recurrence }}</span>
+                  <span class="pp-status">{{ .status }}</span>
+                </p>
+                {{- end }}
+              </div>
+            </div>
+            <figcaption id="pp-activities-cap" class="pp-activities-cap caption">{{ $k.caption }}</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+{{- end }}
+
+{{ define "scripts" }}
+    {{- $js := resources.Get "js/platform-page.js" | minify | fingerprint }}
+    <script src="{{ $js.RelPermalink }}" defer></script>
+{{- end }}

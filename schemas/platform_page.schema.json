@@ -1,0 +1,861 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blowhorn.ai/schemas/platform_page.schema.json",
+  "title": "Platform pages",
+  "description": "data/platform_pages.json: the shared contract every platform product page follows (the Figma 902:111 contract, whose draft-centred hero 902:114 is superseded by the local-action stage) and one record per platform page, rendered by layouts/platform-page.html. A record EXTENDS a supported platform and never restates it: the platform name, logo, docs page and reach come from data/integrations.json plus data/platforms/<platform>.yaml, every action's name, behavior and limits from data/actions.json plus that YAML, and each action's CLI line from data/action_examples.json. A record holds only page copy, the activity types (each pointing at one action id), the local-action stage's scenes (whose amplify and follow text is joined from the YAML, never retyped), and sourced facts: every sourced fact quotes the public page it came from (source), and .github/scripts/check_platform_pages.py --source fails a quote or snippet that page does not carry, or a number the quote does not hold. This schema checks shape; the check script and the template fail the build on the cross-references. Docs: docs/platform-pages.md. Hyphens, never em dashes. No browser or operating system brand names: marketing wording stays general.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "pages"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "contract": {
+      "$ref": "#/definitions/contract"
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/page"
+      }
+    }
+  },
+  "definitions": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "maxLength": 40
+    },
+    "copy": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "not": {
+        "pattern": "—|Chrome|Safari|Firefox|\\bMac\\b|macOS|Outbox"
+      }
+    },
+    "paragraph": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "not": {
+        "pattern": "—|Chrome|Safari|Firefox|\\bMac\\b|macOS|Outbox"
+      }
+    },
+    "contract": {
+      "description": "What every platform page shares (Figma 902:111): the reviewer annotation and the closing Activities continuity visual. Once and recurring activities share one Activities model in which the platform is a filter, not a separate Upcoming or History destination, so the continuity visual is the same on every page; only the platform and the selected activity type change.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewerNote",
+        "continuity"
+      ],
+      "properties": {
+        "reviewerNote": {
+          "description": "The one reviewer annotation the preview keeps: it says the page is not final and not linked. It is drawn as an annotation (alternate colour, mono type and the explicit mark), never as a standard caption. Remove it, and this property, when a page leaves preview.",
+          "$ref": "#/definitions/marked"
+        },
+        "continuity": {
+          "description": "The closing Activities visual. An illustration, never a screenshot or a live list, and never a second call to action.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "heading",
+            "intro",
+            "caption",
+            "filters",
+            "columns",
+            "now",
+            "rows"
+          ],
+          "properties": {
+            "heading": {
+              "$ref": "#/definitions/copy"
+            },
+            "intro": {
+              "$ref": "#/definitions/paragraph"
+            },
+            "caption": {
+              "$ref": "#/definitions/paragraph"
+            },
+            "filters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "applied",
+                "time",
+                "past",
+                "upcoming",
+                "recurrence",
+                "any",
+                "platform",
+                "type"
+              ],
+              "properties": {
+                "title": {
+                  "$ref": "#/definitions/copy"
+                },
+                "applied": {
+                  "$ref": "#/definitions/copy"
+                },
+                "time": {
+                  "$ref": "#/definitions/copy"
+                },
+                "past": {
+                  "$ref": "#/definitions/copy"
+                },
+                "upcoming": {
+                  "$ref": "#/definitions/copy"
+                },
+                "recurrence": {
+                  "$ref": "#/definitions/copy"
+                },
+                "any": {
+                  "$ref": "#/definitions/copy"
+                },
+                "platform": {
+                  "$ref": "#/definitions/copy"
+                },
+                "type": {
+                  "$ref": "#/definitions/copy"
+                }
+              }
+            },
+            "columns": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "when",
+                "activity",
+                "recurrence",
+                "status"
+              ],
+              "properties": {
+                "when": {
+                  "$ref": "#/definitions/copy"
+                },
+                "activity": {
+                  "$ref": "#/definitions/copy"
+                },
+                "recurrence": {
+                  "$ref": "#/definitions/copy"
+                },
+                "status": {
+                  "$ref": "#/definitions/copy"
+                }
+              }
+            },
+            "now": {
+              "$ref": "#/definitions/copy"
+            },
+            "rows": {
+              "description": "Illustrative rows: relative times only, never a date or a clock time that reads as real. Past rows come first, then upcoming; the template draws the now line between them.",
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "when",
+                  "time",
+                  "recurrence",
+                  "status"
+                ],
+                "properties": {
+                  "when": {
+                    "$ref": "#/definitions/copy"
+                  },
+                  "time": {
+                    "type": "string",
+                    "enum": [
+                      "past",
+                      "upcoming"
+                    ]
+                  },
+                  "recurrence": {
+                    "$ref": "#/definitions/copy"
+                  },
+                  "status": {
+                    "$ref": "#/definitions/copy"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "route",
+        "head",
+        "start",
+        "activities",
+        "local",
+        "matrix",
+        "roe",
+        "fieldManual",
+        "usage"
+      ],
+      "properties": {
+        "platform": {
+          "description": "A platform id from data/integrations.json whose status is supported and that has data/platforms/<id>.yaml. The page borrows its name, logo, docs link and reach from there.",
+          "$ref": "#/definitions/id"
+        },
+        "route": {
+          "description": "Public path. Preview pages live at /preview/platforms/<platform>/ and are noindex, out of the sitemap, llms.txt and search, and unlinked from navigation.",
+          "type": "string",
+          "pattern": "^/preview/platforms/[a-z0-9-]+/$"
+        },
+        "head": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "eyebrow",
+            "headline",
+            "lede",
+            "description"
+          ],
+          "properties": {
+            "eyebrow": {
+              "$ref": "#/definitions/copy"
+            },
+            "headline": {
+              "$ref": "#/definitions/copy"
+            },
+            "lede": {
+              "$ref": "#/definitions/paragraph"
+            },
+            "description": {
+              "description": "Meta description.",
+              "$ref": "#/definitions/paragraph"
+            }
+          }
+        },
+        "start": {
+          "description": "The page's one primary call to action. It installs the Blowhorn browser extension from its Chrome Web Store listing, the same link the download page's extension card uses; the template builds the link (data partial extensionHref), so it cannot be invented here, and check_platform_pages.py fails the built page if the two differ. No note or caption sits under it. When a link exists that installs Blowhorn with the platform and type picked, change the label, the partial and the check together.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "Get the browser extension"
+              ]
+            }
+          }
+        },
+        "activities": {
+          "description": "The activity type selector (for X: Post, Respond, Amplify). Each type points at one action id from data/actions.json that the platform's YAML lists, so the selector can only name what the platform supports. The type label may differ from the action name (Respond is the reply action). The first type is selected at load.",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/definitions/activity"
+          }
+        },
+        "related": {
+          "description": "Optional quiet links beside the action matrix (the platform's docs link is always first and comes from the YAML). Site-relative paths only.",
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "href"
+            ],
+            "properties": {
+              "label": {
+                "$ref": "#/definitions/copy"
+              },
+              "href": {
+                "type": "string",
+                "pattern": "^/[a-z0-9/_-]*/?$"
+              }
+            }
+          }
+        },
+        "local": {
+          "description": "The local-action stage, section two after the hero: the platform's reach line, three scenes that switch with native radios, and a diagram of this computer, the extension and the signed-in sessions. Every fact here is either joined from the platform YAML (the scene's join) or quoted from a public page (sourced, planned).",
+          "$ref": "#/definitions/local"
+        },
+        "matrix": {
+          "$ref": "#/definitions/matrix"
+        },
+        "roe": {
+          "$ref": "#/definitions/roe"
+        },
+        "fieldManual": {
+          "$ref": "#/definitions/fieldManual"
+        },
+        "usage": {
+          "$ref": "#/definitions/usage"
+        }
+      }
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action",
+        "label",
+        "intent"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id"
+        },
+        "action": {
+          "description": "An action id from data/actions.json that the platform's YAML lists.",
+          "$ref": "#/definitions/id"
+        },
+        "label": {
+          "$ref": "#/definitions/copy"
+        },
+        "intent": {
+          "$ref": "#/definitions/copy"
+        }
+      }
+    },
+    "sitePath": {
+      "description": "A site-relative path to a public page, optionally with a #fragment. Never a private repository link.",
+      "type": "string",
+      "pattern": "^/[a-z0-9/_.-]*/(#[a-z0-9-]+)?$"
+    },
+    "sourced": {
+      "description": "A fact shown on the page with the public page it came from. text is what the page shows; quote is a verbatim passage of the source page (whitespace may differ) that backs it, and every number in text must appear in quote. check_platform_pages.py --source reads the source's Markdown under content/en/ and fails a quote it does not carry.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "quote",
+        "source"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 400
+        },
+        "source": {
+          "$ref": "#/definitions/sitePath"
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "href"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/definitions/copy"
+        },
+        "href": {
+          "$ref": "#/definitions/sitePath"
+        }
+      }
+    },
+    "marked": {
+      "description": "A line with an explicit mark (for instance Reviewer note or Planned). The template draws the mark in mono caps, so it is never mistaken for a caption.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mark",
+        "text"
+      ],
+      "properties": {
+        "mark": {
+          "$ref": "#/definitions/copy"
+        },
+        "text": {
+          "$ref": "#/definitions/paragraph"
+        }
+      }
+    },
+    "matrix": {
+      "description": "Every action the platform YAML lists, in its order, visible at load (never collapsed). Cells are computed, never written here: the action name from data/actions.json, what it does and limits from the YAML, the CLI line (or its placeholder note) from data/action_examples.json. Only the heading, intro, column labels and the empty-limits label are page copy. The selector highlights the rows bound to the picked type and hides nothing.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "intro",
+        "columns",
+        "none"
+      ],
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/copy"
+        },
+        "intro": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "columns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action",
+            "does",
+            "limits",
+            "cli"
+          ],
+          "properties": {
+            "action": {
+              "$ref": "#/definitions/copy"
+            },
+            "does": {
+              "$ref": "#/definitions/copy"
+            },
+            "limits": {
+              "$ref": "#/definitions/copy"
+            },
+            "cli": {
+              "$ref": "#/definitions/copy"
+            }
+          }
+        },
+        "none": {
+          "description": "Shown in the limits column for an action the YAML gives no limits.",
+          "$ref": "#/definitions/copy"
+        }
+      }
+    },
+    "roe": {
+      "description": "Rules of engagement on this platform: the three presets, each with its daily post cap on the platform as the rules-of-engagement docs state it, and short sourced notes. Never a number the docs do not give.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "intro",
+        "defaultMark",
+        "unit",
+        "presets",
+        "notes",
+        "link"
+      ],
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/copy"
+        },
+        "intro": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "defaultMark": {
+          "$ref": "#/definitions/copy"
+        },
+        "unit": {
+          "$ref": "#/definitions/copy"
+        },
+        "presets": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "means",
+              "stat",
+              "quote",
+              "source"
+            ],
+            "properties": {
+              "label": {
+                "$ref": "#/definitions/copy"
+              },
+              "means": {
+                "description": "The preset's meaning, verbatim from the source.",
+                "$ref": "#/definitions/copy"
+              },
+              "stat": {
+                "type": "string",
+                "pattern": "^[0-9][0-9,.]*$"
+              },
+              "default": {
+                "type": "boolean"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 400
+              },
+              "source": {
+                "$ref": "#/definitions/sitePath"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/sourced"
+          }
+        },
+        "link": {
+          "$ref": "#/definitions/link"
+        }
+      }
+    },
+    "fieldManual": {
+      "description": "A teaser of the platform's Field Manual: one or two sourced facts, each card linking to the section it quotes, and one link to the whole briefing.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "intro",
+        "label",
+        "facts",
+        "link"
+      ],
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/copy"
+        },
+        "intro": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "label": {
+          "$ref": "#/definitions/copy"
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "text",
+              "quote",
+              "source"
+            ],
+            "properties": {
+              "title": {
+                "$ref": "#/definitions/copy"
+              },
+              "text": {
+                "$ref": "#/definitions/copy"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 400
+              },
+              "source": {
+                "$ref": "#/definitions/sitePath"
+              }
+            }
+          }
+        },
+        "link": {
+          "$ref": "#/definitions/link"
+        }
+      }
+    },
+    "usage": {
+      "description": "A rail of real setups, each a terminal code card with one-click copy: an MCP entry, a CLI command and an agent skill. code must appear verbatim (whitespace may differ) on its source page, a public docs or agent page, so nothing here is invented; the source link is shown on the card. Without script the rail is a native scroll area; with it, previous and next buttons page it by hand, never automatically.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "intro",
+        "items"
+      ],
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/copy"
+        },
+        "intro": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "title",
+              "file",
+              "lang",
+              "code",
+              "source",
+              "sourceLabel"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "label": {
+                "$ref": "#/definitions/copy"
+              },
+              "title": {
+                "$ref": "#/definitions/copy"
+              },
+              "file": {
+                "description": "The code card's title bar: a file name, or terminal.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "lang": {
+                "type": "string",
+                "enum": [
+                  "bash",
+                  "json",
+                  "markdown",
+                  "toml",
+                  "yaml"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "source": {
+                "$ref": "#/definitions/sitePath"
+              },
+              "sourceLabel": {
+                "$ref": "#/definitions/copy"
+              }
+            }
+          }
+        }
+      }
+    },
+    "local": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "intro",
+        "choose",
+        "replay",
+        "reach",
+        "boundary",
+        "diagram",
+        "crew",
+        "scenes"
+      ],
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/copy"
+        },
+        "intro": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "choose": {
+          "description": "The legend over the scene radios.",
+          "$ref": "#/definitions/copy"
+        },
+        "replay": {
+          "description": "The replay button's label.",
+          "$ref": "#/definitions/copy"
+        },
+        "reach": {
+          "description": "The label over the reach line. The reach text itself comes from data/platforms/<platform>.yaml (reach), never from this record.",
+          "$ref": "#/definitions/copy"
+        },
+        "boundary": {
+          "description": "One sentence on the session boundary: the extension acts as you, in your own signed-in browser. The text is shown; the quote must be verbatim on the source page.",
+          "$ref": "#/definitions/sourced"
+        },
+        "diagram": {
+          "$ref": "#/definitions/diagram"
+        },
+        "crew": {
+          "description": "Three transparent cutouts from static/assets/brand/cast/icons/ (the alpha-channel set, never the black-background originals) in diagram order: the computer, the extension, the sessions. The third is shown only in the follow scene when its scene says so. Each cutout is checked for an alpha channel.",
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/crew"
+          }
+        },
+        "scenes": {
+          "description": "Exactly three scenes in order: amplify, follow, dry fire. The first is selected at load.",
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/scene"
+          }
+        }
+      }
+    },
+    "diagram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "computer",
+        "extension",
+        "sessions",
+        "profiles",
+        "out"
+      ],
+      "properties": {
+        "computer": {
+          "$ref": "#/definitions/copy"
+        },
+        "extension": {
+          "$ref": "#/definitions/copy"
+        },
+        "sessions": {
+          "$ref": "#/definitions/copy"
+        },
+        "profiles": {
+          "description": "Illustrative profile names for the fan; they name no account.",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/definitions/copy"
+          }
+        },
+        "out": {
+          "$ref": "#/definitions/copy"
+        }
+      }
+    },
+    "crew": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "src"
+      ],
+      "properties": {
+        "src": {
+          "type": "string",
+          "pattern": "^assets/brand/cast/icons/[a-z0-9-]+\\.webp$"
+        },
+        "scene": {
+          "description": "Optional: show this cutout only in the named scene.",
+          "type": "string",
+          "enum": [
+            "amplify",
+            "follow",
+            "dry-fire"
+          ]
+        }
+      },
+      "description": "A cutout drawn on the route, floating with no box behind it."
+    },
+    "scene": {
+      "description": "One local-action scene. The radio label and the panel title are shown; the lede, beats and sourced/planned lines are the scene's own copy. A scene that names an action joins that action's YAML text (join) into a fact line; a scene with no action (dry fire) joins nothing and quotes a public page instead.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action",
+        "label",
+        "title",
+        "lede",
+        "out",
+        "beats"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "amplify",
+            "follow",
+            "dry-fire"
+          ]
+        },
+        "action": {
+          "description": "An action id the platform's YAML lists, or null for a scene that joins none.",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "join": {
+          "description": "Which YAML text the fact line shows: description (the behavior) or limits.",
+          "type": "string",
+          "enum": [
+            "description",
+            "limits"
+          ]
+        },
+        "label": {
+          "$ref": "#/definitions/copy"
+        },
+        "title": {
+          "$ref": "#/definitions/copy"
+        },
+        "lede": {
+          "$ref": "#/definitions/paragraph"
+        },
+        "out": {
+          "description": "The outcome shown on the diagram's last node in this scene.",
+          "$ref": "#/definitions/copy"
+        },
+        "relay": {
+          "description": "Optional: the name on the diagram's relay medallion for this scene. Omitted, the relay is the extension. The dry-fire scene names the desktop app, because the shipped dry fire is the desktop app's.",
+          "$ref": "#/definitions/copy"
+        },
+        "beats": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/paragraph"
+          }
+        },
+        "sourced": {
+          "$ref": "#/definitions/sourced"
+        },
+        "planned": {
+          "$ref": "#/definitions/marked"
+        },
+        "link": {
+          "$ref": "#/definitions/link"
+        }
+      },
+      "if": {
+        "properties": {
+          "action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "required": [
+          "join"
+        ]
+      }
+    }
+  }
+}

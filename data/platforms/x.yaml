@@ -8,12 +8,14 @@ reach: Your own signed-in browser, through the Blowhorn extension
 actions:
   - id: post
     behavior: Publishes your message, with an image if you add one. A message longer than 274 characters goes out as a thread.
+    limits: X publishes 50 original posts a day for an account without a checkmark, and no setting in Blowhorn goes past it.
   - id: reply
     behavior: Replies in a conversation when your post is addressed to it.
+    limits: X publishes 200 replies a day for an account without a checkmark, and no setting in Blowhorn goes past it.
   - id: amplify
     behavior: Retweets or quotes a post from each of your profiles.
   - id: follow
-    behavior: Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself., skipping anyone you already follow.
+    behavior: Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself, skipping anyone you already follow.
     limits: At most 400 follows per profile a day, and 15 in any 15 minutes, counted from that profile's follow log on this computer.
   - id: analytics
     behavior: Records your follower and following counts on each run, so you can watch the trend.

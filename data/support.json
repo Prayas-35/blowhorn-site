@@ -1,0 +1,10 @@
+{
+  "$schema": "../schemas/support.schema.json",
+  "email": "support@blowhorn.ai",
+  "docs": {
+    "eyebrow": "Support",
+    "title": "Stuck on something?",
+    "text": "Email us and a person on the team will help.",
+    "subject": "Docs question"
+  }
+}

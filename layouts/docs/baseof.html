@@ -29,10 +29,12 @@
         {{ end -}}
         {{- block "main" . }}{{ end }}
         {{- partial "tells-docs-card.html" (dict "page" . "where" "end") }}
+        {{- partial "docs-support-card.html" (dict "page" . "where" "end") }}
       </main>
       <aside class="docs-toc" aria-label="On this page">
         {{- partial "toc.html" . }}
         {{- partial "tells-docs-card.html" (dict "page" . "where" "toc") }}
+        {{- partial "docs-support-card.html" (dict "page" . "where" "toc") }}
       </aside>
     </div>
     {{- if eq hugo.Environment "internal" }}

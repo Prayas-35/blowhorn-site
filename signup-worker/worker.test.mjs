@@ -2,7 +2,7 @@
 // unsubscribes and rate-limits, with an in-memory fake for the db adapter.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHandler, THANKS_URL } from './src/worker.js';
+import { createHandler, THANKS_URL, safeBackLink, escHtml, safeHtml, pageResponse } from './src/worker.js';
 
 function fakeDb() {
   const rows = new Map();
@@ -251,4 +251,61 @@ test('GET /api/unsubscribe with missing or unknown token returns 400 or 404', as
   const resUnknown = await handle(new Request('https://api.blowhorn.ai/api/unsubscribe?token=nope'));
   assert.equal(resUnknown.status, 404);
   assert.match(await resUnknown.text(), /not recognized/);
+});
+
+test('safeBackLink accepts clean relative paths and rejects attribute-breaking or external inputs', () => {
+  assert.equal(safeBackLink('/pricing/'), 'https://blowhorn.ai/pricing/');
+  assert.equal(safeBackLink('/docs/reference/platforms/x/'), 'https://blowhorn.ai/docs/reference/platforms/x/');
+  assert.equal(safeBackLink('//evil.com'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink('/\\evil.com'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink('/" onmouseover="alert(1)'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink("/' onmouseover='alert(1)"), 'https://blowhorn.ai');
+  assert.equal(safeBackLink('/path with spaces'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink('/path<script>'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink('https://evil.com'), 'https://blowhorn.ai');
+  assert.equal(safeBackLink(null), 'https://blowhorn.ai');
+  assert.equal(safeBackLink(undefined), 'https://blowhorn.ai');
+});
+
+test('form post error escapes HTML and protects Go back link from attribute injection', async () => {
+  const db = fakeDb();
+  const handle = createHandler(db);
+
+  // Clean path produces correct link
+  const resClean = await handle(formPost('/api/waitlist', {
+    email: 'bad-email',
+    topic: 'tiktok',
+    source_page: '/docs/reference/',
+  }));
+  assert.equal(resClean.status, 400);
+  const textClean = await resClean.text();
+  assert.match(textClean, /<a href="https:\/\/blowhorn\.ai\/docs\/reference\/">Go back<\/a>/);
+
+  // Malicious path cannot break out of href attribute
+  const resMalicious = await handle(formPost('/api/waitlist', {
+    email: 'bad-email',
+    topic: 'tiktok',
+    source_page: '/" onmouseover="alert(1)',
+  }));
+  assert.equal(resMalicious.status, 400);
+  const textMalicious = await resMalicious.text();
+  assert.doesNotMatch(textMalicious, /onmouseover/);
+  assert.match(textMalicious, /<a href="https:\/\/blowhorn\.ai">Go back<\/a>/);
+});
+
+test('pageResponse structurally escapes title and plain body, preserving safeHtml', async () => {
+  const req = new Request('https://api.blowhorn.ai/api/test');
+
+  // Plain strings in title and body are escaped by default
+  const resPlain = pageResponse(req, 400, 'Alert <script>', 'Error & "quotes"');
+  const textPlain = await resPlain.text();
+  assert.match(textPlain, /<title>Alert &lt;script&gt;<\/title>/);
+  assert.match(textPlain, /<h1>Alert &lt;script&gt;<\/h1>/);
+  assert.match(textPlain, /<p>Error &amp; &quot;quotes&quot;<\/p>/);
+
+  // safeHtml wrapper is preserved for trusted markup
+  const resHtml = pageResponse(req, 200, 'Clean Title', safeHtml('<b>formatted</b>'));
+  const textHtml = await resHtml.text();
+  assert.match(textHtml, /<title>Clean Title<\/title>/);
+  assert.match(textHtml, /<p><b>formatted<\/b><\/p>/);
 });

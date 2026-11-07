@@ -317,8 +317,10 @@ tool is marked destructive. A client may use the hint to ask you
 before a destructive call; an additive call still reaches the outside
 world, so it is still a dry run until `confirm` is true.
 
-The additive tools are `accept`, `chrome_create_profile`,
-`chrome_extension_enable`, `chrome_open_profile`, `comment`,
+The additive tools are `accept`, `analytics`,
+`chrome_create_profile`,
+`chrome_extension_enable`, `chrome_open_profile`, `chrome_remember`,
+`chrome_spaces_setup`, `comment`,
 `diagnostics_opened`, `diagnostics_support`, `find`, `follow`, `post`,
 `profile_create`, `slack_react`, `slack_send` and `star`, and the
 page-invitation tool described in the next paragraph. Every other
@@ -326,7 +328,10 @@ changing tool is destructive. `risk_grid` is read-only: it only reads
 your profiles and runs, so it runs for real with no `confirm`. `find`
 stays a preview: it writes nothing to your profiles, but every call
 signs in to Bluesky live, so it is a dry run until `confirm` is true,
-like any other changing tool.
+like any other changing tool. `analytics` stays a preview too: it only
+reads the platforms, but every call signs in live and writes export
+files, so it is a dry run until `confirm` is true, like any other
+changing tool.
 
 Some commands are split into more than one tool, so each form keeps
 its own label. The page-invitation command is additive, and its
@@ -340,7 +345,9 @@ read-only. `schedule_pause` and `schedule_resume` each gain an `--all`
 form for every computer sharing the store, `auth_login` gains
 `auth_login_sign_up`, `profile_auth` gains `profile_auth_all`, and
 `auth_anonymous_usage_stats` gains `auth_anonymous_usage_stats_on` and
-`auth_anonymous_usage_stats_off`. The base tool does not accept the split-out
+`auth_anonymous_usage_stats_off`, and `auth_share_activity_publicly` gains
+`auth_share_activity_publicly_on` and `auth_share_activity_publicly_off`.
+The base tool does not accept the split-out
 arguments: a call to `slack_react` that names `remove` is refused as an
 unknown argument, and the refusal says `remove belongs to slack_unreact`.
 The base tool's description ends by naming each split-out argument and
@@ -666,16 +673,35 @@ call may run at most 600 seconds by default
 
 ## Catalog listings
 
-The server is published in the
+The server is listed in the
 [official MCP Registry](https://registry.modelcontextprotocol.io/) as
-`io.github.blowhorn-ai/blowhorn`, and its launcher on npm as
-[`blowhorn-mcp`](https://www.npmjs.com/package/blowhorn-mcp). The listing
-input, `server.json`, lives in the public
+`io.github.blowhorn-ai/blowhorn`, status `active`, and its launcher is on
+npm as [`blowhorn-mcp`](https://www.npmjs.com/package/blowhorn-mcp).
+The latest version is 1.0.0 on both. The registry has 0.1.1 through
+1.0.0; npm has 0.1.0 through 1.0.0.
+
+Version 1.0.0 is the first stable release of the launcher. It adds no
+launcher features over 0.1.4. It moves the launcher and the registry
+entry to Apache-2.0 (0.1.4 on npm still says AGPL-3.0-only), and it
+changes the hosted endpoint's rate limiter. The launcher needs Node.js
+20 or later.
+
+The listing input, `server.json`, lives in the public
 [blowhorn-mcp repository](https://github.com/blowhorn-ai/blowhorn-mcp)
 beside the source of the npm launcher. It carries the npm launcher's
-version, not the Blowhorn release's: the launcher works with Blowhorn
-1.61.0 or later, and each registry publish pairs with an npm publish of
-the same version. Other catalogs are not listed yet.
+version, not the Blowhorn release's, and each registry publish pairs with
+an npm publish of the same version. Other catalogs are not listed yet.
+
+To check the listing yourself:
+
+```sh
+npm view blowhorn-mcp version
+curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=blowhorn"
+```
+
+The first prints the latest npm version. The second lists the registry
+entries; the one named `io.github.blowhorn-ai/blowhorn` with
+`"isLatest": true` is the current one.
 
 See also the [CLI reference](/docs/reference/cli/) for the commands themselves,
 [Connect an AI assistant over MCP](/docs/how-to/set-up/connect-mcp-client/)

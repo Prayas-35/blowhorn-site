@@ -100,9 +100,12 @@ touches your account. In the app every scope is one duty switch, reading
   switch, the flagless pause above.
 - **The fleet** (every computer sharing your schedule, `--all`) - the
   **Entire fleet** row on Home's Fleet card, **Take leave for the fleet** in
-  Posture, or the popover's **Fleet** switch, which takes no reason. A reason
-  is optional; on Home you type
-  it beside the switch and it saves as you type. While the fleet is off duty,
+  Posture, or the popover's **Fleet** switch, which takes no reason. On Home,
+  the switch opens an optional reason under the row with two buttons: **Save**
+  takes leave with the reason you typed, and **Skip** takes leave with no reason.
+  Escape closes the reason and takes nothing. Clicking away keeps it open and
+  takes nothing either. If the leave cannot be written, the reason stays put so
+  you can press Save or Skip again. While the fleet is off duty,
   the card shows who took it off duty, when and why, and this computer's row is
   held until the fleet is back on duty.
 - **This order** (`--activity N`) - the duty switch on the item's row in the

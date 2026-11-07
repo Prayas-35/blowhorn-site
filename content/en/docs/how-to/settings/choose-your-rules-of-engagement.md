@@ -54,10 +54,12 @@ blowhorn risk set cautious --platform linkedin
 ```
 
 The choice is kept with your organization, so every computer you run
-Blowhorn on uses it, and the row's caption says **every computer**. If your
-organization cannot keep it yet, it is saved on this computer only: the
-command says `scope: this_computer` with the reason, and the row says
-**this computer only**. Your organization's choice for that platform comes
+Blowhorn on uses it. If your organization cannot keep it yet, it is saved on
+this computer only: the command says `scope: this_computer` with the reason,
+the app says so in one line under the grid, and the chip's slider reads
+**Set here, on this computer only**. Each grid cell shows only its rules of
+engagement (Warming, Safety on, Weapons tight or Weapons free); hold the
+pointer over a chip to see where its choice comes from. Your organization's choice for that platform comes
 first, so when it already has one, the command says it still applies on
 every computer and this computer's choice has no effect until an
 organization admin clears it. Choose **Follows Everyone** under the same

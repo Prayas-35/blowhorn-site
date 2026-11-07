@@ -1,0 +1,18 @@
+{{- /* The docs pages' contact-support card (copy in data/support.json docs),
+  a Dispatch card (DESIGN.md, Cards) so it never matches the Field-toned
+  Tells card above it. Rendered twice next to tells-docs-card.html and
+  shown by the same docs-rail-card rules, so exactly one copy is visible at
+  any width. The mailto subject names the page the reader was on.
+  Context: dict "page" and "where" (toc or end). */ -}}
+{{- if partial "tells-show.html" .page }}
+{{- with site.Data.support }}
+{{- /* urlquery writes a space as "+", which a mailto subject shows literally (RFC 6068 wants %20); a real "+" is already %2B. */ -}}
+{{- $subject := replace (printf "%s: %s" .docs.subject $.page.LinkTitle | urlquery) "+" "%20" }}
+<div class="docs-support-card card-dispatch docs-rail-card docs-rail-card-{{ $.where }}">
+  <p class="label">{{ .docs.eyebrow }}</p>
+  <p class="docs-support-card-title">{{ .docs.title }}</p>
+  <p class="docs-support-card-text">{{ .docs.text }}</p>
+  <p class="docs-support-card-link"><a href="mailto:{{ .email }}?subject={{ $subject | safeURL }}">{{ .email }}</a></p>
+</div>
+{{- end }}
+{{- end }}

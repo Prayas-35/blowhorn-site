@@ -1,0 +1,124 @@
+{{- /* Resolve one platform page (layout platform-page, content front matter
+  `platform: <id>`). Joins the page record in data/platform_pages.json with the
+  shared contract in the same file, the platform's canonical identity
+  (data/integrations.json + data/platforms/<id>.yaml), the action vocabulary
+  (data/actions.json) and each action's CLI line (data/action_examples.json), and
+  FAILS THE BUILD when they disagree, so a mismatched platform or action id can
+  never render:
+
+  - the platform must be a supported row in data/integrations.json with a YAML file
+  - the record's route must be this page's URL
+  - every activity type's action id must be in the vocabulary AND listed by the YAML
+  - activity ids are unique, and each is bound to a different action
+  - every local scene that names an action names one the YAML lists, its scene ids
+    are unique, and its join ("description" or "limits") is the YAML's text for it
+  - every action the YAML lists has an entry in data/action_examples.json
+
+  Name, logo, docs link, reach, and every action's name, behavior, limits and CLI
+  line come from the canonical files. The local stage's facts (what an amplify
+  does, the follow limits) are joined from the YAML, never retyped; every other
+  sourced fact is held by the record and checked verbatim by
+  check_platform_pages.py --source. Input: the content page (.). Returns the
+  resolved dict. */ -}}
+{{- $page := . -}}
+{{- $id := $page.Params.platform -}}
+{{- if not $id }}{{ errorf "platform-page: %s sets no `platform:` front matter" $page.File.Path }}{{ end -}}
+{{- $data := hugo.Data.platform_pages -}}
+{{- $contract := $data.contract -}}
+{{- if not $contract }}{{ errorf "platform-page: data/platform_pages.json has no contract" }}{{ end -}}
+{{- $rec := false -}}
+{{- range $data.pages }}{{ if eq .platform $id }}{{ $rec = . }}{{ end }}{{ end -}}
+{{- if not $rec }}{{ errorf "platform-page: no record for platform %q in data/platform_pages.json" $id }}{{ end -}}
+{{- if ne $page.RelPermalink ($rec.route | relURL) }}{{ errorf "platform-page: %s is served at %q but its record says route %q" $page.File.Path $page.RelPermalink $rec.route }}{{ end -}}
+
+{{- $row := false -}}
+{{- range hugo.Data.integrations.platforms }}{{ if eq .id $id }}{{ $row = . }}{{ end }}{{ end -}}
+{{- if not $row }}{{ errorf "platform-page: %q is not in data/integrations.json platforms" $id }}{{ end -}}
+{{- if ne $row.status "supported" }}{{ errorf "platform-page: %q is %q in data/integrations.json; only a supported platform gets a page" $id $row.status }}{{ end -}}
+{{- $yaml := index hugo.Data.platforms $id -}}
+{{- if not $yaml }}{{ errorf "platform-page: no data/platforms/%s.yaml for %q" $id $id }}{{ end -}}
+
+{{- /* The platform's own actions, resolved against the vocabulary. */ -}}
+{{- $byId := dict -}}
+{{- $resolved := slice -}}
+{{- range $yaml.actions -}}
+  {{- $a := partial "action-resolve.html" . -}}
+  {{- $byId = merge $byId (dict $a.id $a) -}}
+  {{- $resolved = $resolved | append $a -}}
+{{- end -}}
+
+{{- /* Activity types: each bound to one action the platform lists. */ -}}
+{{- $activities := slice -}}
+{{- $typeOf := dict -}}
+{{- $activityOf := dict -}}
+{{- $labelOf := dict -}}
+{{- range $rec.activities -}}
+  {{- if index $labelOf .id }}{{ errorf "platform-page: %q repeats activity id %q" $id .id }}{{ end -}}
+  {{- $labelOf = merge $labelOf (dict .id .label) -}}
+  {{- $act := index $byId .action -}}
+  {{- if not $act }}{{ errorf "platform-page: activity %q of %q names action %q, which data/platforms/%s.yaml does not list" .id $id .action $id }}{{ end -}}
+  {{- if index $typeOf .action }}{{ errorf "platform-page: %q binds two activities to action %q" $id .action }}{{ end -}}
+  {{- $typeOf = merge $typeOf (dict .action .label) -}}
+  {{- $activityOf = merge $activityOf (dict .action .id) -}}
+  {{- $activities = $activities | append (merge . (dict "resolved" $act)) -}}
+{{- end -}}
+
+{{- /* Local stage scenes: unique ids; an action names one the YAML lists, and the
+  join reads that action's YAML text. A scene with no action (dry fire) joins nothing. */ -}}
+{{- $scenes := slice -}}
+{{- $sceneIds := dict -}}
+{{- range $rec.local.scenes -}}
+  {{- if index $sceneIds .id }}{{ errorf "platform-page: %q repeats local scene id %q" $id .id }}{{ end -}}
+  {{- $sceneIds = merge $sceneIds (dict .id true) -}}
+  {{- $sid := .id -}}
+  {{- $join := .join -}}
+  {{- $fact := "" -}}
+  {{- with .action -}}
+    {{- $act := index $byId . -}}
+    {{- if not $act }}{{ errorf "platform-page: local scene %q of %q names action %q, which data/platforms/%s.yaml does not list" $sid $id . $id }}{{ end -}}
+    {{- /* The schema requires a join on every action-bearing scene. No fallback: a
+      missing join is a build error, so the page never shows a text it did not choose. */ -}}
+    {{- if not $join }}{{ errorf "platform-page: local scene %q of %q names action %q but sets no join; the schema requires one" $sid $id . }}{{ end -}}
+    {{- $fact = index $act $join -}}
+    {{- if not $fact }}{{ errorf "platform-page: local scene %q of %q joins an empty %q from action %q" $sid $id $join . }}{{ end -}}
+  {{- end -}}
+  {{- $scenes = $scenes | append (merge . (dict "fact" $fact)) -}}
+{{- end -}}
+{{- if lt (len $scenes) 2 }}{{ errorf "platform-page: %q needs at least two local scenes" $id }}{{ end -}}
+{{- $local := merge $rec.local (dict "scenes" $scenes) -}}
+
+{{- /* Each action's CLI line, from the same examples the docs page shows. */ -}}
+{{- $cliOf := dict -}}
+{{- range hugo.Data.action_examples.examples -}}
+  {{- if eq .platform $id }}{{ $cliOf = merge $cliOf (dict .action .surfaces.cli) }}{{ end -}}
+{{- end -}}
+
+{{- /* Actions in the platform's own order, each tagged with the type it belongs to. */ -}}
+{{- $actions := slice -}}
+{{- range $resolved -}}
+  {{- $cli := index $cliOf .id -}}
+  {{- if not $cli }}{{ errorf "platform-page: data/action_examples.json has no %s example for action %q" $id .id }}{{ end -}}
+  {{- $actions = $actions | append (merge . (dict "type" (index $typeOf .id | default "") "activity" (index $activityOf .id | default "") "cli" $cli)) -}}
+{{- end -}}
+
+{{- /* The one primary call to action installs the browser extension from its
+  Chrome Web Store listing, the same link layouts/download.html's extension card
+  uses (check_platform_pages.py fails the build if the two differ). It is built
+  here, never in the record, so a deep link cannot be invented. */ -}}
+{{- $extensionHref := "https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf" -}}
+
+{{- return dict
+  "id" $id
+  "rec" $rec
+  "contract" $contract
+  "name" $yaml.name
+  "short" (replaceRE `\s*\(.*\)$` "" $yaml.name)
+  "logo" $yaml.logo
+  "docs" ($yaml.docs | default $row.docs)
+  "reach" $yaml.reach
+  "activities" $activities
+  "local" $local
+  "actions" $actions
+  "startHref" $extensionHref
+  "catalogPath" hugo.Data.integrations.catalogPath
+-}}

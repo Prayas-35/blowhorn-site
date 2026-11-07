@@ -28,7 +28,9 @@ cover. A command that only runs in one place, such as accept on LinkedIn, can
 only be saved for that place. One you saved on "all" before keeps running there.
 When you edit it, the editor picks that place for you and says so, and saving
 stores it. `blowhorn schedule upsert` does the same when your change names no
-platform, and prints one line saying it did.
+platform, and prints one line saying it did. Before you save it, **Dry fire** in
+the editor rehearses the routine as you have it and stops before acting, so
+nothing is sent or changed.
 
 To move a job, drag its next time to another time. Only the next one moves, and
 only to a time still ahead; the dashed times after it follow on their own. From

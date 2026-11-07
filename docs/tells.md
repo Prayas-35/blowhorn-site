@@ -31,8 +31,8 @@ Build a link with the partial; never hard-code a Tells URL in a template:
 
 | Placement | Where | Template |
 | --- | --- | --- |
-| `bar` | Slim, dismissible bar above the header on every public page | `tells-bar.html`, `tells-bar-head.html`, `assets/js/tells-bar.js` |
-| `nav` | Top-level "Am I a Bot?" item with a Free pill, before Pricing; also the Resources menu entry | `header.html` |
+| `bar` | Slim, dismissible bar: message + Am I a Bot?/Free CTA centered; dismiss far right; `text_short` below 720px | `tells-bar.html`, `tells-bar-head.html`, `assets/js/tells-bar.js` |
+| `nav` | Resources menu entry (label); Free pill text for the announcement-bar CTA | `header.html`, `tells-bar.html` |
 | `home` | Band after Trust on the Signal home page (Sleeper Cell art) | `home/tells.html` |
 | `footer` | Free tools column | `footer.html` |
 | `compare` | Callout before the FAQ on every `/compare/<slug>/` page, and the FAQ links that point at Tells | `tells-callout.html` in `versus.html` |
@@ -41,6 +41,13 @@ Build a link with the partial; never hard-code a Tells URL in a template:
 | `docs` | Card under the table of contents (1280px and up), else at the end of the page | `tells-docs-card.html` in `docs/baseof.html` |
 | `404` | Line under the 404 message | `404.html` |
 
+The docs card shares its spot with the support card: `docs-support-card.html`,
+copy and address in `data/support.json` (schema: `schemas/support.schema.json`),
+a Dispatch card so it never matches the Field-toned Tells card above it. Both
+carry `docs-rail-card` plus `docs-rail-card-toc` or `-end`, and those rules in
+`assets/scss/_styles_project.scss` decide which copy shows; a new rail card
+takes the same classes. Its mailto subject names the page the reader was on.
+
 The alternate home layouts (`/home-oil/`, `/home-reveille/`) do not render
 `signal.html` and carry no band. Prose links in the docs (synced from the
 product repository), the Field Manual, the Trust Center and the role and
@@ -48,6 +55,13 @@ solution FAQs stay untagged on purpose; `check_tells.py` ignores links without
 UTM parameters.
 
 ## The announcement bar
+
+The bar centers a group of the message text immediately followed by one CTA:
+the "Am I a Bot?" label and the green Free pill share a single link to Tells
+(`utm_content=bar`). Free appears only in the pill. The dismiss control is
+pinned to the far right and kept clear of the CTA (equal side padding keeps
+the group optically centered). Below 720px the bar shows `bar.text_short`
+instead of `bar.text` on one line with the CTA; there is no wrap or ellipsis.
 
 Dismissing the bar stores `dismissed` under `bar.storage_key`
 (`bh-tells-bar-v1`) in localStorage. An inline script in the head

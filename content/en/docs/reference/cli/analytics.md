@@ -11,12 +11,42 @@ The `blowhorn analytics` commands. Each one's `--help` prints the same text.
 
 | Command | What it does |
 | --- | --- |
+| [`analytics`](#blowhorn-analytics) | Export analytics data into the repository-root data/analytics/ directory for the selected profile. |
 | [`analytics activities`](#blowhorn-analytics-activities) | Print several activities' results at once, from one set of store reads. |
 | [`analytics activity`](#blowhorn-analytics-activity) | Print one activity's result, read from the store. |
 | [`analytics history`](#blowhorn-analytics-history) | Print the follower history the collectors have already recorded, as one dated series read from the store: every LinkedIn page and every profile's X trend, whichever machine collected them. |
 | [`analytics import-exports`](#blowhorn-analytics-import-exports) | Read the LinkedIn page content exports already on disk and record each activity's reception figures in the store. |
 | [`analytics operations`](#blowhorn-analytics-operations) | Aggregate the run ledger, read from the store, into operations per profile, per platform, per command, per day or per host. |
 | [`analytics pages`](#blowhorn-analytics-pages) | List, add, remove or seed the LinkedIn pages analytics collects from for the signed-in organization, read from and written to the store. |
+
+## blowhorn analytics
+
+Export analytics data into the repository-root data/analytics/ directory for the selected profile. LinkedIn exports honor `--lookback`; X and Bluesky append a follower/following trend row to the profile's CSV history.
+
+```text
+blowhorn analytics [OPTIONS]
+```
+
+| Flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--lookback` | integer |  | Days to look back for export |
+| `--json` | boolean | `false` | Emit machine-readable JSON output |
+| `--platform` | string |  | Platform scope for `blowhorn analytics`. One of: bluesky, linkedin, x, all (`all` means every platform listed here) |
+| `--pace` | string |  | Pace of the random delays between `blowhorn analytics` actions (page loads, typing, clicks, API calls): a preset name (fast/normal/slow) or a numeric multiplier (e.g. 0.5, 2.0). Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
+| `--risk-profile` | string |  | Risk Profile this run uses: cautious, standard or brisk. For this one run it beats the schedule's value, the profile's choice and configuration. A value after the command word wins over one before it; an unrecognized value is rejected before anything runs |
+
+Also takes the [shared flags](/docs/reference/cli/shared-flags/): `--config`, `--log-dir`, `--profile`, `--exclude`, `--headless`, `--chrome-launch`, `--headed`, `--dry-run`, `--verbose`.
+
+Examples:
+
+```bash
+blowhorn analytics --profile personal --dry-run -v
+blowhorn analytics --profile personal --lookback 365
+blowhorn analytics --platform x --profile personal,acme
+blowhorn analytics --platform x --profile all --exclude ""
+```
+
+Output: json with `--json`, text otherwise.
 
 ## blowhorn analytics activities
 

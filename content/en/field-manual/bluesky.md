@@ -9,6 +9,13 @@ layout: field-manual
 weight: 50
 checked: 13 October 2026
 lastmod: 2026-10-13
+
+plate:
+  file: fm-bluesky-open.webp
+  alt: "Open Field Manual with a woodcut of an open sky and a flock of birds"
+  caption: "No Bluesky logo in the art."
+  w: 1280
+  h: 720
 ---
 
 ## How Bluesky feeds work

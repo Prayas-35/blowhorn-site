@@ -1,7 +1,7 @@
 ---
 title: "blowhorn auth"
 linkTitle: "auth"
-description: "blowhorn auth: anonymous-usage-stats, login, logout, status, switch-organization."
+description: "blowhorn auth: anonymous-usage-stats, login, logout, share-activity-publicly, status, switch-organization."
 weight: 102
 ---
 
@@ -14,6 +14,7 @@ The `blowhorn auth` commands. Each one's `--help` prints the same text.
 | [`auth anonymous-usage-stats`](#blowhorn-auth-anonymous-usage-stats) | Show or set whether your account shares anonymous usage data for product improvement. |
 | [`auth login`](#blowhorn-auth-login) | Sign in to Blowhorn at https://cloud.blowhorn.ai in your browser. |
 | [`auth logout`](#blowhorn-auth-logout) | Sign out of Blowhorn and clear the local entitlement attestation cache. |
+| [`auth share-activity-publicly`](#blowhorn-auth-share-activity-publicly) | Show or set whether your completed runs can appear in the public activity feed. |
 | [`auth status`](#blowhorn-auth-status) | Show whether Blowhorn credentials and an entitlement attestation are present. |
 | [`auth switch-organization`](#blowhorn-auth-switch-organization) | Switch the signed-in account to another of its organizations. |
 
@@ -103,6 +104,37 @@ Examples:
 ```bash
 blowhorn auth logout
 blowhorn auth logout --json
+```
+
+Output: json with `--json`, text otherwise.
+
+## blowhorn auth share-activity-publicly
+
+Show or set whether your completed runs can appear in the public activity feed.
+
+Reads and writes shareActivityPublicly in your Blowhorn account's preferences (GET /api/identity/users/profile, PUT /api/identity/users/preferences with that one field, so no other preference changes). It belongs to the account, so every computer you use Blowhorn on follows it. On, your completed runs can appear in the public activity feed on blowhorn.ai, linked to your profile only when your profile is public. Off, they stay visible only inside your org. Not set reads as on. With no flag it reads your account and always exits 0: signed out or unreachable, it reports on and says why. `--on` and `--off` save the setting and exit 1 when your account cannot be written. `--dry-run` reads and sends nothing.
+
+```text
+blowhorn auth share-activity-publicly [OPTIONS]
+```
+
+| Flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--on` | boolean | `false` | Share your activity publicly (saved to your account). |
+| `--off` | boolean | `false` | Keep your activity private to your org (saved to your account). |
+| `--json` | boolean | `false` | Emit machine-readable JSON output |
+| `--platform` | string |  | Accepted and ignored by `blowhorn auth`: this command never acts on a platform, so `--platform` has no effect here -- including a value inherited from `BLOWHORN_PLATFORM` or defaults.platform in .blowhorn.yaml |
+| `--pace` | string |  | Accepted by `blowhorn auth share-activity-publicly` because `--pace` is a global flag, but this command does no paced work -- it sleeps between nothing -- so the value changes nothing about how it runs and appears only in the Pace column of the -v summary. Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
+| `--risk-profile` | string |  | Accepted by `blowhorn auth share-activity-publicly` because `--risk-profile` is a global flag, but this command does no gated work -- no Risk Profile hold, cap or pace applies to it -- so the value changes nothing about how it runs. A value after the command word wins over one before it; an unrecognized value is rejected before anything runs |
+
+Also takes the [shared flags](/docs/reference/cli/shared-flags/): `--config`, `--log-dir`, `--profile`, `--exclude`, `--headless`, `--chrome-launch`, `--headed`, `--dry-run`, `--verbose`.
+
+Examples:
+
+```bash
+blowhorn auth share-activity-publicly
+blowhorn auth share-activity-publicly --off
+blowhorn auth share-activity-publicly --json
 ```
 
 Output: json with `--json`, text otherwise.

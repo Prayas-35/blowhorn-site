@@ -315,18 +315,19 @@ Output: json with `--json`, text otherwise.
 
 ## blowhorn schedule trigger-now
 
-Force a specific scheduled action to run immediately. While `blowhorn schedule pause` is in effect the activity is not run and the command exits 1, unless `--ignore-pause` is passed. A Risk Profile hold, including while a profile is warming up, also keeps it from running unless you confirm at the prompt or pass `--ignore-risk`. A limit the platform publishes still applies. Browser visibility comes from the job: its own headless=/headed= params, then the environment, then Settings.
+Force a specific scheduled action to run immediately. While `blowhorn schedule pause` is in effect the activity is not run and the command exits 1, unless `--ignore-pause` is passed. A Risk Profile hold, including while a profile is warming up, also keeps it from running unless you confirm at the prompt or pass `--ignore-risk`. A limit the platform publishes still applies. Browser visibility comes from the job: its own headless=/headed= params, then the environment, then Settings. With `--payload-stdin` and `--dry-run` it rehearses a routine nobody has saved instead: the routine's values arrive on stdin, as the editor builds them, and no activity number is given.
 
 ```text
-blowhorn schedule trigger-now [OPTIONS] activity
+blowhorn schedule trigger-now [OPTIONS] [activity]
 ```
 
 | Argument | Required | Description |
 | --- | --- | --- |
-| `activity` | yes | Activity number to execute |
+| `activity` | no | Activity number to execute |
 
 | Flag | Type | Default | Description |
 | --- | --- | --- | --- |
+| `--payload-stdin` | boolean | `false` | Dry fire one routine that is not saved: read one schedule row's values as JSON on stdin (the fields `schedule upsert` takes, naming one Command, Profile and Platform) and walk it through the dry run as far as the action stops, printing each stage as it is reached. Needs `--dry-run`; no activity number is given, and `--profile` and `--platform` are not read. Writes nothing - no schedule row, ledger entry or run record. Hacker News is refused, because its dry run signs in. |
 | `--ignore-pause` | boolean | `false` | Run even while `blowhorn schedule pause` is in effect; without it a paused scheduler claims nothing |
 | `--ignore-quiet-hours` | boolean | `false` | Run even inside the quiet hours (defaults.quiet_hours, or a profile's own Quiet Hours setting); without it a due activity inside the window is held until it ends |
 | `--ignore-risk` | boolean | `false` | Run this once even if your Risk Profile would hold it (a daily cap, quiet hours, outreach turned off or a pause after a sign-in challenge). Only this run; your Risk Profile stays as it is. A limit the platform itself publishes still applies |
@@ -344,6 +345,7 @@ blowhorn schedule trigger-now 7 --dry-run
 blowhorn schedule trigger-now 7
 blowhorn schedule trigger-now 7 --ignore-pause
 blowhorn schedule trigger-now 7 --ignore-risk
+blowhorn schedule trigger-now --dry-run --payload-stdin
 ```
 
 Output: json with `--json`, text otherwise.
