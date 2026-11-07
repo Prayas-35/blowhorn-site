@@ -13,6 +13,8 @@ import urllib.request
 EXPECTED_REPOSITORY = "blowhorn-ai/blowhorn-site"
 API_ROOT = "https://api.github.com"
 RUNS_PAGE_SIZE = 100
+# Bound a malformed or unexpectedly repeating response at 10,000 runs.
+RUNS_PAGE_LIMIT = 100
 
 
 def api_request(method: str, path: str, body: dict | None = None) -> dict:
@@ -94,8 +96,7 @@ def handle_pull_request(
         marked_ready = True
 
     pending = []
-    page = 1
-    while True:
+    for page in range(1, RUNS_PAGE_LIMIT + 1):
         query = urllib.parse.urlencode(
             {
                 "status": "action_required",
@@ -110,7 +111,10 @@ def handle_pull_request(
         pending.extend(run for run in page_runs if run.get("head_sha") == head_sha)
         if len(page_runs) < RUNS_PAGE_SIZE:
             break
-        page += 1
+    else:
+        raise RuntimeError(
+            f"workflow-runs pagination exceeded {RUNS_PAGE_LIMIT} pages"
+        )
 
     approved = []
     for run in pending:

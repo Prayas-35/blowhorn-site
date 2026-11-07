@@ -98,6 +98,40 @@ class HandlerTest(unittest.TestCase):
         self.assertEqual([200], approved)
         self.assertEqual([1, 2], run_pages)
 
+    def test_pagination_cap_fails_closed_before_approving_runs(self):
+        run_pages = []
+        approval_paths = []
+
+        def request(method, path, body=None):
+            if path.endswith("/pulls/14"):
+                return {"draft": False, "head": {"sha": "repeated-full-page"}}
+            if "/actions/runs?" in path:
+                query = urllib.parse.parse_qs(urllib.parse.urlsplit(path).query)
+                page = int(query["page"][0])
+                run_pages.append(page)
+                return {
+                    "workflow_runs": [
+                        {
+                            "id": page * handler.RUNS_PAGE_SIZE + run_id,
+                            "head_sha": "repeated-full-page",
+                        }
+                        for run_id in range(handler.RUNS_PAGE_SIZE)
+                    ]
+                }
+            if path.endswith("/approve"):
+                approval_paths.append(path)
+                return {}
+            self.fail(f"unexpected request: {method} {path}")
+
+        with mock.patch.object(handler, "RUNS_PAGE_LIMIT", 2):
+            with self.assertRaisesRegex(RuntimeError, "exceeded 2 pages"):
+                handler.handle_pull_request(
+                    14, handler.EXPECTED_REPOSITORY, request
+                )
+
+        self.assertEqual([1, 2], run_pages)
+        self.assertEqual([], approval_paths)
+
     def test_ready_mutation_must_confirm_draft_is_false(self):
         for result in (
             {
