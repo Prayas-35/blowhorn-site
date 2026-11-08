@@ -42,6 +42,10 @@ def api_request(method: str, path: str, body: dict | None = None) -> dict:
         raise RuntimeError(
             f"GitHub API {method} {path} failed with HTTP {error.code}: {detail}"
         ) from error
+    except urllib.error.URLError as error:
+        raise RuntimeError(
+            f"GitHub API {method} {path} failed: {error.reason}"
+        ) from error
     result = json.loads(payload) if payload else {}
     if result.get("errors"):
         raise RuntimeError(f"GitHub API {method} {path} returned errors: {result['errors']}")

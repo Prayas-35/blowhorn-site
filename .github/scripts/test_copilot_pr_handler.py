@@ -11,6 +11,22 @@ import copilot_pr_handler as handler  # noqa: E402
 
 
 class HandlerTest(unittest.TestCase):
+    def test_api_request_wraps_network_error(self):
+        network_error = handler.urllib.error.URLError("temporary DNS failure")
+        with mock.patch.dict(os.environ, {"GH_TOKEN": "secret-token"}):
+            with mock.patch.object(
+                handler.urllib.request,
+                "urlopen",
+                side_effect=network_error,
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    r"GitHub API GET /repos/example failed: temporary DNS failure",
+                ) as raised:
+                    handler.api_request("GET", "/repos/example")
+
+        self.assertNotIn("secret-token", str(raised.exception))
+
     def test_marks_draft_ready_and_approves_only_matching_sha(self):
         calls = []
 
