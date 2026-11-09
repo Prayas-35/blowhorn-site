@@ -229,6 +229,20 @@ test('fleet page flags a snapshot older than two runs as stale', async () => {
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({ disk: [old] }), certsFetch)).text();
   assert.match(html, /Stale: the cron has missed at least two runs/);
 });
+test('fleet page preserves row collected_at when body does not repeat it', async () => {
+  const diskWithoutDateInBody = { ...diskSnap };
+  delete diskWithoutDateInBody.collected_at;
+  const db = {
+    prepare: () => ({
+      bind: () => ({
+        all: async () => ({ results: [{ collected_at: '2020-01-01T00:00:00Z', body: JSON.stringify(diskWithoutDateInBody) }] }),
+      }),
+    }),
+  };
+  const html = await (await handle(authed('/engineering/fleet/'), { ...env, FLEET_DB: db }, certsFetch)).text();
+  assert.match(html, /Stale: the cron has missed at least two runs/);
+  assert.match(html, /Collected Dec 31, 6:00 PM CST/);
+});
 test('fleet page says so when there is no data yet', async () => {
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({}), certsFetch)).text();
   assert.match(html, /No workload snapshot yet/);

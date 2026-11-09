@@ -355,7 +355,9 @@ function num(v) {
 
 function parseBody(row) {
   try {
-    return JSON.parse(row.body);
+    const data = JSON.parse(row.body);
+    if (!data || typeof data !== 'object') return null;
+    return { ...data, collected_at: row.collected_at || data.collected_at };
   } catch {
     return null;
   }
@@ -375,9 +377,10 @@ function csvOf(fields, rows) {
 
 function staleNote(snap, kind, nowMs) {
   if (!snap) return `<p class="stale">No ${kind} snapshot yet.</p>`;
-  const age = nowMs - new Date(snap.collected_at).getTime();
+  const t = new Date(snap.collected_at).getTime();
+  const age = nowMs - t;
   const when = `Collected ${escHtml(fmtCentral(snap.collected_at))} on ${escHtml(snap.collector_host || '')}`;
-  if (age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
+  if (Number.isNaN(age) || age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
   return `<p>${when}.</p>`;
 }
 
