@@ -79,6 +79,10 @@
   --surface: #FFFFFF;
   --surface-raised: #F4F7F6;
   --surface-tint: #DDF4F1;
+  /* Mega-menu panel fill. Light follows --surface-tint; dark uses a neutral
+     offset (#222) so the menu stands apart from the Signal olive page without
+     recolouring every --surface-tint consumer. */
+  --nav-panel: var(--surface-tint);
   --ink: #1E2117;
   --ink-muted: #5B6A70;
   --ink-wordmark: #3C494F;
@@ -145,6 +149,7 @@
     --surface: #1E2117;
     --surface-raised: #2A2E25;
     --surface-tint: #173A34;
+    --nav-panel: #222;
     --ink: #EDEDED;
     --ink-muted: #A3AEB2;
     --ink-wordmark: #FFFFFF;
@@ -460,9 +465,9 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
      blurring the page, so the panel carries the glass look without relying on it. */
   background:
     linear-gradient(180deg, var(--glass-sheen), transparent 46%),
-    var(--surface-tint);
-  /* Lifted off the Signal field: the tinted fill, a strong rim and the lift
-     shadow set the panel apart from the pale ambient surface. */
+    var(--nav-panel);
+  /* Lifted off the Signal field: --nav-panel, a strong rim and the lift
+     shadow set the panel apart from the ambient surface. */
   box-shadow:
     inset 0 1px 0 0 var(--glass-specular),
     inset 0 0 0 1px var(--line-strong),
@@ -526,11 +531,16 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
   position: relative; display: grid; gap: var(--space-2); align-content: start;
   padding: var(--space-4); border-radius: var(--radius-lg); color: var(--ink);
 }
-/* The panel's fill is --surface-tint, the field card's fill and the arrow
-   chip's default, so inside it the field card takes --surface and the chips on
-   unfilled cards take it too. */
+/* Light: panel fill is --surface-tint, so field cards take --surface and
+   unfilled-card chips take it too. Dark: panel is neutral #222 (--nav-panel),
+   so field cards return to the tint fill and chips on unfilled cards take the
+   tint so they stay visible on the grey panel. */
 .mm-panel :is(.card-stamp, .card-plain) { --card-chip: var(--surface); }
 .mm-panel .card-field { --card-bg: var(--surface); --card-chip: var(--surface-tint); }
+@media (prefers-color-scheme: dark) {
+  .mm-panel :is(.card-stamp, .card-plain) { --card-chip: var(--surface-tint); }
+  .mm-panel .card-field { --card-bg: var(--surface-tint); --card-chip: var(--surface); }
+}
 .mm-card-title { grid-row: 2; grid-column: 1; font-size: 15px; line-height: 21px; font-weight: 700; padding-right: var(--space-6); }
 .mm-card:hover .mm-card-title { color: var(--link); }
 .mm-card-desc { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
