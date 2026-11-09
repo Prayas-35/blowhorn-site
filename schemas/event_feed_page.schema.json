@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://blowhorn.ai/schemas/event_feed_page.schema.json",
   "title": "EventFeedPage",
-  "description": "JSON Schema projection of EventFeedPage and EventFeedItem from meshery/schemas v1.3.116 (schemas/constructs/v1beta3/event/api.yml), the response of GET /api/events/feed on the Blowhorn account service. Meshery's schemas are the source of truth: re-project this file when the pinned version changes, never edit the contract here. assets/js/activity-feed.js mirrors it for live payloads.",
+  "description": "JSON Schema projection of EventFeedPage and EventFeedItem from meshery/schemas v1.3.117 (schemas/constructs/v1beta3/event/api.yml), the response of GET /api/events/feed on the Blowhorn account service. Meshery's schemas are the source of truth: re-project this file when the pinned version changes, never edit the contract here. assets/js/activity-feed.js mirrors it for live payloads.",
   "$ref": "#/definitions/EventFeedPage",
   "definitions": {
     "EventFeedPage": {
@@ -41,7 +41,7 @@
     "EventFeedItem": {
       "type": "object",
       "additionalProperties": false,
-      "description": "An event projected into the public feed. Never includes email, names, description, provider or raw metadata.",
+      "description": "An event projected into the public feed. The owner's public profile fields (displayName, avatarUrl, organizationName, publicProfileUrl) are resolved at read time and present only for a public profile. Never includes email, description, provider or raw metadata.",
       "required": [
         "id",
         "userId",
@@ -111,7 +111,8 @@
         },
         "displayName": {
           "type": "string",
-          "maxLength": 80
+          "maxLength": 200,
+          "description": "The same value PublicUser.username carries for the owner, never an email. Resolved for every served owner and omitted when empty."
         },
         "avatarUrl": {
           "type": "string",

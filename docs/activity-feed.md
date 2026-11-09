@@ -6,14 +6,15 @@ Public copy on the card says the fallback lines are examples. It does not name a
 
 ## The contract
 
-The feed is `GET <cloud_url>/api/events/feed` on the account service (`params.cloud_url` in `hugo.toml`, `https://cloud.blowhorn.ai`). No auth. The response shape is `EventFeedPage` and its items are `EventFeedItem`, both defined in meshery/schemas v1.3.116 (`schemas/constructs/v1beta3/event/api.yml`). That repository is the source of truth; nothing here redefines the contract.
+The feed is `GET <cloud_url>/api/events/feed` on the account service (`params.cloud_url` in `hugo.toml`, `https://cloud.blowhorn.ai`). No auth. The response shape is `EventFeedPage` and its items are `EventFeedItem`, both defined in meshery/schemas v1.3.117 (`schemas/constructs/v1beta3/event/api.yml`). That repository is the source of truth; nothing here redefines the contract.
 
 | Piece | Value |
 |---|---|
 | Query | `page` (from 0), `pagesize` (default 20, max 50), optional `category`, `action`. The card asks for `page=0&pagesize=20&category=schedule&action=completed`. |
 | Envelope | `{ page, pageSize, totalCount, data: EventFeedItem[] }`, newest first. |
 | Required item fields | `id`, `userId` (UUIDs), `category`, `action`, `createdAt`, `visibility` (`public`), `platform` (one of the seven supported ids), `role` (3 to 40 characters), `line` (10 to 120). |
-| Optional item fields | `networks`, `displayName`, `avatarUrl`, `organizationName`, `publicProfileUrl` (https), present only for a public profile. Cloud is adding `handle` (the person's handle on the network, if they have one) next to `displayName`; it is not yet in the pinned meshery/schemas projection, so the script accepts it on its own (letters, digits and `. _ : / -`, up to 64 characters, a leading `@` stripped) and drops a malformed one without dropping the row. Re-project the schema when meshery/schemas publishes it. |
+| Optional item fields | `networks`, `displayName`, `avatarUrl`, `organizationName`, `publicProfileUrl` (https), present only for a public profile. `displayName` (up to 200 characters) is the same value `PublicUser.username` carries for the owner, never an email, resolved for every served owner and omitted when empty. |
+| `handle` (local extension) | Cloud has no `handle` field and meshery/schemas does not define one, so the JSON Schema projection leaves it out. For forward compatibility the script still accepts an optional `handle` (letters, digits and `. _ : / -`, up to 64 characters, a leading `@` stripped) and drops a malformed one without dropping the row. It never derives a handle from another field. With no handle the card hides the `[data-activity-handle]` slot and the name falls back from `displayName` to the role. If meshery/schemas adds a handle, re-project the schema and drop this row. |
 | Caching | `Cache-Control: public, max-age=N`, N at most 30. Over the limit the service answers 429 with `Retry-After`. |
 | Empty feed | `{ "page": 0, "pageSize": 20, "totalCount": 0, "data": [] }`. This is valid and is what the card sees until public events exist. |
 
@@ -23,7 +24,7 @@ The feed is `GET <cloud_url>/api/events/feed` on the account service (`params.cl
 
 | Piece | Role |
 |---|---|
-| `schemas/event_feed_page.schema.json` | JSON Schema projection of `EventFeedPage` and `EventFeedItem` from meshery/schemas v1.3.116. Re-project it when the pinned version changes. |
+| `schemas/event_feed_page.schema.json` | JSON Schema projection of `EventFeedPage` and `EventFeedItem` from meshery/schemas v1.3.117. Re-project it when the pinned version changes. |
 | `schemas/activity_feed.examples.schema.json` | Local schema for the bundled file only: `{ example: true, data }`, each item a `$ref` to `EventFeedItem`. |
 | `data/activity_feed.examples.json` | The collection baked into the home page. The envelope's `example: true` marks every item an example. |
 | `layouts/_partials/activity-feed.html` | Static card (first example, Examples label), the `data-feed-url` attribute built from `params.cloud_url`, and a `script type="application/json"` block holding the examples. Loads the script fingerprinted and deferred, only where the card is rendered. |

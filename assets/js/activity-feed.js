@@ -1,6 +1,6 @@
 /* Hero activity card. Pure helpers are exported for node:test.
    Items and the page envelope mirror EventFeedItem and EventFeedPage from
-   meshery/schemas v1.3.116 (schemas/event_feed_page.schema.json).
+   meshery/schemas v1.3.117 (schemas/event_feed_page.schema.json).
    The feed URL is not in this file: the partial puts it in the card's
    data-feed-url from params.cloud_url, and boot turns it into the
    transport. With no URL the card shows the bundled examples. Live items
@@ -25,7 +25,7 @@ export const LIMITS = Object.freeze({
   roleMax: 40,
   lineMin: 10,
   lineMax: 120,
-  name: 80,
+  name: 200,
   handle: 64,
   organization: 255,
   network: 255,
@@ -143,8 +143,9 @@ export function validateItem(input) {
     if (!displayName) return fail("displayName");
     item.displayName = displayName;
   }
-  // handle is being added by Cloud next to displayName and is not yet in the
-  // pinned meshery/schemas projection. A malformed one is dropped, not the row.
+  // handle is not in meshery/schemas and Cloud does not send it; it is a local
+  // extension kept for forward compatibility. Without one the handle slot stays
+  // hidden. A malformed one is dropped, not the row.
   if (input.handle !== undefined) {
     const handle = typeof input.handle === "string" ? plain(input.handle.replace(/^@+/, ""), 1, LIMITS.handle) : null;
     if (handle && HANDLE.test(handle)) item.handle = handle;

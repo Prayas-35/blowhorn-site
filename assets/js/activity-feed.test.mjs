@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   PLATFORMS,
+  LIMITS,
   INTERVAL_MS,
   validateItem,
   sanitizeItem,
@@ -909,4 +910,23 @@ test("a handle shows next to a displayName, stands in for a missing one, and a b
   paintActivity(view.root, { ...roleOnly, example: false }, { example: false });
   assert.equal(view.name.textContent, "Solo founder");
   assert.equal(view.handle.hidden, true);
+});
+
+test("a displayName up to the v1.3.117 limit paints with no handle, and the handle slot stays hidden", () => {
+  assert.equal(LIMITS.name, 200);
+  const longest = "A".repeat(200);
+  const named = sanitizeItem(item({ displayName: longest }));
+  assert.ok(named, "a 200-character displayName is in the contract");
+  assert.equal(named.displayName, longest);
+  assert.equal(named.handle, undefined, "no handle is invented from other fields");
+
+  const view = card();
+  view.handle.textContent = "@stale";
+  view.handle.hidden = false;
+  paintActivity(view.root, { ...named, example: false }, { example: false });
+  assert.equal(view.name.textContent, longest);
+  assert.equal(view.handle.textContent, "");
+  assert.equal(view.handle.hidden, true);
+
+  assert.equal(sanitizeItem(item({ displayName: "A".repeat(201) })), null);
 });
