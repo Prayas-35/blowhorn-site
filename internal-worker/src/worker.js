@@ -356,7 +356,7 @@ function num(v) {
 function parseBody(row) {
   try {
     const data = JSON.parse(row.body);
-    if (!data || typeof data !== 'object') return null;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return null;
     return { ...data, collected_at: row.collected_at || data.collected_at };
   } catch {
     return null;

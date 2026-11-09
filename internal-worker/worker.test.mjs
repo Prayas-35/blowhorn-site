@@ -243,6 +243,18 @@ test('fleet page preserves row collected_at when body does not repeat it', async
   assert.match(html, /Stale: the cron has missed at least two runs/);
   assert.match(html, /Collected Dec 31, 6:00 PM CST/);
 });
+test('fleet page ignores array snapshot body', async () => {
+  const db = {
+    prepare: () => ({
+      bind: () => ({
+        all: async () => ({ results: [{ collected_at: '2020-01-01T00:00:00Z', body: JSON.stringify(['malformed', 'array']) }] }),
+      }),
+    }),
+  };
+  const html = await (await handle(authed('/engineering/fleet/'), { ...env, FLEET_DB: db }, certsFetch)).text();
+  assert.match(html, /No workload snapshot yet/);
+  assert.match(html, /No disk snapshot yet/);
+});
 test('fleet page says so when there is no data yet', async () => {
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({}), certsFetch)).text();
   assert.match(html, /No workload snapshot yet/);
