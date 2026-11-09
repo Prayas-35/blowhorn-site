@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blowhorn.ai/schemas/social_links.schema.json",
+  "title": "Blowhorn social links",
+  "description": "data/social_links.json: Blowhorn's own public profiles, listed in order as icon links under the footer tagline (layouts/_partials/footer.html). Plain text, hyphens never em dashes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["links"],
+  "definitions": {
+    "text": { "type": "string", "minLength": 1, "not": { "pattern": "—" } }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "links": {
+      "description": "One entry per profile, in display order.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "url", "icon"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "description": "The platform's name, used as the link's accessible name.", "$ref": "#/definitions/text" },
+          "url": { "description": "Blowhorn's public profile on the platform.", "type": "string", "pattern": "^https://[^\\s]+$" },
+          "icon": { "description": "The platform owner's logo, a path under static/ (static/assets/platforms/), used as the file.", "type": "string", "pattern": "^assets/platforms/[a-z0-9-]+\\.(svg|png)$" }
+        }
+      }
+    }
+  }
+}

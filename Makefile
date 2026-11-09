@@ -307,6 +307,7 @@ check-schemas:
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/action_examples.schema.json -d data/action_examples.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/tells.schema.json -d data/tells.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/support.schema.json -d data/support.json
+	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/social_links.schema.json -d data/social_links.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/docs_events.schema.json -r schemas/defs/docs-event.schema.json -d data/docs_events.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/internal_access.schema.json -d internal-worker/access.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/bookmarklet.schema.json -d data/bookmarklet.json
