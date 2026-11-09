@@ -21,15 +21,20 @@ def page(head="", body=""):
 
 
 class CheckThirdPartyTest(unittest.TestCase):
-    def run_check(self, files):
+    def run_check(self, files, avatar_js=None):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp) / "public"
             for name, text in files.items():
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
+            extra = []
+            if avatar_js is not None:
+                source = Path(tmp) / "activity-feed.js"
+                source.write_text(avatar_js, encoding="utf-8")
+                extra = ["--avatar-source", str(source)]
             result = subprocess.run(
-                [sys.executable, str(SCRIPT), str(root)], capture_output=True, text=True, check=False
+                [sys.executable, str(SCRIPT), str(root), *extra], capture_output=True, text=True, check=False
             )
         return result.returncode, result.stderr
 
@@ -49,6 +54,18 @@ class CheckThirdPartyTest(unittest.TestCase):
             "css/site.css": "body{background:url(../img/a.png)}",
             "js/app.js": 'fetch("https://api.github.com/repos/x/releases")',
         })
+
+    def test_avatar_hosts_must_be_reviewed(self):
+        home = {"index.html": page()}
+        reviewed = 'export const AVATAR_HOSTS = Object.freeze([\n  "pbs.twimg.com",\n  "cdn.bsky.app",\n]);'
+        code, err = self.run_check(home, reviewed)
+        self.assertEqual(code, 0, err)
+        code, err = self.run_check(home, reviewed.replace('"cdn.bsky.app",', '"cdn.bsky.app",\n  "img.tracker.example",'))
+        self.assertEqual(code, 1, err)
+        self.assertIn("img.tracker.example", err)
+        code, err = self.run_check(home, "export const HOSTS = [];")
+        self.assertEqual(code, 1, err)
+        self.assertIn("AVATAR_HOSTS", err)
 
     def test_external_script_and_stylesheet_fail(self):
         self.assert_fails_naming({"index.html": page('<script src="https://cdn.example/x.js"></script>')}, "cdn.example")

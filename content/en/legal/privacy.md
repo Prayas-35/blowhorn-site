@@ -19,7 +19,7 @@ blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and style
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The download page asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the download button still works.
-- The home page's recent-activity card asks the Blowhorn account service (cloud.blowhorn.ai) for recently completed public activity from your browser. The request sends no cookies and no account details. It reaches Blowhorn like any other request your browser makes, with your IP address and the usual request headers. If the request fails or nothing is public yet, the card shows labelled examples. With JavaScript off, no request is made.
+- The home page's recent-activity card asks the Blowhorn account service (cloud.blowhorn.ai) for recently completed public activity from your browser. The request sends no cookies and no account details. It reaches Blowhorn like any other request your browser makes, with your IP address and the usual request headers. When a person has made their activity public, the card also loads their profile picture from the network the person uses (X, LinkedIn, Reddit, Bluesky, Slack or GitHub) or from Blowhorn's account service, with no referrer. If the request fails or nothing is public yet, the card shows labelled examples. With JavaScript off, no request is made.
 
 ### Google Analytics {#google-analytics}
 

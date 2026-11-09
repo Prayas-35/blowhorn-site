@@ -83,7 +83,7 @@ regenerate them. Claims on every page come from the product repository's
   Google Analytics 4 (`[services.googleAnalytics]` in `hugo.toml`;
   `layouts/_partials/analytics.html` loads gtag.js on every production page with
   analytics storage enabled and advertising storage denied), the download
-  page's release lookup on api.github.com, the home hero activity card's feed request to `params.cloud_url` (`data-feed-url`, [docs/activity-feed.md](docs/activity-feed.md)), and the footer newsletter form, which posts to
+  page's release lookup on api.github.com, the home hero activity card's feed request to `params.cloud_url` (`data-feed-url`) and its live avatars from `AVATAR_HOSTS` only ([docs/activity-feed.md](docs/activity-feed.md)), and the footer newsletter form, which posts to
   Blowhorn's own signup service at `api.blowhorn.ai`, an allowed host in `FORM_ACTION_HOSTS`. Never add another analytics or tracking tag, a
   CDN script or stylesheet, or web fonts from elsewhere, and never copy layer5io/docs' head,
   navbar or footer (Docsy's head would add a second, consent-less gtag). A new outside host needs a privacy

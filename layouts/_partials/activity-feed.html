@@ -1,9 +1,12 @@
 {{- /* Hero activity card. The first bundled example is in the HTML, so the
-   card is readable with no JavaScript. assets/js/activity-feed.js asks the
-   account service for the public event feed (data-feed-url, built from
-   params.cloud_url) and shows it only while it is fresh; on an empty feed,
-   a failure or an invalid payload it rotates the bundled examples, labelled
-   as such. docs/activity-feed.md */ -}}
+   card is readable with no JavaScript and the script's first paint does not
+   move it. assets/js/activity-feed.js asks the account service for the
+   public event feed (data-feed-url, built from params.cloud_url) and shows
+   it only while it is fresh; on an empty feed, a failure or an invalid
+   payload it rotates the bundled examples, labelled as such. Platform names
+   and first-party logo paths come from data/platforms/*.yaml (data-platforms).
+   The monogram hue class is the first 8 hex digits of userId mod 12, the same
+   rule as monogramHue() in the script. docs/activity-feed.md */ -}}
 {{- $feed := index site.Data "activity_feed.examples" -}}
 {{- if not $feed -}}
   {{- with index site.Data "activity_feed" -}}
@@ -16,21 +19,56 @@
 {{- if not $feed }}{{ errorf "activity feed: data/activity_feed.examples.json is missing" }}{{ end -}}
 {{- $first := index $feed.data 0 -}}
 {{- if not $first }}{{ errorf "activity feed: data/activity_feed.examples.json has no data" }}{{ end -}}
-<aside class="activity-feed card card-glass" data-activity-feed{{ with $feedURL }} data-feed-url="{{ . }}"{{ end }} aria-labelledby="activity-feed-label">
-  <div class="activity-feed-head">
-    <p id="activity-feed-label" class="label">Recent activity</p>
-    <p class="activity-feed-badge" data-activity-examples>Examples</p>
+{{- $platforms := dict -}}
+{{- range $id, $p := site.Data.platforms -}}
+  {{- $platforms = merge $platforms (dict $id (dict "name" (replaceRE ` \(.*\)$` "" $p.name) "logo" ($p.logo | relURL))) -}}
+{{- end -}}
+{{- $fp := index $platforms $first.platform -}}
+{{- if not $fp }}{{ errorf "activity feed: no data/platforms entry for %q" $first.platform }}{{ end -}}
+{{- $words := split $first.role " " -}}
+{{- $initials := upper (substr (index $words 0) 0 1) -}}
+{{- if gt (len $words) 1 }}{{ $initials = printf "%s%s" $initials (upper (substr (index $words 1) 0 1)) }}{{ end -}}
+{{- $hue := mod (int (printf "0x%s" (substr $first.userId 0 8))) 12 -}}
+<aside class="activity-feed" data-activity-feed data-state="examples"{{ with $feedURL }} data-feed-url="{{ . }}"{{ end }} data-platforms="{{ $platforms | jsonify }}" aria-labelledby="activity-feed-label">
+  <div class="af-head">
+    <p class="af-status">
+      <span class="af-live" data-activity-live hidden><span class="af-pulse" aria-hidden="true"></span>Live</span>
+      <span class="af-badge" data-activity-examples>Examples</span>
+      <span id="activity-feed-label" class="af-label">Recent activity</span>
+    </p>
+    <div class="af-nav activity-feed-nav">
+      <button type="button" class="af-nav-btn" data-activity-prev aria-label="Previous activity"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="af-nav-btn" data-activity-next aria-label="Next activity"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
   </div>
-  <p class="activity-feed-note caption" data-activity-note>Illustrative examples, not real customer activity.</p>
-  <div class="activity-feed-stage">
-    <p class="activity-feed-line body" data-activity-line>{{ $first.line }}</p>
-    <p class="activity-feed-meta caption muted"><span data-activity-role>{{ $first.role }}</span> <span data-activity-when>Example activity</span></p>
+  <p class="af-note" data-activity-note>Illustrative examples, not real customer activity.</p>
+  <div class="af-stage" data-activity-stage>
+    <div class="af-identity">
+      <span class="af-avatar" aria-hidden="true">
+        <span class="af-avatar-media" data-activity-avatar>
+          <span class="af-monogram af-hue-{{ $hue }}" data-activity-monogram>{{ $initials }}</span>
+        </span>
+        <span class="af-platform-badge"><img data-activity-platform-logo src="{{ $fp.logo }}" alt="" width="16" height="16"></span>
+      </span>
+      <div class="af-who">
+        <p class="af-name"><span data-activity-name>{{ $first.role }}</span><span class="af-org" data-activity-org hidden></span></p>
+        <p class="af-meta"><span class="af-handle" data-activity-handle hidden></span><span data-activity-platform>{{ $fp.name }}</span><span class="af-dot" aria-hidden="true">·</span><time data-activity-when datetime="{{ $first.createdAt }}">Example activity</time></p>
+      </div>
+    </div>
+    <p class="af-line" data-activity-line>{{ $first.line }}</p>
+    <div class="af-foot">
+      <ul class="af-networks" data-activity-networks>
+        {{- $nets := $first.networks | default slice }}{{ if lt (len $nets) 2 }}{{ $nets = slice }}{{ end }}{{ range first 3 $nets }}<li class="af-chip">{{ . }}</li>{{ end -}}
+      </ul>
+      <p class="af-cta-slot" data-activity-link-slot hidden><a class="af-cta" data-activity-link>View profile<span class="af-cta-icon" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></p>
+    </div>
   </div>
-  <p class="activity-feed-profile" data-activity-link-slot hidden></p>
-  <div class="activity-feed-nav">
-    <button type="button" class="button button-secondary" data-activity-prev aria-label="Previous activity">Previous</button>
-    <button type="button" class="button button-secondary" data-activity-next aria-label="Next activity">Next</button>
+  <div class="af-empty" data-activity-empty hidden>
+    <span class="af-empty-stack" aria-hidden="true"><span></span><span></span><span></span></span>
+    <p class="af-empty-title">No public activity yet</p>
+    <p class="af-empty-sub">Completed activity shows up here as it happens.</p>
   </div>
+  <div class="af-progress" data-activity-progress aria-hidden="true"></div>
 </aside>
 <script type="application/json" id="activity-feed-data">{{ $feed | jsonify | safeJS }}</script>
 {{- $js := resources.Get "js/activity-feed.js" | minify | fingerprint }}
