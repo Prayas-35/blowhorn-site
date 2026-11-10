@@ -83,6 +83,7 @@ AVATAR_HOSTS = {
     "styles.redditmedia.com",
     "www.redditstatic.com",
     "cloud.blowhorn.ai",
+    "lh3.googleusercontent.com",
 }
 AVATAR_SOURCE = Path(__file__).resolve().parents[2] / "assets" / "js" / "activity-feed.js"
 AVATAR_CONST = re.compile(r"AVATAR_HOSTS\s*=\s*Object\.freeze\(\[(.*?)\]\)", re.DOTALL)

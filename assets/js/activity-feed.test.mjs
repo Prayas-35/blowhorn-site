@@ -334,7 +334,9 @@ test("relativeTime covers each bucket and clamps the future", () => {
 
 test("avatars load only from allowlisted https hosts and never for examples", () => {
   assert.ok(AVATAR_HOSTS.includes("avatars.githubusercontent.com"));
+  assert.ok(AVATAR_HOSTS.includes("lh3.googleusercontent.com"));
   assert.equal(avatarAllowed("https://avatars.githubusercontent.com/u/1?v=4"), true);
+  assert.equal(avatarAllowed("https://lh3.googleusercontent.com/a/photo"), true);
   assert.equal(avatarAllowed("https://PBS.twimg.com/a.jpg"), true);
   assert.equal(avatarAllowed("http://pbs.twimg.com/a.jpg"), false);
   assert.equal(avatarAllowed("https://evil.example/a.jpg"), false);

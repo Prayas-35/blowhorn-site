@@ -475,6 +475,7 @@ export const AVATAR_HOSTS = Object.freeze([
   "styles.redditmedia.com",
   "www.redditstatic.com",
   "cloud.blowhorn.ai",
+  "lh3.googleusercontent.com",
 ]);
 const AVATAR_HOST_SET = new Set(AVATAR_HOSTS);
 const AVATAR_PX = 64;
