@@ -995,3 +995,30 @@ test("fallback for 429 and network error provides retry ttlMs and schedules a re
   assert.equal(netRes.reason, "network");
   assert.equal(netRes.ttlMs, 45000);
 });
+
+test("validation treats null optional fields as absent instead of failing the item", () => {
+  const itemWithNulls = item({
+    avatarUrl: null,
+    displayName: null,
+    organizationName: null,
+    publicProfileUrl: null,
+    networks: null,
+    handle: null,
+  });
+
+  const res = validateItem(itemWithNulls);
+  assert.equal(res.ok, true);
+  assert.equal(res.item.avatarUrl, undefined);
+  assert.equal(res.item.displayName, undefined);
+  assert.equal(res.item.organizationName, undefined);
+  assert.equal(res.item.publicProfileUrl, undefined);
+  assert.equal(res.item.networks, undefined);
+  assert.equal(res.item.handle, undefined);
+
+  assert.equal(avatarFor(res.item), null);
+
+  const normalized = normalizePayload(live([itemWithNulls]));
+  assert.equal(normalized.valid, true);
+  assert.equal(normalized.dropped, 0);
+  assert.equal(normalized.items.length, 1);
+});
