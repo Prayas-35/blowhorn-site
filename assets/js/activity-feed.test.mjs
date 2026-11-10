@@ -930,3 +930,68 @@ test("a displayName up to the v1.3.117 limit paints with no handle, and the hand
 
   assert.equal(sanitizeItem(item({ displayName: "A".repeat(201) })), null);
 });
+
+test("fallback for 429 and network error provides retry ttlMs and schedules a refresh", async () => {
+  const fallback = payload([item({ id: EID(99), line: "Example: bundled fallback line" })]);
+  const liveItem = item({ id: EID(50), line: "Live: live activity line" });
+  let clock = 1_000_000;
+  let calls = 0;
+  const timers = new Map();
+  let seq = 0;
+
+  const source = createFeedSource({
+    now: () => clock,
+    rateLimitFallbackMs: 60000,
+    transport: async () => {
+      calls += 1;
+      if (calls === 1) return response(429, "rate limited", { "retry-after": "30" });
+      return response(200, live([liveItem]), { "cache-control": "max-age=30" });
+    },
+    fallback,
+  });
+
+  const res1 = await source.load();
+  assert.equal(res1.reason, "rate-limit");
+  assert.equal(res1.ttlMs, 30000);
+
+  const view = card();
+  const mounted = mountActivityFeed(view.root, {
+    source,
+    now: () => clock,
+    matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),
+    setTimer(fn, ms) {
+      const handle = ++seq;
+      timers.set(handle, { at: clock + ms, fn });
+      return handle;
+    },
+    clearTimer(handle) { timers.delete(handle); },
+  });
+
+  await mounted.ready;
+  assert.equal(view.line.textContent, "Example: bundled fallback line");
+  assert.equal(view.root.attrs["data-state"], "examples");
+
+  clock += 30000;
+  for (const [handle, timer] of [...timers]) {
+    if (timer.at <= clock) {
+      timers.delete(handle);
+      timer.fn();
+    }
+  }
+
+  // Allow promise chain (source.load() and showResult()) to finish
+  await new Promise((resolve) => setTimeout(resolve, 20));
+
+  assert.equal(view.line.textContent, "Live: live activity line");
+  assert.equal(view.root.attrs["data-state"], "live");
+  mounted.destroy();
+
+  const netSource = createFeedSource({
+    rateLimitFallbackMs: 45000,
+    transport: async () => { throw new TypeError("Failed to fetch"); },
+    fallback,
+  });
+  const netRes = await netSource.load();
+  assert.equal(netRes.reason, "network");
+  assert.equal(netRes.ttlMs, 45000);
+});
