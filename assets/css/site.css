@@ -3106,22 +3106,22 @@ a.card.docs-card > * { margin-top: 0; }
   .proof-ticker-track { animation: none; flex-wrap: wrap; width: auto; row-gap: var(--space-3); }
 }
 
-/* Hero activity card (layouts/_partials/activity-feed.html). A premium,
+/* Activity card (layouts/_partials/activity-feed.html). A premium,
    product-style panel rather than a site card: a tinted gradient surface,
    layered soft depth with a hairline highlight, a 24px radius, circular ghost
-   arrows, swatch dots and a dark pill call to action. Colours are card-local
-   custom properties (--af-*) so the card can break from the site palette
-   while light and dark follow the OS like every other component. The stage
-   reserves its height so a rotation never moves the page; the controls hold
-   their space before the script marks the card ready. The script never
-   announces rotations. docs/activity-feed.md */
+   arrows and swatch dots. Colours are card-local custom properties (--af-*)
+   so the card can break from the site palette while light and dark follow
+   the OS like every other component. The stage reserves its height so a
+   rotation never moves the page; the controls hold their space before the
+   script marks the card ready. The script never announces rotations.
+   docs/activity-feed.md */
 .activity-feed-slot { min-width: 0; }
 @media (min-width: 900px) {
-  .activity-feed-slot { grid-column: 1; }
+  .hero-grid .activity-feed-slot { grid-column: 1; }
 }
 @media (max-width: 899px) {
   .hero-copy { order: 1; }
-  .activity-feed-slot { order: 2; }
+  .hero-grid .activity-feed-slot { order: 2; }
   .hero-film-cell, .hero-grid > .hero-art { order: 3; }
 }
 .activity-feed {
@@ -3136,9 +3136,6 @@ a.card.docs-card > * { margin-top: 0; }
   --af-ghost-hover: #FFFFFF;
   --af-ghost-border: rgba(27, 33, 36, 0.12);
   --af-chip: rgba(27, 33, 36, 0.06);
-  --af-cta: #1B2124;
-  --af-cta-ink: #FFFFFF;
-  --af-cta-hover: #000000;
   --af-ring: #1B2124;
   --af-dot: rgba(27, 33, 36, 0.18);
   --af-live: #0A6B49;
@@ -3184,9 +3181,6 @@ a.card.docs-card > * { margin-top: 0; }
     --af-ghost-hover: rgba(255, 255, 255, 0.14);
     --af-ghost-border: rgba(255, 255, 255, 0.14);
     --af-chip: rgba(255, 255, 255, 0.08);
-    --af-cta: #F2F5F3;
-    --af-cta-ink: #14191B;
-    --af-cta-hover: #FFFFFF;
     --af-ring: #F2F5F3;
     --af-dot: rgba(255, 255, 255, 0.22);
     --af-live: #3DDC97;
@@ -3229,7 +3223,7 @@ a.card.docs-card > * { margin-top: 0; }
 }
 .af-nav-btn:hover { background: var(--af-ghost-hover); border-color: color-mix(in srgb, var(--af-ink) 24%, transparent); }
 .af-nav-btn:active { transform: scale(0.94); }
-.af-nav-btn:focus-visible, .af-cta:focus-visible {
+.af-nav-btn:focus-visible {
   outline: 2px solid var(--af-ring); outline-offset: 2px;
 }
 .af-note { margin-top: -8px !important; font-size: 13px; line-height: 18px; color: var(--af-muted) !important; }
@@ -3288,22 +3282,6 @@ a.card.docs-card > * { margin-top: 0; }
   font-size: 20px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em;
   min-height: calc(2em * 1.35); overflow-wrap: anywhere; text-wrap: pretty;
 }
-.af-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; min-height: 40px; }
-.af-cta-slot { margin-left: auto !important; }
-.af-cta {
-  display: inline-flex; align-items: center; gap: 10px; min-height: 40px;
-  padding: 0 6px 0 18px; border-radius: 999px;
-  background: var(--af-cta); color: var(--af-cta-ink); text-decoration: none;
-  font-size: 14px; line-height: 20px; font-weight: 600;
-  transition: background-color 200ms var(--af-ease), transform 200ms var(--af-ease);
-}
-.af-cta:hover { background: var(--af-cta-hover); color: var(--af-cta-ink); }
-.af-cta-icon {
-  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
-  background: var(--af-cta-ink); color: var(--af-cta); transition: transform 200ms var(--af-ease);
-}
-.af-cta:hover .af-cta-icon { transform: rotate(45deg); }
-
 .af-progress { display: flex; align-items: center; gap: 10px; min-height: 16px; }
 .af-swatch {
   position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--af-dot);
@@ -3335,18 +3313,17 @@ a.card.docs-card > * { margin-top: 0; }
 .af-empty-sub { font-size: 14px; line-height: 20px; color: var(--af-muted) !important; }
 
 /* Swap: outgoing content lifts 6px with a slight blur; incoming fades in
-   with a short stagger (avatar, name, line, footer). */
-.af-identity .af-avatar, .af-who, .af-line, .af-foot {
+   with a short stagger (avatar, name, line). */
+.af-identity .af-avatar, .af-who, .af-line {
   transition: opacity 160ms var(--af-ease), transform 160ms var(--af-ease), filter 160ms var(--af-ease);
 }
 .activity-feed.is-swap .af-avatar, .activity-feed.is-swap .af-who,
-.activity-feed.is-swap .af-line, .activity-feed.is-swap .af-foot {
+.activity-feed.is-swap .af-line {
   opacity: 0; transform: translateY(-6px); filter: blur(2px);
 }
 .activity-feed.is-entering .af-avatar { animation: af-in 260ms var(--af-ease) both; }
 .activity-feed.is-entering .af-who { animation: af-in 260ms var(--af-ease) 30ms both; }
 .activity-feed.is-entering .af-line { animation: af-in 260ms var(--af-ease) 60ms both; }
-.activity-feed.is-entering .af-foot { animation: af-in 260ms var(--af-ease) 90ms both; }
 @keyframes af-in { from { opacity: 0; transform: translateY(6px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
 
 @media (max-width: 599px) {
@@ -3359,7 +3336,7 @@ a.card.docs-card > * { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   .activity-feed *, .activity-feed *::after { animation: none !important; transition: none !important; }
   .activity-feed.is-swap .af-avatar, .activity-feed.is-swap .af-who,
-  .activity-feed.is-swap .af-line, .activity-feed.is-swap .af-foot { opacity: 1; transform: none; filter: none; }
+  .activity-feed.is-swap .af-line { opacity: 1; transform: none; filter: none; }
 }
 
 /* ---------- Pricing (/pricing/) ----------

@@ -1290,3 +1290,32 @@ html[data-theme="signal"] #platforms .logo-tile img[src*="github-invertocat-blac
 }
 @keyframes posture-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @media (max-width: 599px) { .posture { padding: var(--space-6) var(--space-4); } }
+
+/* Distributed teams (#teams): the activity card sits beside the intro on
+   wide screens and under the intro on phones. It is not wrapped in another
+   card, so its hairline does not stack on a second border. Grid gap is the
+   only space between the head, the card, the points and the CTA. */
+.home-signal #teams .teams-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+.home-signal #teams .activity-feed-slot { min-width: 0; }
+.home-signal #teams .activity-feed { margin-top: 0; width: 100%; }
+.home-signal #teams .teams-layout > .section-body { margin-top: 0; }
+@media (min-width: 960px) {
+  .home-signal #teams .teams-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 36rem);
+    column-gap: var(--space-12);
+    row-gap: var(--space-8);
+    align-items: start;
+  }
+  .home-signal #teams .section-head { grid-column: 1; grid-row: 1; }
+  .home-signal #teams .activity-feed-slot {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .home-signal #teams .teams-layout > .grid,
+  .home-signal #teams .teams-layout > .section-body {
+    grid-column: 1 / -1;
+  }
+}

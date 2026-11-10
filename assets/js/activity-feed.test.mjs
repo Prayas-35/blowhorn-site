@@ -156,12 +156,6 @@ function card() {
   badge.attrs["data-activity-examples"] = "";
   const note = element("p");
   note.attrs["data-activity-note"] = "";
-  const linkSlot = element("p");
-  linkSlot.attrs["data-activity-link-slot"] = "";
-  linkSlot.hidden = true;
-  const link = element("a");
-  link.attrs["data-activity-link"] = "";
-  linkSlot.appendChild(link);
   const make = (tag, attr) => {
     const node = element(tag);
     node.attrs[attr] = "";
@@ -191,8 +185,8 @@ function card() {
   prev.attrs["data-activity-prev"] = "";
   const next = element("button");
   next.attrs["data-activity-next"] = "";
-  for (const child of [line, role, when, badge, note, linkSlot, prev, next, name, org, handle, platform, avatar, badges, live, stage, empty, progress]) root.appendChild(child);
-  return { doc, root, line, role, when, badge, note, linkSlot, link, prev, next, name, org, handle, platform, avatar, badges, monogram, live, stage, empty, progress };
+  for (const child of [line, role, when, badge, note, prev, next, name, org, handle, platform, avatar, badges, live, stage, empty, progress]) root.appendChild(child);
+  return { doc, root, line, role, when, badge, note, prev, next, name, org, handle, platform, avatar, badges, monogram, live, stage, empty, progress };
 }
 
 test("bundled examples stay inside the contract", () => {
@@ -256,7 +250,7 @@ test("validation rejects XSS urls, bad schemes, oversize text and unknown platfo
   assert.equal(validateItem("nope").ok, false);
 });
 
-test("paint uses textContent and a hardened profile link", () => {
+test("paint uses textContent and does not turn the name into a profile link", () => {
   const view = card();
   const xss = "<img src=x onerror=alert(1)>";
   paintActivity(view.root, item({
@@ -268,23 +262,19 @@ test("paint uses textContent and a hardened profile link", () => {
   assert.equal(view.when.attrs.datetime, "2026-10-02T08:15:00Z");
   assert.equal(view.root.attrs["data-state"], "live");
   assert.equal(view.live.hidden, false);
-  const link = view.link;
-  assert.equal(link.attrs.href, "https://example.com/profile");
-  assert.equal(link.attrs.rel, "noopener noreferrer nofollow");
-  assert.equal(link.attrs.target, "_blank");
-  assert.equal(link.attrs["aria-label"], "View profile of Solo founder");
   assert.equal(view.name.textContent, "Solo founder");
   assert.equal(view.name.tag, "span");
   assert.equal(view.root.querySelector("[data-activity-name-link]"), null);
+  assert.equal(view.root.querySelector("[data-activity-link]"), null);
+  assert.equal(view.root.querySelector(".af-cta"), null);
 
   paintActivity(view.root, item({ publicProfileUrl: "https://example.com/profile" }), { example: true });
   assert.equal(view.when.textContent, "Example activity");
   assert.equal(view.badge.hidden, false);
   assert.equal(view.live.hidden, true);
   assert.equal(view.root.attrs["data-state"], "examples");
-  assert.equal(view.linkSlot.hidden, true);
-  assert.equal(link.attrs.href, undefined);
   assert.equal(view.name.textContent, "Solo founder");
+  assert.equal(view.root.querySelector("[data-activity-link]"), null);
 });
 
 test("a new avatar hides the old face until it loads, and a stale error is ignored", () => {
@@ -440,7 +430,6 @@ test("paintEmpty shows the designed empty state and progress caps at 8 dots", ()
   assert.equal(view.empty.hidden, false);
   assert.equal(view.badge.hidden, true);
   assert.equal(view.live.hidden, true);
-  assert.equal(view.linkSlot.hidden, true);
 });
 
 test("empty and malformed payloads fall back", async () => {

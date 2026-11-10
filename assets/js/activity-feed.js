@@ -752,25 +752,7 @@ export function paintActivity(root, item, flags = {}) {
   if (note) note.hidden = !example;
   paintAvatar(root, item, name);
   paintBadges(root, item, platforms);
-
-  const showLink = !!(item && item.publicProfileUrl && isHttpsUrl(item.publicProfileUrl, LIMITS.profileUrl) && !example);
-  const href = showLink ? item.publicProfileUrl.trim() : null;
   if (nameSlot) nameSlot.textContent = name;
-
-  const linkSlot = slot(root, "[data-activity-link-slot]");
-  const link = slot(root, "[data-activity-link]");
-  if (!linkSlot || !link) return;
-  if (!href) {
-    linkSlot.hidden = true;
-    link.removeAttribute("href");
-    link.removeAttribute("aria-label");
-    return;
-  }
-  link.setAttribute("href", href);
-  link.setAttribute("rel", "noopener noreferrer nofollow");
-  link.setAttribute("target", "_blank");
-  link.setAttribute("aria-label", `View profile of ${name}`);
-  linkSlot.hidden = false;
 }
 
 export function paintEmpty(root) {
@@ -779,7 +761,7 @@ export function paintEmpty(root) {
   const empty = slot(root, "[data-activity-empty]");
   if (stage) stage.hidden = true;
   if (empty) empty.hidden = false;
-  for (const selector of ["[data-activity-examples]", "[data-activity-note]", "[data-activity-live]", "[data-activity-link-slot]"]) {
+  for (const selector of ["[data-activity-examples]", "[data-activity-note]", "[data-activity-live]"]) {
     const node = slot(root, selector);
     if (node) node.hidden = true;
   }

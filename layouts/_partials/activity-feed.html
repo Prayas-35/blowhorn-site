@@ -1,4 +1,4 @@
-{{- /* Hero activity card. The first bundled example is in the HTML, so the
+{{- /* Activity card. The first bundled example is in the HTML, so the
    card is readable with no JavaScript and the script's first paint does not
    move it. assets/js/activity-feed.js asks the account service for the
    public event feed (data-feed-url, built from params.cloud_url) and shows
@@ -101,9 +101,6 @@
       </div>
     </div>
     <p class="af-line" data-activity-line>{{ $first.line }}</p>
-    <div class="af-foot">
-      <p class="af-cta-slot" data-activity-link-slot hidden><a class="af-cta" data-activity-link>View profile<span class="af-cta-icon" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></p>
-    </div>
   </div>
   <div class="af-empty" data-activity-empty hidden>
     <span class="af-empty-stack" aria-hidden="true"><span></span><span></span><span></span></span>
