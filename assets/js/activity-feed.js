@@ -244,7 +244,7 @@ export function createFeedSource(options = {}) {
     return { items: normalized.items, live: false, example: normalized.example, expiresAt: null };
   }
 
-  function finishFallback(reason, replaceLive) {
+  function finishFallback(reason, replaceLive, waitMs = 0) {
     const normalized = normalizePayload(fallback);
     if (replaceLive) memory = exampleHold();
     return {
@@ -252,7 +252,7 @@ export function createFeedSource(options = {}) {
       example: normalized.example,
       reason,
       fromFallback: true,
-      ttlMs: 0,
+      ttlMs: waitMs,
     };
   }
 
@@ -272,18 +272,19 @@ export function createFeedSource(options = {}) {
       const header = response.headers && response.headers.get ? response.headers.get("retry-after") : null;
       const until = parseRetryAfter(header, now());
       retryNotBefore = until == null ? now() + rateLimitFallbackMs : until;
-      return finishFallback("rate-limit", replaceLive);
+      const waitMs = Math.max(0, retryNotBefore - now()) || rateLimitFallbackMs;
+      return finishFallback("rate-limit", replaceLive, waitMs);
     }
-    if (!status || status < 200 || status >= 300) return finishFallback("http", replaceLive);
+    if (!status || status < 200 || status >= 300) return finishFallback("http", replaceLive, rateLimitFallbackMs);
     let payload;
     try {
       payload = await response.json();
     } catch {
-      return finishFallback("malformed", replaceLive);
+      return finishFallback("malformed", replaceLive, rateLimitFallbackMs);
     }
     const normalized = normalizePayload(payload);
     if (!normalized.items.length) {
-      return finishFallback(normalized.valid && normalized.rawCount === 0 ? "empty" : "invalid", replaceLive);
+      return finishFallback(normalized.valid && normalized.rawCount === 0 ? "empty" : "invalid", replaceLive, rateLimitFallbackMs);
     }
     const liveItems = normalized.items.filter((item) => !item.example);
     const header = response.headers && response.headers.get ? response.headers.get("cache-control") : null;
@@ -297,7 +298,7 @@ export function createFeedSource(options = {}) {
         ttlMs: 0,
       };
     }
-    if (ttlMs <= 0) return finishFallback("ttl", true);
+    if (ttlMs <= 0) return finishFallback("ttl", true, rateLimitFallbackMs);
     memory = {
       items: liveItems,
       live: true,
@@ -327,7 +328,10 @@ export function createFeedSource(options = {}) {
       const replaceLive = claimed.expired;
       const transport = Object.prototype.hasOwnProperty.call(options, "transport") ? options.transport : null;
       if (transport == null) return finishFallback("disabled", replaceLive);
-      if (now() < retryNotBefore) return finishFallback("rate-limit", replaceLive);
+      if (now() < retryNotBefore) {
+        const waitMs = Math.max(0, retryNotBefore - now()) || rateLimitFallbackMs;
+        return finishFallback("rate-limit", replaceLive, waitMs);
+      }
       try {
         const response = await new Promise((resolve, reject) => {
           timer = setTimer(() => {
@@ -343,8 +347,8 @@ export function createFeedSource(options = {}) {
         return await handleResponse(response, replaceLive);
       } catch (err) {
         if (gen !== epoch) return finishFallback("destroyed", replaceLive);
-        if (err && err.code === "TIMEOUT") return finishFallback("timeout", replaceLive);
-        return finishFallback("network", replaceLive);
+        if (err && err.code === "TIMEOUT") return finishFallback("timeout", replaceLive, rateLimitFallbackMs);
+        return finishFallback("network", replaceLive, rateLimitFallbackMs);
       } finally {
         if (timer != null) {
           clearTimer(timer);
