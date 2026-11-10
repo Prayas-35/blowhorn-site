@@ -612,21 +612,94 @@ function paintAvatar(root, item, name) {
   }
 }
 
-function paintNetworks(root, item) {
-  const list = slot(root, "[data-activity-networks]");
-  if (!list) return;
-  clearChildren(list);
-  const doc = root.ownerDocument;
-  // One network is the platform the meta line already names, so chips show
-  // only for a cross-network activity.
-  const networks = item && item.networks && item.networks.length > 1 ? item.networks : [];
-  for (const name of networks.slice(0, 3)) {
-    const chip = doc.createElement("li");
-    chip.className = "af-chip";
-    chip.textContent = name;
-    list.appendChild(chip);
+/* Network badges stacked on the avatar. At most BADGE_CAP badges show; a
+   longer list shows BADGE_CAP - 1 logos and a +N badge for the rest. */
+export const BADGE_CAP = 3;
+
+const bareName = (value) => String(value || "").replace(/ \(.*\)$/, "").trim().toLowerCase();
+
+/* One network, by platform id or display name ("X (Twitter)" matches X), as
+   { id, name, logo } from the data-platforms map. An unknown name keeps its
+   raw text and has no id or logo. */
+export function resolveNetwork(value, platforms) {
+  const raw = String(value || "").trim();
+  const map = platforms || {};
+  const key = raw.toLowerCase();
+  const bare = bareName(raw);
+  for (const id of Object.keys(map)) {
+    const entry = map[id] || {};
+    if (id === key || (entry.name && bareName(entry.name) === bare)) {
+      return { id, name: entry.name || id, logo: entry.logo || "" };
+    }
   }
-  list.hidden = list.children.length === 0;
+  return { id: null, name: raw, logo: "" };
+}
+
+/* The item's networks (its platform when it has none), resolved, without
+   repeats, in PLATFORMS order, then unknown names as first seen. */
+export function networksFor(item, platforms) {
+  if (!item) return [];
+  const names = Array.isArray(item.networks) && item.networks.length
+    ? item.networks
+    : [platforms && platforms[item.platform] && platforms[item.platform].name ? platforms[item.platform].name : item.platform];
+  const known = new Map();
+  const unknown = new Map();
+  for (const name of names) {
+    const net = resolveNetwork(name, platforms);
+    if (net.id) {
+      if (!known.has(net.id)) known.set(net.id, net);
+    } else if (net.name && !unknown.has(net.name.toLowerCase())) {
+      unknown.set(net.name.toLowerCase(), net);
+    }
+  }
+  const rank = (id) => (PLATFORMS.includes(id) ? PLATFORMS.indexOf(id) : PLATFORMS.length);
+  const ordered = [...known.values()].sort((a, b) => rank(a.id) - rank(b.id));
+  return [...ordered, ...unknown.values()];
+}
+
+/* { shown, hidden }: every network when they fit the cap, else cap - 1. */
+export function badgeStack(networks, cap = BADGE_CAP) {
+  if (networks.length <= cap) return { shown: networks, hidden: [] };
+  const keep = Math.max(0, cap - 1);
+  return { shown: networks.slice(0, keep), hidden: networks.slice(keep) };
+}
+
+function paintBadges(root, item, platforms) {
+  const stack = slot(root, "[data-activity-badges]");
+  if (!stack) return;
+  clearChildren(stack);
+  const doc = root.ownerDocument;
+  const { shown, hidden } = badgeStack(networksFor(item, platforms));
+  for (const net of shown) {
+    const badge = doc.createElement("span");
+    badge.className = "af-platform-badge";
+    badge.setAttribute("title", net.name);
+    if (net.logo) {
+      const img = doc.createElement("img");
+      img.setAttribute("src", net.logo);
+      img.setAttribute("alt", net.name);
+      img.setAttribute("width", "16");
+      img.setAttribute("height", "16");
+      badge.appendChild(img);
+    } else {
+      badge.className = "af-platform-badge af-badge-initial";
+      badge.setAttribute("role", "img");
+      badge.setAttribute("aria-label", net.name);
+      badge.textContent = Array.from(net.name)[0].toUpperCase();
+    }
+    stack.appendChild(badge);
+  }
+  if (hidden.length) {
+    const more = doc.createElement("span");
+    const label = `Also on ${hidden.map((net) => net.name).join(", ")}`;
+    more.className = "af-platform-badge af-badge-more";
+    more.setAttribute("role", "img");
+    more.setAttribute("aria-label", label);
+    more.setAttribute("title", label);
+    more.textContent = `+${hidden.length}`;
+    stack.appendChild(more);
+  }
+  stack.hidden = stack.children.length === 0;
 }
 
 export function paintActivity(root, item, flags = {}) {
@@ -648,7 +721,6 @@ export function paintActivity(root, item, flags = {}) {
   const org = slot(root, "[data-activity-org]");
   const when = slot(root, "[data-activity-when]");
   const platformName = slot(root, "[data-activity-platform]");
-  const platformLogo = slot(root, "[data-activity-platform-logo]");
   const badge = slot(root, "[data-activity-examples]");
   const live = slot(root, "[data-activity-live]");
   const note = slot(root, "[data-activity-note]");
@@ -674,12 +746,11 @@ export function paintActivity(root, item, flags = {}) {
     handleSlot.hidden = !handle;
   }
   if (platformName) platformName.textContent = platform && platform.name ? platform.name : (item && item.platform) || "";
-  if (platformLogo && platform && platform.logo) platformLogo.setAttribute("src", platform.logo);
   if (badge) badge.hidden = !example;
   if (live) live.hidden = example;
   if (note) note.hidden = !example;
   paintAvatar(root, item, name);
-  paintNetworks(root, item);
+  paintBadges(root, item, platforms);
 
   const showLink = !!(item && item.publicProfileUrl && isHttpsUrl(item.publicProfileUrl, LIMITS.profileUrl) && !example);
   const href = showLink ? item.publicProfileUrl.trim() : null;
@@ -1026,6 +1097,10 @@ export const BlowhornActivityFeed = {
   AVATAR_HOSTS,
   avatarAllowed,
   avatarFor,
+  BADGE_CAP,
+  resolveNetwork,
+  networksFor,
+  badgeStack,
   monogramHue,
   initials,
   relativeTime,

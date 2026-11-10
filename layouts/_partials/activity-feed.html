@@ -6,7 +6,11 @@
    payload it rotates the bundled examples, labelled as such. Platform names
    and first-party logo paths come from data/platforms/*.yaml (data-platforms).
    The monogram hue class is the first 8 hex digits of userId mod 12, the same
-   rule as monogramHue() in the script. docs/activity-feed.md */ -}}
+   rule as monogramHue() in the script. The network badges on the avatar
+   follow networksFor() and badgeStack(): networks (else platform) resolved
+   to data/platforms by id or name, without repeats, in platform weight order
+   then unknown names as listed, three at most with a +N badge past that.
+   docs/activity-feed.md */ -}}
 {{- $feed := index site.Data "activity_feed.examples" -}}
 {{- if not $feed -}}
   {{- with index site.Data "activity_feed" -}}
@@ -25,6 +29,34 @@
 {{- end -}}
 {{- $fp := index $platforms $first.platform -}}
 {{- if not $fp }}{{ errorf "activity feed: no data/platforms entry for %q" $first.platform }}{{ end -}}
+{{- /* Network badges for the static first example, as networksFor() and badgeStack() build them. */ -}}
+{{- $names := $first.networks | default (slice $fp.name) -}}
+{{- $known := slice -}}
+{{- range sort site.Data.platforms "weight" -}}
+  {{- $id := .key -}}
+  {{- $bare := lower (replaceRE ` \(.*\)$` "" .name) -}}
+  {{- range $names -}}
+    {{- $n := lower (replaceRE ` \(.*\)$` "" (trim . " ")) -}}
+    {{- if and (or (eq $n $id) (eq $n $bare)) (not (in $known $id)) }}{{ $known = $known | append $id }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- $nets := slice -}}
+{{- range $known }}{{ $nets = $nets | append (index $platforms .) }}{{ end -}}
+{{- $seen := slice -}}
+{{- range $names -}}
+  {{- $raw := trim . " " -}}
+  {{- $n := lower (replaceRE ` \(.*\)$` "" $raw) -}}
+  {{- $hit := false -}}
+  {{- range $id, $p := $platforms }}{{ if or (eq $n $id) (eq $n (lower $p.name)) }}{{ $hit = true }}{{ end }}{{ end -}}
+  {{- if and (not $hit) (not (in $seen (lower $raw))) -}}
+    {{- $seen = $seen | append (lower $raw) -}}
+    {{- $nets = $nets | append (dict "name" $raw "logo" "") -}}
+  {{- end -}}
+{{- end -}}
+{{- $cap := 3 -}}
+{{- $shown := $nets -}}
+{{- $hidden := slice -}}
+{{- if gt (len $nets) $cap }}{{ $shown = first (sub $cap 1) $nets }}{{ $hidden = after (sub $cap 1) $nets }}{{ end -}}
 {{- $words := split $first.role " " -}}
 {{- $initials := upper (substr (index $words 0) 0 1) -}}
 {{- if gt (len $words) 1 }}{{ $initials = printf "%s%s" $initials (upper (substr (index $words 1) 0 1)) }}{{ end -}}
@@ -44,11 +76,24 @@
   <p class="af-note" data-activity-note>Illustrative examples, not real customer activity.</p>
   <div class="af-stage" data-activity-stage>
     <div class="af-identity">
-      <span class="af-avatar" aria-hidden="true">
-        <span class="af-avatar-media" data-activity-avatar>
+      <span class="af-avatar">
+        <span class="af-avatar-media" data-activity-avatar aria-hidden="true">
           <span class="af-monogram af-hue-{{ $hue }}" data-activity-monogram>{{ $initials }}</span>
         </span>
-        <span class="af-platform-badge"><img data-activity-platform-logo src="{{ $fp.logo }}" alt="" width="16" height="16"></span>
+        <span class="af-badges" data-activity-badges>
+          {{- range $shown -}}
+            {{- if .logo -}}
+              <span class="af-platform-badge" title="{{ .name }}"><img src="{{ .logo }}" alt="{{ .name }}" width="16" height="16"></span>
+            {{- else -}}
+              <span class="af-platform-badge af-badge-initial" title="{{ .name }}" role="img" aria-label="{{ .name }}">{{ upper (substr .name 0 1) }}</span>
+            {{- end -}}
+          {{- end -}}
+          {{- with $hidden -}}
+            {{- $names := slice }}{{ range . }}{{ $names = $names | append .name }}{{ end -}}
+            {{- $label := printf "Also on %s" (delimit $names ", ") -}}
+            <span class="af-platform-badge af-badge-more" title="{{ $label }}" role="img" aria-label="{{ $label }}">+{{ len . }}</span>
+          {{- end -}}
+        </span>
       </span>
       <div class="af-who">
         <p class="af-name"><span data-activity-name>{{ $first.role }}</span><span class="af-org" data-activity-org hidden></span></p>
@@ -57,9 +102,6 @@
     </div>
     <p class="af-line" data-activity-line>{{ $first.line }}</p>
     <div class="af-foot">
-      <ul class="af-networks" data-activity-networks>
-        {{- $nets := $first.networks | default slice }}{{ if lt (len $nets) 2 }}{{ $nets = slice }}{{ end }}{{ range first 3 $nets }}<li class="af-chip">{{ . }}</li>{{ end -}}
-      </ul>
       <p class="af-cta-slot" data-activity-link-slot hidden><a class="af-cta" data-activity-link>View profile<span class="af-cta-icon" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10" focusable="false"><path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></p>
     </div>
   </div>

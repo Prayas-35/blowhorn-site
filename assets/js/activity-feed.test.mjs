@@ -25,6 +25,10 @@ import {
   mountActivityFeed,
   boot,
   feedTransport,
+  BADGE_CAP,
+  resolveNetwork,
+  networksFor,
+  badgeStack,
 } from "./activity-feed.js";
 
 const sourceText = readFileSync(new URL("./activity-feed.js", import.meta.url), "utf8");
@@ -168,12 +172,11 @@ function card() {
   const org = make("span", "data-activity-org");
   const handle = make("span", "data-activity-handle");
   const platform = make("span", "data-activity-platform");
-  const logo = make("img", "data-activity-platform-logo");
   const avatar = make("span", "data-activity-avatar");
   const monogram = make("span", "data-activity-monogram");
   avatar.appendChild(monogram);
   const live = make("span", "data-activity-live");
-  const networks = make("ul", "data-activity-networks");
+  const badges = make("span", "data-activity-badges");
   const stage = make("div", "data-activity-stage");
   const empty = make("div", "data-activity-empty");
   empty.hidden = true;
@@ -181,13 +184,15 @@ function card() {
   root.attrs["data-platforms"] = JSON.stringify({
     linkedin: { name: "LinkedIn", logo: "/assets/platforms/linkedin-in-bug.png" },
     x: { name: "X", logo: "/assets/platforms/x-logo-black.png" },
+    reddit: { name: "Reddit", logo: "/assets/platforms/reddit-logo.png" },
+    bluesky: { name: "Bluesky", logo: "/assets/platforms/bluesky-butterfly-blue.svg" },
   });
   const prev = element("button");
   prev.attrs["data-activity-prev"] = "";
   const next = element("button");
   next.attrs["data-activity-next"] = "";
-  for (const child of [line, role, when, badge, note, linkSlot, prev, next, name, org, handle, platform, logo, avatar, live, networks, stage, empty, progress]) root.appendChild(child);
-  return { doc, root, line, role, when, badge, note, linkSlot, link, prev, next, name, org, handle, platform, logo, avatar, monogram, live, networks, stage, empty, progress };
+  for (const child of [line, role, when, badge, note, linkSlot, prev, next, name, org, handle, platform, avatar, badges, live, stage, empty, progress]) root.appendChild(child);
+  return { doc, root, line, role, when, badge, note, linkSlot, link, prev, next, name, org, handle, platform, avatar, badges, monogram, live, stage, empty, progress };
 }
 
 test("bundled examples stay inside the contract", () => {
@@ -356,7 +361,16 @@ test("monogram hue and initials are deterministic", () => {
   assert.equal(initials(""), "");
 });
 
-test("paint shows name, org, platform, chips and the avatar or its fallback", () => {
+const badgeView = (view) => view.badges.children.map((badge) => ({
+  className: badge.className,
+  title: badge.attrs.title,
+  label: badge.attrs["aria-label"],
+  text: badge.textContent,
+  src: badge.children[0] ? badge.children[0].attrs.src : undefined,
+  alt: badge.children[0] ? badge.children[0].attrs.alt : undefined,
+}));
+
+test("paint shows name, org, platform, stacked network badges and the avatar or its fallback", () => {
   const view = card();
   paintActivity(view.root, item({
     platform: "x",
@@ -368,9 +382,14 @@ test("paint shows name, org, platform, chips and the avatar or its fallback", ()
   assert.equal(view.name.textContent, "Ada Lovelace");
   assert.equal(view.org.textContent, " at Analytical");
   assert.equal(view.platform.textContent, "X");
-  assert.equal(view.logo.attrs.src, "/assets/platforms/x-logo-black.png");
   assert.equal(view.when.textContent, "1h ago");
-  assert.deepEqual(view.networks.children.map((chip) => chip.textContent), ["X", "LinkedIn", "Bluesky"]);
+  // Four networks past a cap of three: two logos in platform order, then +2.
+  assert.deepEqual(badgeView(view), [
+    { className: "af-platform-badge", title: "LinkedIn", label: undefined, text: "", src: "/assets/platforms/linkedin-in-bug.png", alt: "LinkedIn" },
+    { className: "af-platform-badge", title: "X", label: undefined, text: "", src: "/assets/platforms/x-logo-black.png", alt: "X" },
+    { className: "af-platform-badge af-badge-more", title: "Also on Reddit, Bluesky", label: "Also on Reddit, Bluesky", text: "+2", src: undefined, alt: undefined },
+  ]);
+  assert.equal(view.badges.hidden, false);
   const img = view.avatar.children.find((child) => child.attrs["data-activity-avatar-img"] !== undefined);
   assert.equal(img.attrs.src, "https://pbs.twimg.com/profile/a.jpg");
   assert.equal(img.attrs.alt, "");
@@ -836,11 +855,50 @@ test("runtime source has no endpoint and no web storage", () => {
   assert.equal(boot({ documentElement: { dataset: { activityFeedBoot: "off" } }, querySelector() { return {}; } }), null);
 });
 
-test("a single network shows no chip, since the meta line already names the platform", () => {
+test("a single network shows one badge, and no networks falls back to the platform", () => {
   const view = card();
   paintActivity(view.root, item({ platform: "reddit", networks: ["Reddit"] }), { example: false });
-  assert.equal(view.networks.children.length, 0);
-  assert.equal(view.networks.hidden, true);
+  assert.deepEqual(badgeView(view).map((badge) => [badge.title, badge.src, badge.alt]), [
+    ["Reddit", "/assets/platforms/reddit-logo.png", "Reddit"],
+  ]);
+  paintActivity(view.root, item({ platform: "x" }), { example: false });
+  assert.deepEqual(badgeView(view).map((badge) => badge.src), ["/assets/platforms/x-logo-black.png"]);
+  assert.equal(view.root.querySelector("[data-activity-networks]"), null);
+});
+
+test("three networks fit the cap, so all three show and no +N badge", () => {
+  const view = card();
+  paintActivity(view.root, item({ platform: "x", networks: ["Reddit", "X (Twitter)", "linkedin"] }), { example: false });
+  assert.equal(BADGE_CAP, 3);
+  assert.deepEqual(badgeView(view).map((badge) => badge.title), ["LinkedIn", "X", "Reddit"]);
+  assert.equal(badgeView(view).some((badge) => badge.text.startsWith("+")), false);
+});
+
+test("an unknown network keeps a lettered badge named by its raw text", () => {
+  const view = card();
+  paintActivity(view.root, item({ platform: "linkedin", networks: ["mastodon", "LinkedIn", "Mastodon"] }), { example: false });
+  assert.deepEqual(badgeView(view), [
+    { className: "af-platform-badge", title: "LinkedIn", label: undefined, text: "", src: "/assets/platforms/linkedin-in-bug.png", alt: "LinkedIn" },
+    { className: "af-platform-badge af-badge-initial", title: "mastodon", label: "mastodon", text: "M", src: undefined, alt: undefined },
+  ]);
+});
+
+test("networks resolve by id or name, dedupe and order by the platform list", () => {
+  const map = {
+    linkedin: { name: "LinkedIn", logo: "/l.png" },
+    x: { name: "X", logo: "/x.png" },
+    bluesky: { name: "Bluesky", logo: "/b.png" },
+  };
+  assert.deepEqual(resolveNetwork("X (Twitter)", map), { id: "x", name: "X", logo: "/x.png" });
+  assert.deepEqual(resolveNetwork("bluesky", map), { id: "bluesky", name: "Bluesky", logo: "/b.png" });
+  assert.deepEqual(resolveNetwork("Threads", map), { id: null, name: "Threads", logo: "" });
+  const nets = networksFor(item({ networks: ["Threads", "Bluesky", "x", "X", "LinkedIn", "threads", "Kbin"] }), map);
+  assert.deepEqual(nets.map((net) => net.name), ["LinkedIn", "X", "Bluesky", "Threads", "Kbin"]);
+  assert.deepEqual(networksFor(item({ platform: "bluesky", networks: [] }), map).map((net) => net.id), ["bluesky"]);
+  assert.deepEqual(networksFor(null, map), []);
+  const four = badgeStack(nets.slice(0, 4));
+  assert.deepEqual([four.shown.length, four.hidden.map((net) => net.name)], [2, ["Bluesky", "Threads"]]);
+  assert.deepEqual(badgeStack(nets.slice(0, 3)).hidden, []);
 });
 
 test("an organization that is the account itself is not repeated after the name", () => {
