@@ -1292,9 +1292,10 @@ html[data-theme="signal"] #platforms .logo-tile img[src*="github-invertocat-blac
 @media (max-width: 599px) { .posture { padding: var(--space-6) var(--space-4); } }
 
 /* Distributed teams (#teams): the activity card sits beside the intro on
-   wide screens and under the intro on phones. It is not wrapped in another
-   card, so its hairline does not stack on a second border. Grid gap is the
-   only space between the head, the card, the points and the CTA. */
+   wide screens (intro two thirds, card one third of the wrap) and under the
+   intro on phones. It is not wrapped in another card, so its hairline does
+   not stack on a second border. Grid gap is the only space between the
+   head, the card, the points and the CTA. */
 .home-signal #teams .teams-layout {
   display: grid;
   gap: var(--space-8);
@@ -1304,7 +1305,7 @@ html[data-theme="signal"] #platforms .logo-tile img[src*="github-invertocat-blac
 .home-signal #teams .teams-layout > .section-body { margin-top: 0; }
 @media (min-width: 960px) {
   .home-signal #teams .teams-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(20rem, 36rem);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     column-gap: var(--space-12);
     row-gap: var(--space-8);
     align-items: start;
