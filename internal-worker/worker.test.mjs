@@ -395,3 +395,31 @@ test('fleet sort script normalizes storage units and disk table embeds byte keys
   assert.match(html, /data-v="45000000000"/);
   assert.match(html, /data-v="500000000000"/);
 });
+
+test('internal responses include security headers for MIME, frame and referrer protection', async () => {
+  const e = fleetEnv({ disk: [diskSnap], workload: [workloadSnap] });
+
+  // Denied / unauthenticated response
+  const deniedRes = await handle(new Request('https://internal.blowhorn.ai/'), e, certsFetch);
+  assert.equal(deniedRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(deniedRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(deniedRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // Authenticated asset response
+  const assetRes = await handle(authed('/internal/'), e, certsFetch);
+  assert.equal(assetRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(assetRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(assetRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // Authenticated fleet dashboard
+  const fleetRes = await handle(authed('/engineering/fleet/'), e, certsFetch);
+  assert.equal(fleetRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(fleetRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(fleetRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // Authenticated fleet CSV export
+  const csvRes = await handle(authed('/engineering/fleet/disk.csv'), e, certsFetch);
+  assert.equal(csvRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(csvRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(csvRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+});
