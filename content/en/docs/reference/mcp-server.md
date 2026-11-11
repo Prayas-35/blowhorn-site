@@ -630,10 +630,28 @@ serves RFC 9728 protected-resource metadata locally (both
 authorization server, and rewrites Cloud's `401` `WWW-Authenticate` so
 `resource_metadata` points at this origin.
 
-Connect today with a Cloud API token as `Authorization: Bearer <token>`.
+Connect today with a Blowhorn API token as `Authorization: Bearer <token>`.
+Create one on the Tokens page of your Blowhorn account; the steps are in
+[Get a Blowhorn API token](/docs/how-to/set-up/connect-mcp-client/#get-a-blowhorn-api-token). The
+Blowhorn desktop app has no screen for creating one.
 Standards-following MCP OAuth clients can discover the authorization server
 from the metadata, but end-to-end sign-in stays gated until Cloud enables
 dynamic client registration (`POST /oauth2/register` currently returns 403).
+
+The gateway is read-only today. Cloud serves four tools through it,
+`listContentItems`, `getContentItem`, `getEvents` and `getConnections`, so a
+client can read your queue, a post, your activity and your connections, but
+cannot post, schedule or change anything. Writes with approval come with the
+hosted Blowhorn MCP server.
+
+The gateway is stateless: every MCP message is its own JSON-RPC `POST` to
+`/mcp`. Opening `/mcp` in a browser sends a `GET` without a token, so it
+answers with a JSON error, such as `Bearer token required` or
+`Method not allowed: this stateless gateway answers POST only.`, rather than a
+page. That is by design; see
+[Opening the gateway URL in a browser](/docs/how-to/set-up/connect-mcp-client/#opening-the-gateway-url-in-a-browser).
+`GET /healthz` answers `{"ok": true, ...}` without calling Cloud, so use it to
+check that the gateway is up.
 
 If a token you send through this gateway leaks, see
 [Revoke a leaked token](/docs/how-to/set-up/connect-mcp-client/#revoke-a-leaked-token).

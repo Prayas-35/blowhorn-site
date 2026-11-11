@@ -519,7 +519,8 @@ work can still wait for you in the app (see [Dry run first](#dry-run-first)).
 A Muse bot that is not running on your Mac can still read
 through the interim hosted gateway. Connect it as a custom MCP
 connector with the server URL `https://mcp.blowhorn.ai/mcp` and an
-API token for your Blowhorn account, sent as a Bearer token. The
+API token for your Blowhorn account ([Get a Blowhorn API
+token](#get-a-blowhorn-api-token)), sent as a Bearer token. The
 gateway proxies Cloud's `/mcp` (read tools today). RFC 9728 discovery
 is live on mcp.blowhorn.ai, but end-to-end OAuth sign-in waits on Cloud
 enabling dynamic client registration, so a client that cannot send a
@@ -555,7 +556,8 @@ Grok Build can also read through the interim hosted gateway:
 grok mcp add --transport http blowhorn-cloud https://mcp.blowhorn.ai/mcp --header "Authorization: Bearer <token>"
 ```
 
-Put an API token for your Blowhorn account in place of `<token>`.
+Put an API token for your Blowhorn account in place of `<token>`
+(see [Get a Blowhorn API token](#get-a-blowhorn-api-token)).
 The gateway is read-only, with the four tools `listContentItems`,
 `getContentItem`, `getEvents` and `getConnections`.
 
@@ -585,7 +587,10 @@ cannot post, schedule or change anything. For those, use a client
 on the Mac where Blowhorn runs, such as [Claude Code](#claude-code)
 or [Grok Build](#grok).
 
-You need an API token for your Blowhorn account.
+You need an API token for your Blowhorn account. The Blowhorn app
+has no screen for one; create it on your Blowhorn account's web
+page, as
+[Get a Blowhorn API token](#get-a-blowhorn-api-token) shows.
 
 1. In a chat with your bot, ask it to add the server. Say "custom",
    so the bot does not look for a catalog connector instead:
@@ -618,11 +623,13 @@ is missing or malformed: the gateway wants exactly
 `Authorization: Bearer <token>`. If it connects but a tool call
 fails with a `401` from your Blowhorn account, the token has expired
 or been revoked: get a new token and ask the bot to update the
-header on the `blowhorn` server.
+header on the `blowhorn` server. If you opened the URL in a
+browser to check it and saw a JSON error, that is expected: see
+[Opening the gateway URL in a browser](#opening-the-gateway-url-in-a-browser).
 
 ## Authentication
 
-There is no OAuth step for this server and no token to create. The
+The local server has no OAuth step and no token to create. The
 stdio transport does not use OAuth: that belongs to a remote server,
 not to a process on your own computer. A client that offers you an
 OAuth login for this server is pointed at the wrong thing. The local
@@ -644,6 +651,65 @@ A hosted Blowhorn MCP server, with its own sign-in, is coming.
 Until it lands, the interim hosted gateway in the Muse, Grok and
 Grok Bot sections above serves a few read-only tools to clients that can
 send a token. The rest of this page covers the local server.
+
+### Local server or hosted gateway
+
+| | Local server (`blowhorn-mcp`) | Interim hosted gateway |
+| --- | --- | --- |
+| Where it runs | On your Mac, started by your client over stdio | `https://mcp.blowhorn.ai/mcp`, over HTTPS |
+| Sign-in | None: it uses the sign-in the Blowhorn app already saved | A Blowhorn API token, sent as `Authorization: Bearer <token>` |
+| Tools | Every Blowhorn command except the hidden ones | Four read-only tools: `listContentItems`, `getContentItem`, `getEvents` and `getConnections` |
+| Writes | Dry run first, `confirm` true to act | None yet: it cannot post, schedule or change anything |
+| Use it from | A client on the same Mac as Blowhorn, such as Claude Desktop, Claude Code or Cursor | A client that cannot start a process on your Mac, such as Grok Bot or a Muse bot in the cloud |
+
+### Get a Blowhorn API token
+
+The hosted gateway needs an API token for your Blowhorn account; the
+local server does not. The Blowhorn desktop app has no screen for
+creating one. Create it on your Blowhorn account's web page:
+
+1. Open [cloud.blowhorn.ai/security/tokens](https://cloud.blowhorn.ai/security/tokens)
+   and sign in with your Blowhorn account. This is the **Tokens** tab
+   under **Security**.
+2. Click **Create**.
+3. Enter a **Token Name** that says where the token is used, such as
+   `grok-bot-mcp`, and a **Token Purpose**, then click **Create**. The
+   new token appears in the list.
+4. In that token's row, click the **Download** icon. The download saves
+   a file named `token_<id>.json`.
+5. Open the file. The value of its `"token"` field is the API token.
+   Give a client that value, and nothing else, where it asks for the
+   Bearer token; the client sends it as `Authorization: Bearer <token>`.
+
+Make one token per client, so you can revoke one without breaking the
+others, and delete the downloaded file once the token is in the
+client. To stop using a token, delete it from the same page with the
+**Delete** icon in its row, or see
+[Revoke a leaked token](#revoke-a-leaked-token).
+
+### Opening the gateway URL in a browser
+
+`https://mcp.blowhorn.ai/mcp` is an endpoint for MCP clients, not a web
+page. A client sends each request as a JSON-RPC `POST`, with the token
+in the `Authorization` header. A browser sends a plain `GET` without a
+token, so it gets a short JSON error instead of a page, such as:
+
+```json
+{"error":"unauthorized","error_description":"Bearer token required. Discover the authorization server via the resource_metadata URL in WWW-Authenticate."}
+```
+
+or:
+
+```json
+{"jsonrpc":"2.0","error":{"code":-32000,"message":"Method not allowed: this stateless gateway answers POST only."},"id":null}
+```
+
+That is the gateway working as designed, not a fault. It keeps no
+session between requests, so it answers MCP messages sent as `POST`
+only. To check from a browser that the gateway is up, open
+[mcp.blowhorn.ai/healthz](https://mcp.blowhorn.ai/healthz) instead,
+which answers `{"ok":true,...}`. To check your token, connect a
+client and ask it which Blowhorn tools it has.
 
 ### Revoke a leaked token
 
