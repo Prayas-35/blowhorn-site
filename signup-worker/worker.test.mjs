@@ -334,4 +334,10 @@ test('signup responses include security headers for MIME, frame and referrer pro
   assert.equal(notFoundRes.headers.get('x-content-type-options'), 'nosniff');
   assert.equal(notFoundRes.headers.get('x-frame-options'), 'DENY');
   assert.equal(notFoundRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // OPTIONS preflight response
+  const optionsRes = await handler(new Request('https://api.blowhorn.ai/api/waitlist', { method: 'OPTIONS' }));
+  assert.equal(optionsRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(optionsRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(optionsRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
 });

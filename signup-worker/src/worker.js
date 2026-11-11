@@ -223,6 +223,7 @@ export function createHandler(db) {
           'access-control-allow-methods': 'POST, GET, OPTIONS',
           'access-control-allow-headers': 'Content-Type',
           vary: 'Origin',
+          ...SECURITY_HEADERS,
         },
       });
     }

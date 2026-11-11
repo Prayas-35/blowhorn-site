@@ -246,9 +246,7 @@ export async function handle(request, env, fetchImpl = fetch) {
   const out = new Response(res.body, res);
   out.headers.set('cache-control', 'private, no-store');
   out.headers.set('x-robots-tag', 'noindex, nofollow');
-  out.headers.set('x-content-type-options', 'nosniff');
-  out.headers.set('x-frame-options', 'DENY');
-  out.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) out.headers.set(name, value);
   return out;
 }
 
