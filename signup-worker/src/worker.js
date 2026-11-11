@@ -84,6 +84,12 @@ function clientIp(request) {
   return 'unknown';
 }
 
+const SECURITY_HEADERS = {
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+};
+
 function corsHeaders(request) {
   const origin = request.headers.get('origin');
   if (origin === SITE_ORIGIN) return { 'access-control-allow-origin': SITE_ORIGIN, vary: 'Origin' };
@@ -93,7 +99,12 @@ function corsHeaders(request) {
 function jsonResponse(request, status, body) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...corsHeaders(request) },
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      'cache-control': 'no-store',
+      ...SECURITY_HEADERS,
+      ...corsHeaders(request),
+    },
   });
 }
 
@@ -110,7 +121,12 @@ export function pageResponse(request, status, title, body) {
     `<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="utf-8"><title>${safeTitle}</title></head>\n<body>\n<main>\n<h1>${safeTitle}</h1>\n<p>${safeBody}</p>\n</main>\n</body>\n</html>\n`,
     {
       status,
-      headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', ...corsHeaders(request) },
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'cache-control': 'no-store',
+        ...SECURITY_HEADERS,
+        ...corsHeaders(request),
+      },
     },
   );
 }
@@ -215,7 +231,10 @@ export function createHandler(db) {
     const isUnsubscribeGet = request.method === 'GET' && url.pathname === '/api/unsubscribe';
     const isUnsubscribePost = request.method === 'POST' && url.pathname === '/api/unsubscribe';
     if (!isWaitlist && !isSubscribe && !isUnsubscribeGet && !isUnsubscribePost) {
-      return new Response('Not found\n', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+      return new Response('Not found\n', {
+        status: 404,
+        headers: { 'content-type': 'text/plain; charset=utf-8', ...SECURITY_HEADERS },
+      });
     }
 
     // Per-IP rate limit, Tells shape (30 req/min), backed by D1.

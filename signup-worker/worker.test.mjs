@@ -309,3 +309,29 @@ test('pageResponse structurally escapes title and plain body, preserving safeHtm
   assert.match(textHtml, /<title>Clean Title<\/title>/);
   assert.match(textHtml, /<p><b>formatted<\/b><\/p>/);
 });
+
+test('signup responses include security headers for MIME, frame and referrer protection', async () => {
+  const handler = createHandler(fakeDb());
+
+  // JSON API response
+  const jsonRes = await handler(post('/api/newsletter', {
+    email: 'valid@example.com',
+  }));
+  assert.equal(jsonRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(jsonRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(jsonRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // HTML page response (e.g. 400 error page)
+  const errRes = await handler(formPost('/api/newsletter', {
+    email: 'invalid-email',
+  }));
+  assert.equal(errRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(errRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(errRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+
+  // 404 response
+  const notFoundRes = await handler(new Request('https://api.blowhorn.ai/unknown'));
+  assert.equal(notFoundRes.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(notFoundRes.headers.get('x-frame-options'), 'DENY');
+  assert.equal(notFoundRes.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+});

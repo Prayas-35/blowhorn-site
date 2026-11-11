@@ -34,10 +34,17 @@ let certsCache = { url: '', keys: null, fetchedAt: 0 };
 
 const certsUrl = (teamDomain) => `https://${teamDomain}/cdn-cgi/access/certs`;
 
+const SECURITY_HEADERS = {
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+};
+
 const DENY_HEADERS = {
   'content-type': 'text/plain; charset=utf-8',
   'cache-control': 'no-store',
   'x-robots-tag': 'noindex, nofollow',
+  ...SECURITY_HEADERS,
 };
 
 function deny(status = 403) {
@@ -239,6 +246,9 @@ export async function handle(request, env, fetchImpl = fetch) {
   const out = new Response(res.body, res);
   out.headers.set('cache-control', 'private, no-store');
   out.headers.set('x-robots-tag', 'noindex, nofollow');
+  out.headers.set('x-content-type-options', 'nosniff');
+  out.headers.set('x-frame-options', 'DENY');
+  out.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
   return out;
 }
 
@@ -270,6 +280,7 @@ export function csvCell(v) {
 const ADMIN_HEADERS = {
   'cache-control': 'no-store',
   'x-robots-tag': 'noindex, nofollow',
+  ...SECURITY_HEADERS,
 };
 
 async function handleSignupsAdmin(url, env) {
