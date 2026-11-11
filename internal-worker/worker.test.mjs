@@ -87,6 +87,23 @@ test('alg none is denied', async () => {
 });
 test('garbage token is denied', async () =>
   assert.equal(await status(req({ 'cf-access-jwt-assertion': 'x.y.z' })), 403));
+test('token with invalid characters in signature is denied (403, not 503)', async () => {
+  const head = b64({ alg: 'RS256', kid: 'k1', typ: 'JWT' });
+  const body = b64(good());
+  const token = `${head}.${body}.invalid!chars`;
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': token })), 403);
+});
+test('token with invalid base64 length in signature is denied (403, not 503)', async () => {
+  const head = b64({ alg: 'RS256', kid: 'k1', typ: 'JWT' });
+  const body = b64(good());
+  const token = `${head}.${body}.a`;
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': token })), 403);
+});
+test('token with null JSON header is denied (403, not 503)', async () => {
+  const body = b64(good());
+  const token = `bnVsbA.${body}.xyz`;
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': token })), 403);
+});
 test('missing configuration fails closed', async () =>
   assert.equal(await status(req({ 'cf-access-jwt-assertion': sign(good()) }), { ...env, POLICY_AUD: '' }), 503));
 test('certs outage fails closed', async () =>
@@ -97,6 +114,30 @@ test('root serves the /internal/ contents page', async () => {
   const res = await handle(r, env, certsFetch);
   assert.equal(res.status, 200);
   assert.equal(await res.text(), 'asset:/internal/');
+});
+test('rotated signing key refetches certs when kid is not in cache and caches new key', async () => {
+  const { privateKey: k2Priv, publicKey: k2Pub } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const k2Jwk = { ...k2Pub.export({ format: 'jwk' }), kid: 'k2', alg: 'RS256' };
+
+  let fetchCount = 0;
+  const rotatingFetch = async (url) => {
+    fetchCount++;
+    const keys = fetchCount === 1 ? [jwk] : [jwk, k2Jwk];
+    return new Response(JSON.stringify({ keys }), { status: 200 });
+  };
+
+  // 1. Prime cache with k1
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': sign(good()) }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 1);
+
+  // 2. Request with rotated key k2: bypasses stale cache, fetches certs, and admits
+  const tokenK2 = sign(good(), k2Priv, 'k2');
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': tokenK2 }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 2);
+
+  // 3. Subsequent request with k2 uses the updated cache without extra network fetch
+  assert.equal(await status(req({ 'cf-access-jwt-assertion': tokenK2 }), env, rotatingFetch), 200);
+  assert.equal(fetchCount, 2);
 });
 test('root without a token is denied', async () =>
   assert.equal(await status(new Request('https://internal.blowhorn.ai/')), 403));
@@ -187,6 +228,32 @@ test('fleet page flags a snapshot older than two runs as stale', async () => {
   const old = { ...diskSnap, collected_at: '2020-01-01T00:00:00Z' };
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({ disk: [old] }), certsFetch)).text();
   assert.match(html, /Stale: the cron has missed at least two runs/);
+});
+test('fleet page preserves row collected_at when body does not repeat it', async () => {
+  const diskWithoutDateInBody = { ...diskSnap };
+  delete diskWithoutDateInBody.collected_at;
+  const db = {
+    prepare: () => ({
+      bind: () => ({
+        all: async () => ({ results: [{ collected_at: '2020-01-01T00:00:00Z', body: JSON.stringify(diskWithoutDateInBody) }] }),
+      }),
+    }),
+  };
+  const html = await (await handle(authed('/engineering/fleet/'), { ...env, FLEET_DB: db }, certsFetch)).text();
+  assert.match(html, /Stale: the cron has missed at least two runs/);
+  assert.match(html, /Collected Dec 31, 6:00 PM CST/);
+});
+test('fleet page ignores array snapshot body', async () => {
+  const db = {
+    prepare: () => ({
+      bind: () => ({
+        all: async () => ({ results: [{ collected_at: '2020-01-01T00:00:00Z', body: JSON.stringify(['malformed', 'array']) }] }),
+      }),
+    }),
+  };
+  const html = await (await handle(authed('/engineering/fleet/'), { ...env, FLEET_DB: db }, certsFetch)).text();
+  assert.match(html, /No workload snapshot yet/);
+  assert.match(html, /No disk snapshot yet/);
 });
 test('fleet page says so when there is no data yet', async () => {
   const html = await (await handle(authed('/engineering/fleet/'), fleetEnv({}), certsFetch)).text();
@@ -317,4 +384,14 @@ test('csvCell preserves normal values and quotes cells containing bare carriage 
   assert.equal(csvCell('quote "value"'), '"quote ""value"""');
   assert.equal(csvCell(null), '');
   assert.equal(csvCell(undefined), '');
+});
+
+test('fleet sort script normalizes storage units and disk table embeds byte keys', async () => {
+  assert.match(FLEET_SORT_JS, /MULT/);
+  assert.match(FLEET_SORT_JS, /\[kmgt]\?b/i);
+
+  const e = fleetEnv({ disk: [diskSnap], workload: [workloadSnap] });
+  const html = await (await handle(authed('/engineering/fleet/'), e, certsFetch)).text();
+  assert.match(html, /data-v="45000000000"/);
+  assert.match(html, /data-v="500000000000"/);
 });

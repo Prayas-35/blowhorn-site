@@ -1,11 +1,12 @@
 {{- /* The docs pages' Blowhorn Tells card (copy in data/tells.json docs).
   docs/baseof.html renders it twice: under the table of contents, shown
   from 1280px, and at the end of the page, shown below 1280px or while the
-  contents column is collapsed. CSS shows exactly one, so a reader and a
-  screen reader meet it once. Context: dict "page" and "where" (toc or end). */ -}}
+  contents column is collapsed. The docs-rail-card rules show exactly one,
+  so a reader and a screen reader meet it once; the support card
+  (docs-support-card.html) follows it in both places. Context: dict "page" and "where" (toc or end). */ -}}
 {{- if partial "tells-show.html" .page }}
 {{- with site.Data.tells.docs }}
-<div class="tells-docs-card tells-docs-card-{{ $.where }}">
+<div class="tells-docs-card docs-rail-card docs-rail-card-{{ $.where }}">
   <p class="label">{{ .eyebrow }}</p>
   <p class="tells-docs-card-title">{{ .title }}</p>
   <p class="tells-docs-card-text">{{ .text }}</p>

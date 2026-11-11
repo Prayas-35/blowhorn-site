@@ -1,0 +1,67 @@
+{
+  "$schema": "../schemas/posture.schema.json",
+  "label": "Rules of engagement",
+  "note": "A preview: moving it here changes nothing. Choose yours on the Posture screen in the app.",
+  "docs": "/docs/how-to/settings/choose-your-rules-of-engagement",
+  "stops": [
+    {
+      "id": "cautious",
+      "name": "Safety on",
+      "subtitle": "slow and careful",
+      "tone": "safe",
+      "still": "/assets/brand/cast/major-roe-safety-on.webp",
+      "summary": "A quarter of each cap, long gaps between actions, quiet nights and no outreach.",
+      "dials": [
+        { "label": "Pace", "value": "Slow" },
+        { "label": "Share of each cap", "value": "25%" },
+        { "label": "Between public actions", "value": "15 to 30 minutes, per profile on each platform" },
+        { "label": "Quiet hours", "value": "22:00 to 07:00" },
+        { "label": "Outreach (follows and invitations)", "value": "Off" },
+        { "label": "After a CAPTCHA or checkpoint", "value": "Holds that platform for 72 hours" },
+        { "label": "Retries", "value": "None" },
+        { "label": "Runs at once", "value": "One at a time" }
+      ]
+    },
+    {
+      "id": "standard",
+      "name": "Weapons tight",
+      "subtitle": "normal pace, within the platform's own limits",
+      "tone": "live",
+      "default": true,
+      "still": "/assets/brand/cast/major-roe-weapons-tight.webp",
+      "summary": "The default. Normal pace and half of each cap, with outreach only where it is established.",
+      "dials": [
+        { "label": "Pace", "value": "Normal" },
+        { "label": "Share of each cap", "value": "50%" },
+        { "label": "Quiet hours", "value": "None" },
+        { "label": "Outreach (follows and invitations)", "value": "Only on established platforms" },
+        { "label": "After a CAPTCHA or checkpoint", "value": "Holds that platform for 24 hours" },
+        { "label": "Retries", "value": "None" },
+        { "label": "Runs at once", "value": "Profiles on one platform take turns" }
+      ]
+    },
+    {
+      "id": "brisk",
+      "name": "Weapons free",
+      "subtitle": "fast, and more noticeable to the platform",
+      "tone": "warn",
+      "still": "/assets/brand/cast/major-roe-weapons-free.webp",
+      "summary": "The full cap, outreach on and a shorter pause after a challenge. Still never past a platform's published limit.",
+      "dials": [
+        { "label": "Pace", "value": "Fast" },
+        { "label": "Share of each cap", "value": "100%" },
+        { "label": "Quiet hours", "value": "None" },
+        { "label": "Outreach (follows and invitations)", "value": "On" },
+        { "label": "After a CAPTCHA or checkpoint", "value": "Holds that platform for 12 hours" },
+        { "label": "Retries", "value": "One, never for a sign-in" },
+        { "label": "Runs at once", "value": "Profiles on one platform may run together" }
+      ]
+    }
+  ],
+  "warmup": "New profiles and new computers run Safety on for their first 14 days, caps ramping up, whatever you choose.",
+  "promise": {
+    "title": "A hard cap above every stop",
+    "body": "Blowhorn follows its Field Manual and each platform's best practices. Every cap sits under Blowhorn's own ceiling for that platform, and above everything stands a hard cap from the limits the platform itself publishes. No stop, not even Weapons free, pushes past them and puts your accounts at risk. Your own caps can only lower them, never raise them.",
+    "link": { "label": "Read the Field Manual", "href": "/field-manual" }
+  }
+}

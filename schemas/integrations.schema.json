@@ -21,6 +21,7 @@
       "maxLength": 400,
       "not": { "pattern": "\u2014" }
     },
+    "clip": { "$ref": "#/definitions/clip" },
     "major": { "$ref": "#/definitions/major" },
     "catalogPath": {
       "type": "string",
@@ -48,6 +49,32 @@
     }
   },
   "definitions": {
+    "clipFiles": {
+      "description": "One theme's copy of the clip, paths under static/.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["webm", "mp4", "poster"],
+      "properties": {
+        "webm": { "description": "VP9 WebM, the first source.", "type": "string", "pattern": "^assets/video/[a-z0-9-]+\\.webm$" },
+        "mp4": { "description": "H.264 MP4 with faststart, the fallback source.", "type": "string", "pattern": "^assets/video/[a-z0-9-]+\\.mp4$" },
+        "poster": { "description": "The first frame, shown before it plays and under reduced motion.", "type": "string", "pattern": "^assets/video/[a-z0-9-]+\\.(jpg|png|webp)$" }
+      }
+    },
+    "clip": {
+      "description": "Optional silent loop under the platforms section head (layouts/_partials/home/platforms-clip.html, assets/js/platforms-clip.js). Muted and looped with no autoplay attribute: it plays from the start once about half of it is in view and pauses when it leaves. Under prefers-reduced-motion it rests on its poster with native controls. The light and dark copies follow the OS theme like the logos.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "description", "width", "height", "light", "dark"],
+      "properties": {
+        "label": { "description": "Short accessible name. Hyphens never em dashes.", "type": "string", "minLength": 1, "maxLength": 80, "not": { "pattern": "\u2014" } },
+        "description": { "description": "What the clip shows, read by screen readers. Hyphens never em dashes.", "type": "string", "minLength": 1, "maxLength": 400, "not": { "pattern": "\u2014" } },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "light": { "$ref": "#/definitions/clipFiles" },
+        "dark": { "$ref": "#/definitions/clipFiles" },
+        "source": { "description": "Where the clip's sources live, for maintainers. Not rendered.", "type": "string" }
+      }
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",

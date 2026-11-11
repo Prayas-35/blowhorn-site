@@ -80,8 +80,8 @@ and checked against it, so a page says what `--help` says.
 | --- | --- |
 | [`blowhorn accept`](/docs/reference/cli/accept/) | Accept pending LinkedIn connection invitations other people have sent you, one at a time with a randomized pause between each. |
 | [`blowhorn analytics`](/docs/reference/cli/analytics/) | blowhorn analytics: activities, activity, history, import-exports, operations, pages. |
-| [`blowhorn auth`](/docs/reference/cli/auth/) | blowhorn auth: anonymous-usage-stats, login, logout, status, switch-organization. |
-| [`blowhorn chrome`](/docs/reference/cli/chrome/) | blowhorn chrome: active-tab, attach-chrome, confirm, create-profile, discover, extension-enable, extension-install, extension-mode, extension-status, map, open-profile, profiles, status, suggest, unmap. |
+| [`blowhorn auth`](/docs/reference/cli/auth/) | blowhorn auth: anonymous-usage-stats, login, logout, share-activity-publicly, status, switch-organization. |
+| [`blowhorn chrome`](/docs/reference/cli/chrome/) | blowhorn chrome: active-tab, attach-chrome, confirm, create-profile, discover, extension-enable, extension-install, extension-mode, extension-status, map, open-profile, profiles, remember, spaces-setup, status, suggest, unmap. |
 | [`blowhorn classify-url`](/docs/reference/cli/classify-url/) | Say what a link is, by the platform rules the engine keeps. |
 | [`blowhorn comment`](/docs/reference/cli/comment/) | Post LinkedIn, Reddit, or Bluesky comments from scheduled activities or ad-hoc target/message flags. |
 | [`blowhorn config`](/docs/reference/cli/config/) | blowhorn config: get, path, set, show. |
@@ -172,7 +172,7 @@ The sign-in on this machine (the Keychain item `ai.blowhorn.cloud-token`, the
 entitlement cache `ai.blowhorn.entitlement.v2`, `cloud.yaml` and the `cloud-token`
 file) is removed on every uninstall. Local data is kept and named (the store
 connection file an older version wrote, which Blowhorn no longer reads, the
-desktop app's state, Blowhorn's own Chrome trees under `~/.blowhorn`, the app's
+desktop app's state, Blowhorn's own Chrome trees and service sockets under `~/.blowhorn`, the app's
 per-user Library state and the checkout's `data/cache/`, which holds each
 profile's runtime state); `--purge` removes it after you type `purge` at the prompt, or with
 `--yes` when there is no terminal (`--json --purge` needs `--yes` outside a dry

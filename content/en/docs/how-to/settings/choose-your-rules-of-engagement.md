@@ -54,10 +54,12 @@ blowhorn risk set cautious --platform linkedin
 ```
 
 The choice is kept with your organization, so every computer you run
-Blowhorn on uses it, and the row's caption says **every computer**. If your
-organization cannot keep it yet, it is saved on this computer only: the
-command says `scope: this_computer` with the reason, and the row says
-**this computer only**. Your organization's choice for that platform comes
+Blowhorn on uses it. If your organization cannot keep it yet, it is saved on
+this computer only: the command says `scope: this_computer` with the reason,
+the app says so in one line under the grid, and the chip's slider reads
+**Set here, on this computer only**. Each grid cell shows only its rules of
+engagement (Warming, Safety on, Weapons tight or Weapons free); hold the
+pointer over a chip to see where its choice comes from. Your organization's choice for that platform comes
 first, so when it already has one, the command says it still applies on
 every computer and this computer's choice has no effect until an
 organization admin clears it. Choose **Follows Everyone** under the same
@@ -105,9 +107,9 @@ will use, and you change them in Posture.
 ## Adjust the limits yourself
 
 Under the grid, **The limits Blowhorn keeps** starts from the preset: change
-the pace and daily caps per platform in the **by platform** table, and the
-other limits below it, including typing and pointer timing, then **save
-limits**. The header reads "Custom, based on Weapons tight, 3 dials changed" once
+the pace and daily caps per platform in **by platform** (pick a platform by its
+logo, then slide each cap), and the other limits below it, including typing and
+pointer timing. Each change saves as you make it. The header reads "Custom, based on Weapons tight, 3 dials changed" once
 dials move, and **reset to preset** puts every dial back. No dial may exceed a
 built-in ceiling: your own cap can only lower a ceiling, never raise it.
 Two dials carry a driver note: pauses and mistakes run on the Playwright

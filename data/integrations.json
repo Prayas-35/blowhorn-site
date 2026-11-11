@@ -2,6 +2,15 @@
   "$schema": "../schemas/integrations.schema.json",
   "headline": "One queue. Every network that matters.",
   "lede": "One queue for every network your audience reads. LinkedIn, X, Reddit and Hacker News go through your own browser with the Blowhorn extension. Slack and Bluesky use their APIs. On GitHub, Blowhorn rallies reactions on the issue, it does not post.",
+  "clip": {
+    "label": "Every platform Blowhorn supports",
+    "description": "A 10-second loop. A row of platform logos slides by: LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub, then YouTube, Instagram, TikTok and Facebook, which are coming soon. A cursor picks each supported platform in turn, and its card shows how Blowhorn reaches it and the actions it takes there.",
+    "width": 1920,
+    "height": 1080,
+    "light": { "webm": "assets/video/supported-platforms-light.webm", "mp4": "assets/video/supported-platforms-light.mp4", "poster": "assets/video/supported-platforms-light-poster.webp" },
+    "dark": { "webm": "assets/video/supported-platforms-dark.webm", "mp4": "assets/video/supported-platforms-dark.mp4", "poster": "assets/video/supported-platforms-dark-poster.webp" },
+    "source": "Layer5 shared drive, Marketing/Blowhorn/Blowhorn Marketing/2026-11-08 Supported platforms clip (HyperFrames and Rotato sources in source/)"
+  },
   "major": {
     "headline": "Write it once. Deploy to every front.",
     "supporting": "You give the order. Major Blowhorn takes it to %s and the rest."

@@ -54,9 +54,20 @@
 {{- $t := index . 0 -}}
 <section class="section proof-interlude" aria-label="A Blowhorn user, in their own words">
   <div class="wrap">
+    {{- /* The first sentence leads in full ink with a green marker that
+       sweeps in as the quote scrolls into view; the rest reads quieter, so
+       the quote has a way in instead of one flat block of display type. */ -}}
+    {{- $parts := split $t.quote ". " -}}
     <figure class="proof-big">
-      <blockquote class="display">{{ $t.quote }}</blockquote>
-      <figcaption class="label">{{ $t.name }} · {{ $t.role }}, {{ $t.company }}{{ if $t.placeholder }} <span class="proof-flag">Placeholder</span>{{ end }}</figcaption>
+      <span class="proof-big-mark" aria-hidden="true">&ldquo;</span>
+      <blockquote class="proof-big-quote">
+        {{- if gt (len $parts) 1 -}}
+        <span class="proof-big-lead">{{ index $parts 0 }}.</span> {{ delimit (after 1 $parts) ". " }}
+        {{- else -}}
+        <span class="proof-big-lead">{{ $t.quote }}</span>
+        {{- end -}}
+      </blockquote>
+      <figcaption class="proof-who proof-big-who">{{ partial "proof-who.html" $t }}{{ if $t.placeholder }} <span class="proof-flag">Placeholder</span>{{ end }}</figcaption>
     </figure>
   </div>
 </section>
@@ -79,11 +90,7 @@
         {{- end }}
         <span class="proof-mark" aria-hidden="true">&ldquo;</span>
         <blockquote class="body-lg">{{ $t.quote }}</blockquote>
-        <p class="proof-who"><span class="proof-avatar" aria-hidden="true">
-          {{- with $t.picture }}
-          <img src="{{ . | relURL }}" alt="">
-          {{- end }}
-        </span><span><strong>{{ $t.name }}</strong><br><span class="caption muted">{{ $t.role }}, {{ $t.company }}</span></span></p>
+        <p class="proof-who">{{ partial "proof-who.html" $t }}</p>
       </li>
       {{- end }}
     </ul>
@@ -108,11 +115,7 @@
     {{- range $i, $t := . }}
     <figure class="proof-rotate-item card-paper{{ if eq $i 0 }} is-current{{ end }}"{{ if ne $i 0 }} aria-hidden="true"{{ end }}>
       <blockquote class="body-lg">{{ $t.quote }}</blockquote>
-      <figcaption class="proof-who"><span class="proof-avatar" aria-hidden="true">
-        {{- with $t.picture }}
-        <img src="{{ . | relURL }}" alt="">
-        {{- end }}
-      </span><span><strong>{{ $t.name }}</strong><br><span class="caption muted">{{ $t.role }}, {{ $t.company }}</span></span>{{ if $t.placeholder }} <span class="proof-flag">Placeholder</span>{{ end }}</figcaption>
+      <figcaption class="proof-who">{{ partial "proof-who.html" $t }}{{ if $t.placeholder }} <span class="proof-flag">Placeholder</span>{{ end }}</figcaption>
     </figure>
     {{- end }}
     <div class="proof-rotate-nav">

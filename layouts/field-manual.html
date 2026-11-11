@@ -17,6 +17,12 @@
           {{- end }}
           <p class="body-lg muted">{{ $p.lead | $.RenderString }}</p>
           {{- with $p.checked }}<p class="caption muted">Sources checked {{ . }}.</p>{{ end }}
+          {{- with $p.plate }}
+          <figure class="fm-plate">
+            <img src="{{ printf "assets/brand/mascot/field-manual/%s" .file | relURL }}" alt="{{ .alt }}" width="{{ .w | default 1280 }}" height="{{ .h | default 720 }}" loading="{{ if not $.IsPage }}eager{{ else }}lazy{{ end }}">
+            {{- with .caption }}<figcaption class="caption muted">{{ . }}</figcaption>{{ end }}
+          </figure>
+          {{- end }}
         </header>
 
         {{- with $p.matrix }}

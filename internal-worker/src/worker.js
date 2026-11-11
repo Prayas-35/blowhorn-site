@@ -32,6 +32,8 @@
 const CERTS_TTL_MS = 10 * 60 * 1000;
 let certsCache = { url: '', keys: null, fetchedAt: 0 };
 
+const certsUrl = (teamDomain) => `https://${teamDomain}/cdn-cgi/access/certs`;
+
 const DENY_HEADERS = {
   'content-type': 'text/plain; charset=utf-8',
   'cache-control': 'no-store',
@@ -43,6 +45,7 @@ function deny(status = 403) {
 }
 
 function b64urlToBytes(s) {
+  if (s.length % 4 === 1) throw new Error('invalid base64url length');
   const pad = s.length % 4 === 0 ? '' : '='.repeat(4 - (s.length % 4));
   const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/') + pad);
   const out = new Uint8Array(bin.length);
@@ -55,7 +58,7 @@ function decodeJson(part) {
 }
 
 async function accessKeys(teamDomain, fetchImpl) {
-  const url = `https://${teamDomain}/cdn-cgi/access/certs`;
+  const url = certsUrl(teamDomain);
   const now = Date.now();
   if (certsCache.url === url && certsCache.keys && now - certsCache.fetchedAt < CERTS_TTL_MS) {
     return certsCache.keys;
@@ -91,9 +94,16 @@ export async function verifyAccessToken(token, env, fetchImpl = fetch, nowSec = 
   } catch {
     return null;
   }
-  if (header.alg !== 'RS256' || !header.kid) return null;
-  const keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
-  const jwk = keys.find((k) => k.kid === header.kid);
+  if (!header || typeof header !== 'object' || header.alg !== 'RS256' || !header.kid) return null;
+  if (!claims || typeof claims !== 'object') return null;
+  const hadCachedKeys = certsCache.url === certsUrl(env.TEAM_DOMAIN) && Boolean(certsCache.keys);
+  let keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
+  let jwk = keys.find((k) => k.kid === header.kid);
+  if (!jwk && hadCachedKeys) {
+    resetCertsCache();
+    keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
+    jwk = keys.find((k) => k.kid === header.kid);
+  }
   if (!jwk) return null;
   const key = await crypto.subtle.importKey(
     'jwk',
@@ -102,17 +112,28 @@ export async function verifyAccessToken(token, env, fetchImpl = fetch, nowSec = 
     false,
     ['verify'],
   );
-  const ok = await crypto.subtle.verify(
-    'RSASSA-PKCS1-v1_5',
-    key,
-    b64urlToBytes(parts[2]),
-    new TextEncoder().encode(`${parts[0]}.${parts[1]}`),
-  );
+  let sigBytes;
+  try {
+    sigBytes = b64urlToBytes(parts[2]);
+  } catch {
+    return null;
+  }
+  let ok = false;
+  try {
+    ok = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      sigBytes,
+      new TextEncoder().encode(`${parts[0]}.${parts[1]}`),
+    );
+  } catch {
+    return null;
+  }
   if (!ok) return null;
   const aud = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
   if (!aud.includes(env.POLICY_AUD)) return null;
   if (claims.iss !== `https://${env.TEAM_DOMAIN}`) return null;
-  if (typeof claims.exp !== 'number' || claims.exp <= nowSec) return null;
+  if (typeof claims.exp !== 'number' || !Number.isFinite(claims.exp) || claims.exp <= nowSec) return null;
   if (typeof claims.nbf === 'number' && claims.nbf > nowSec + 60) return null;
   const email = String(claims.email || '').toLowerCase();
   if (!emailAllowed(email, listFrom(env.ALLOWED_EMAILS), listFrom(env.ALLOWED_EMAIL_DOMAINS))) return null;
@@ -334,7 +355,9 @@ function num(v) {
 
 function parseBody(row) {
   try {
-    return JSON.parse(row.body);
+    const data = JSON.parse(row.body);
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return null;
+    return { ...data, collected_at: row.collected_at || data.collected_at };
   } catch {
     return null;
   }
@@ -354,9 +377,10 @@ function csvOf(fields, rows) {
 
 function staleNote(snap, kind, nowMs) {
   if (!snap) return `<p class="stale">No ${kind} snapshot yet.</p>`;
-  const age = nowMs - new Date(snap.collected_at).getTime();
+  const t = new Date(snap.collected_at).getTime();
+  const age = nowMs - t;
   const when = `Collected ${escHtml(fmtCentral(snap.collected_at))} on ${escHtml(snap.collector_host || '')}`;
-  if (age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
+  if (Number.isNaN(age) || age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
   return `<p>${when}.</p>`;
 }
 
@@ -366,7 +390,7 @@ function diskTable(snap) {
     .map((m) =>
       m.reachable
         ? `<tr><td>${escHtml(m.name)}</td><td>${escHtml(m.os)}</td><td class="n${m.used_pct >= 90 ? ' hot' : ''}">${escHtml(num(m.used_pct))}%</td>` +
-          `<td class="n">${fmtGB(m.free_bytes)}</td><td class="n">${fmtGB(m.size_bytes)}</td><td>${escHtml(m.mount)}</td></tr>`
+          `<td class="n" data-v="${escHtml(num(m.free_bytes))}">${fmtGB(m.free_bytes)}</td><td class="n" data-v="${escHtml(num(m.size_bytes))}">${fmtGB(m.size_bytes)}</td><td>${escHtml(m.mount)}</td></tr>`
         : `<tr><td>${escHtml(m.name)}</td><td colspan="5" class="stale">Unreachable: ${escHtml(m.error || 'no answer')}</td></tr>`,
     )
     .join('');
@@ -447,11 +471,18 @@ const FLEET_CSS =
 // in localStorage across refreshes (fleet-stats-sort).
 export const FLEET_SORT_JS = `(() => {
   const STORE = 'fleet-stats-sort';
+  const MULT = { b: 1, kb: 1e3, mb: 1e6, gb: 1e9, tb: 1e12 };
   const key = (td) => {
     if (!td) return null;
     const raw = (td.dataset.v ?? td.textContent).trim();
     if (raw === '' || raw === '-') return null;
-    return /^-?\\d+(\\.\\d+)?(%| GB)?$/.test(raw) ? parseFloat(raw) : raw.toLowerCase();
+    const m = raw.match(/^(-?\\d+(?:\\.\\d+)?)\\s*(%|[kmgt]?b)?$/i);
+    if (m) {
+      const n = parseFloat(m[1]);
+      const u = (m[2] || '').toLowerCase();
+      return u && MULT[u] ? n * MULT[u] : n;
+    }
+    return raw.toLowerCase();
   };
   const readStore = () => {
     try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch { return {}; }

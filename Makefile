@@ -298,7 +298,7 @@ check-third-party: site-build
 check-urls: site-build
 	python3 .github/scripts/check-site-contract.py $(BUILD_DIR)
 
-## Validate every data file that has a JSON Schema in schemas/ (data/hero.json, data/machines.json, data/home_ai.json, data/roles.json, data/use_cases.json, data/solutions.json, data/themes.json, data/integrations.json, data/hero_demo.json, data/actions.json, data/action_examples.json, data/tells.json, data/docs_events.json, data/activity_feed.sample.json, internal-worker/access.json).
+## Validate every data file that has a JSON Schema in schemas/ (data/hero.json, data/machines.json, data/home_ai.json, data/roles.json, data/use_cases.json, data/solutions.json, data/themes.json, data/integrations.json, data/hero_demo.json, data/actions.json, data/action_examples.json, data/tells.json, data/support.json, data/docs_events.json, data/activity_feed.examples.json, internal-worker/access.json).
 ## Role, use-case and solution schemas $ref shared line/text/card types; ajv -r loads that file.
 ## data/docs_events.json $refs the docs event payload types in schemas/defs/docs-event.schema.json (ajv -r).
 ## check_action_examples.py also requires every supported YAML action to have an example.
@@ -307,16 +307,19 @@ check-schemas:
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/hero.schema.json -d data/hero.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/machines.schema.json -d data/machines.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/home_ai.schema.json -d data/home_ai.json
+	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/posture.schema.json -d data/posture.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/roles.schema.json -r schemas/defs/cast-page.schema.json -d data/roles.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/use_cases.schema.json -r schemas/defs/cast-page.schema.json -d data/use_cases.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/solutions.schema.json -r schemas/defs/cast-page.schema.json -d data/solutions.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/themes.schema.json -d data/themes.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/integrations.schema.json -d data/integrations.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/hero_demo.schema.json -d data/hero_demo.json
-	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/activity_feed.schema.json -d data/activity_feed.sample.json
+	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -r schemas/event_feed_page.schema.json -s schemas/activity_feed.examples.schema.json -d data/activity_feed.examples.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/actions.schema.json -d data/actions.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/action_examples.schema.json -d data/action_examples.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/tells.schema.json -d data/tells.json
+	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/support.schema.json -d data/support.json
+	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/social_links.schema.json -d data/social_links.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/docs_events.schema.json -r schemas/defs/docs-event.schema.json -d data/docs_events.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/internal_access.schema.json -d internal-worker/access.json
 	npx --yes ajv-cli@$(AJV_CLI_VERSION) validate --strict=false -s schemas/bookmarklet.schema.json -d data/bookmarklet.json
@@ -382,8 +385,12 @@ check-naming: site-build
 check-no-internal: site-build
 	.github/scripts/check-no-internal.sh $(BUILD_DIR)
 
-## Run the unit tests for the check scripts in .github/scripts/.
-test-scripts: test-internal-worker
+## Unit tests for the hero activity feed (node:test, no extra dependencies).
+test-activity-feed:
+	node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test assets/js/activity-feed.test.mjs
+
+## Run the unit tests for the check scripts in .github/scripts/, then the hero activity feed tests.
+test-scripts: test-internal-worker test-activity-feed
 	python3 -m unittest discover -s .github/scripts -p 'test_*.py'
 
 ## Lint this repo's GitHub Actions workflows with actionlint.
@@ -563,6 +570,7 @@ clean:
 	site-internal-worker-deploy \
 	site-internal-verify \
 	test-internal-worker \
+	test-activity-feed \
 	preview-internal \
 	check-blowhorn \
 	test-scripts \

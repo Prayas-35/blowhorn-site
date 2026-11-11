@@ -9,6 +9,13 @@ layout: field-manual
 weight: 70
 checked: 28 October 2026
 lastmod: 2026-10-28
+
+plate:
+  file: fm-tuning-open.webp
+  alt: "Open Field Manual with a woodcut of dials, calipers and a pacing clock"
+  caption: "Pace and tune with care."
+  w: 1280
+  h: 720
 ---
 
 ## Baseline config

@@ -9,6 +9,13 @@ layout: field-manual
 weight: 10
 checked: 28 October 2026
 lastmod: 2026-10-28
+
+plate:
+  file: fm-linkedin-open.webp
+  alt: "Open Field Manual with a woodcut of a handshake in a professional network"
+  caption: "No LinkedIn logo in the art."
+  w: 1280
+  h: 720
 ---
 
 ## Roll call of the fallen

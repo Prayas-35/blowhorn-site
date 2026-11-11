@@ -7,7 +7,7 @@ layout: legal
 weight: 10
 aliases:
   - /privacy.html
-lastmod: 2026-10-27
+lastmod: 2026-11-10
 sitemap:
   changefreq: yearly
   priority: 0.3
@@ -15,10 +15,11 @@ sitemap:
 
 ## This website
 
-blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. That is its one script from a third party, and its cookies are the only ones the site sets. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The site's other requests to another host are the download page's release lookup and the signup forms described below. The newsletter form in the footer sends nothing unless you submit it.
+blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. That is its one script from a third party, and its cookies are the only ones the site sets. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The site's other requests to another host are the download page's release lookup, the home page's recent-activity card, and the signup forms described below. The newsletter form in the footer sends nothing unless you submit it.
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The download page asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the download button still works.
+- The home page's recent-activity card asks the Blowhorn account service (cloud.blowhorn.ai) for recently completed public activity from your browser. The request sends no cookies and no account details. It reaches Blowhorn like any other request your browser makes, with your IP address and the usual request headers. When a person has made their activity public, the card also loads their profile picture from the network the person uses (X, LinkedIn, Reddit, Bluesky, Slack or GitHub), from their Google account photo, or from Blowhorn's account service, with no referrer. If the request fails or nothing is public yet, the card shows labelled examples. With JavaScript off, no request is made.
 
 ### Google Analytics {#google-analytics}
 

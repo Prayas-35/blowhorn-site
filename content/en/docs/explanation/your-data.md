@@ -101,7 +101,7 @@ email only if you typed one in, plus the report id only if you left
 ## Anonymous usage data
 
 Separately from failure reports, your Blowhorn account has a setting for
-anonymous usage data, **share anonymous usage data for product
+anonymous usage data, **Share anonymous usage data for product
 improvement**. It is on until you turn it off, and it is kept in your
 account rather than on one computer, so every computer you use Blowhorn on
 follows it.
@@ -114,6 +114,16 @@ post or send, your credentials or sign-in, platform account names, or the
 contents of any page Blowhorn drives. With the setting off, none is shared.
 To change it, see
 [Turn anonymous usage data on or off](/docs/how-to/settings/share-usage-data/).
+
+## Public activity
+
+Your account also has one setting for whether completed runs can appear in
+the public activity feed on blowhorn.ai: **Share my activity publicly**. It
+is on until you turn it off. On, a completed run can appear in that feed,
+linked to your profile only when your profile is public. Off, your activity
+stays visible only inside your org. The setting is kept in your account, so
+every computer you use Blowhorn on follows it. To change it, see
+[Share your activity publicly or keep it in your org](/docs/how-to/settings/share-activity/).
 
 ## Related
 

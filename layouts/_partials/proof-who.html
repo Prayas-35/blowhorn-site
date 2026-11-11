@@ -1,0 +1,9 @@
+{{- /* Who said a testimonial: avatar (their photo, or nothing) beside their
+   name, role and company. Callers wrap it in their own <p> or <figcaption>
+   with the proof-who class. Context: one data/testimonials.json item. */ -}}
+<span class="proof-avatar" aria-hidden="true">
+  {{- with .picture }}
+  <img src="{{ . | relURL }}" alt="">
+  {{- end }}
+</span><span><strong>{{ .name }}</strong><br><span class="caption muted">{{ .role }}, {{ .company }}</span></span>
+{{- /**/ -}}

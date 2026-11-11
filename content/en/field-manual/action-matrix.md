@@ -65,6 +65,13 @@ matrix:
   - platform: Facebook, YouTube, Instagram, TikTok, Threads, Mastodon
     page: /field-manual/other-feeds
     via: Not supported by Blowhorn
+
+plate:
+  file: fm-action-matrix-open.webp
+  alt: "Open Field Manual with a woodcut of an operations risk table"
+  caption: "Every action, graded by the platform's own rules."
+  w: 1280
+  h: 720
 ---
 
 ## Beyond the API

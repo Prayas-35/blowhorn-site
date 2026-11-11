@@ -1,0 +1,22 @@
+{{- /* The platforms clip, from data/integrations.json clip (schema:
+  schemas/integrations.schema.json definitions.clip). A silent loop under the
+  platforms section head, one copy per OS theme (the logo-on-light /
+  logo-on-dark swap in themes.css). Muted and looped with no autoplay
+  attribute: assets/js/platforms-clip.js removes the native controls, plays it
+  from the start once about half of it is in view and pauses it when it
+  leaves, and shows Pause motion. Under prefers-reduced-motion, or without
+  JavaScript, it rests on its poster with native controls. Called with the
+  clip. */ -}}
+{{- $clip := . -}}
+<figure class="plat-clip" data-plat-clip aria-labelledby="plat-clip-title">
+  <figcaption class="visually-hidden"><span id="plat-clip-title">{{ $clip.label }}</span>. {{ $clip.description }}</figcaption>
+  {{- range $theme := slice "light" "dark" }}
+  {{- with index $clip $theme }}
+  <video class="plat-clip-video logo-on-{{ $theme }}" controls muted loop playsinline preload="metadata" width="{{ $clip.width }}" height="{{ $clip.height }}" poster="{{ .poster | relURL }}" aria-labelledby="plat-clip-title">
+    <source src="{{ .webm | relURL }}" type="video/webm">
+    <source src="{{ .mp4 | relURL }}" type="video/mp4">
+  </video>
+  {{- end }}
+  {{- end }}
+  <p class="plat-clip-ctl"><button type="button" class="constellation-pause" data-plat-clip-pause aria-pressed="false" hidden>Pause motion</button></p>
+</figure>

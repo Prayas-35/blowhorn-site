@@ -10,6 +10,13 @@ lastmod: 2026-10-28
 sitemap:
   changefreq: monthly
   priority: 0.5
+
+plate:
+  file: fm-home-open.webp
+  alt: "Open Field Manual with a woodcut of a hill and fallen soldiers"
+  caption: "Standing orders. Every claim has a source."
+  w: 1280
+  h: 720
 ---
 
 ## A word from the Major

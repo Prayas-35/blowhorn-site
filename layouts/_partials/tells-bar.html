@@ -1,14 +1,29 @@
 {{- /* The site-wide announcement bar for Blowhorn Tells, the free Am I a Bot?
-  check: one slim line above the header on every public page. Copy and the
-  localStorage key are in data/tells.json. It scrolls away with the page, so
-  the sticky header and the cookie notice at the bottom never overlap it.
-  tells-bar-head.html hides it before first paint once dismissed; the close
-  button stays hidden until assets/js/tells-bar.js can remember the choice. */ -}}
+  check: one slim line above the header on every public page. Message copy
+  and the Am I a Bot? + Free pill CTA sit together as a centered group; the
+  dismiss control is pinned to the far right and kept apart from the CTA.
+  Desktop uses bar.text; below 720px bar.text_short on one line (no wrap, no
+  ellipsis). Free
+  appears only in the pill. Copy and the localStorage key are in
+  data/tells.json. It scrolls away with the page, so the sticky header and
+  the cookie notice at the bottom never overlap it. tells-bar-head.html
+  hides it before first paint once dismissed; the close button stays hidden
+  until assets/js/tells-bar.js can remember the choice. */ -}}
 {{- if partial "tells-show.html" . }}
-{{- $t := site.Data.tells.bar }}
+{{- $tells := site.Data.tells -}}
+{{- $t := $tells.bar }}
     <aside class="tells-bar" aria-label="Announcement" data-tells-bar data-key="{{ $t.storage_key }}">
       <div class="wrap tells-bar-inner">
-        <p class="tells-bar-text">{{ $t.text }} <a class="tells-bar-link" href="{{ partial "tells-link.html" (dict "placement" "bar") }}">{{ $t.link }}<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"></path></svg></a></p>
+        <div class="tells-bar-cluster">
+          <p class="tells-bar-text">
+            <span class="tells-bar-text-full">{{ $t.text }}</span>
+            <span class="tells-bar-text-short">{{ $t.text_short }}</span>
+          </p>
+          <a class="tells-bar-cta" href="{{ partial "tells-link.html" (dict "placement" "bar") }}">
+            <span class="tells-bar-cta-label">{{ $t.link }}</span>
+            <span class="tells-bar-pill">{{ $tells.nav.pill }}</span>
+          </a>
+        </div>
         <button type="button" class="tells-bar-close" aria-label="Dismiss" hidden>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
         </button>

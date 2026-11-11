@@ -16,6 +16,8 @@ name: Cloud auth smoke
 #             release after 1.24.0, which still defaults to cloud.blowhorn.ai)
 #
 # Secrets: BLOWHORN_SMOKE_EMAIL, BLOWHORN_SMOKE_PASSWORD (the test account).
+# Follow-up: move this account to a dedicated test+smoke@blowhorn.ai address
+# once the test groups exist; see docs/test-accounts-design-231.md (#231).
 # Run: gh workflow run cloud-auth-smoke.yml -R blowhorn-ai/blowhorn-site [-f register=true]
 
 on:

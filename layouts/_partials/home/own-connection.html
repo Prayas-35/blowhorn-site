@@ -8,10 +8,14 @@
 {{- if not $solution }}{{ errorf "home/own-connection.html: /solutions/distributed-teams/ is missing from data/solutions.json" }}{{ end -}}
 <section id="teams" class="section" aria-labelledby="teams-title">
   <div class="wrap">
+    <div class="teams-layout">
     <div class="section-head">
       <p class="label">Distributed teams</p>
       <h2 id="teams-title" class="display">Your whole team. Their own connections.</h2>
       <p class="body-lg muted">Teammates in any city run Blowhorn on their own computers, from one shared queue. Every post goes out over the poster's own internet connection.</p>
+    </div>
+    <div class="activity-feed-slot">
+      {{ partial "activity-feed.html" . }}
     </div>
     <ul class="grid grid-2 section-body">
       <li class="card card-field">
@@ -32,5 +36,6 @@
       </li>
     </ul>
     <p class="section-body"><a class="button button-secondary" href="{{ $solution.RelPermalink }}">Blowhorn for distributed teams</a></p>
+    </div>
   </div>
 </section>

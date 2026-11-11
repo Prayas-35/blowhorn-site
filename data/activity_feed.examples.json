@@ -1,0 +1,1057 @@
+{
+  "$schema": "../schemas/activity_feed.examples.schema.json",
+  "example": true,
+  "data": [
+    {
+      "id": "8467c194-7b7f-5928-8221-3da472dac13a",
+      "userId": "3999901e-1256-5af3-96c8-df2d7108ef88",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-12T17:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager amplified a launch post on LinkedIn and X",
+      "networks": [
+        "LinkedIn",
+        "X"
+      ]
+    },
+    {
+      "id": "78ee255e-6bd3-50bc-aca6-72b3992f7db8",
+      "userId": "585ad4b0-dc4f-59b7-9e5f-b13201c2b539",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-01T08:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Solo founder",
+      "line": "Example: a solo founder shared a launch post on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "12ba6f40-4ca7-5286-9353-e6d1d1a6c571",
+      "userId": "9e27eba9-b418-5fbc-b5a8-4b6845a69055",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-02T09:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Agency",
+      "line": "Example: an agency published a release note on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "749174e0-061b-5bcc-96fe-19fe165dcc8d",
+      "userId": "4f5ab085-c4ab-50bf-8c94-aca5d0fb25ba",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-03T10:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer shared a project update on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "d67bba72-c6d1-5f7e-bca1-17816c67684c",
+      "userId": "be7486ed-2660-5b6b-adcd-28d8059dd292",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-04T11:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "DevRel",
+      "line": "Example: a DevRel replied in a thread on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "2e7ab92e-f775-551d-8adb-32d2890a05ce",
+      "userId": "b7040b77-40e9-57f8-a4be-b02e9b64af1b",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-05T12:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager replied to a conversation on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "323bfa7f-2b1a-5086-ac01-5896d1613d29",
+      "userId": "9b2224c9-af6e-54e4-bc36-3203af3a397f",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-06T13:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Community manager",
+      "line": "Example: a community manager sent a reply in a thread on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "ae509331-2fbe-5b60-a162-f2c58912dd09",
+      "userId": "0a16396c-ce7e-56fc-9f3d-5c811f7327aa",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-07T14:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Founder",
+      "line": "Example: a founder amplified a launch post on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "0a2a007d-b917-5fde-99fa-8f8d54f66816",
+      "userId": "f78215bd-6628-5d84-9951-4cabefb31f39",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-08T15:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Solo founder",
+      "line": "Example: a solo founder amplified a release note on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "4b8852f5-d01a-5c98-b34d-9930faf7b065",
+      "userId": "14a2597d-fc32-5536-8889-efda1311a491",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-09T16:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Agency",
+      "line": "Example: an agency amplified a project update on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "79d9a012-64dd-55e8-bfed-90acb38403fc",
+      "userId": "26546e05-072e-5991-bcbc-c0bfc38cc725",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-10T17:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer followed an account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "dd685afe-bc5b-58c6-a0d7-52627eb67bc8",
+      "userId": "c9500e64-aae2-5c65-aa2b-867e42697939",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-11T08:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "DevRel",
+      "line": "Example: a DevRel followed a project account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "9e310929-f40a-5bed-8406-c08e1580f30f",
+      "userId": "125f1c36-ebd1-52da-b15c-f953ca06b755",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-12T09:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager followed an account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "960700a7-1ef9-5a6e-8b0e-2786ae2703bd",
+      "userId": "2ad3c970-27fb-55dc-a714-0bc4145ce9a8",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-13T10:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Community manager",
+      "line": "Example: a community manager unfollowed an account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "57be624a-9f88-50c3-a70a-b09ec9e06604",
+      "userId": "a1605bf1-d30e-5c4b-a4ae-9f3517c89b82",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-14T11:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Founder",
+      "line": "Example: a founder unfollowed a project account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "7bb68f49-0e5f-52ae-9009-aea4a1279463",
+      "userId": "ef5fd9b0-ab13-5b36-ab36-6adb17914f53",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-15T12:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Solo founder",
+      "line": "Example: a solo founder unfollowed an account on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "9106883c-e41b-5e44-846e-0c8e5eadfc57",
+      "userId": "bb78159a-3f75-5c3b-a62d-52deda008e28",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-16T13:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Agency",
+      "line": "Example: an agency searched posts on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "33cda4e9-7604-59ea-8a3f-7e046ed29b60",
+      "userId": "0c447b87-ad92-571a-be6f-e67a80791ad8",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-17T14:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer looked up posts on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "9df52acf-eea0-5849-bc98-361532bbdd24",
+      "userId": "c5e09809-5335-57d2-82fe-e8f7447f4bae",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-18T15:15:00Z",
+      "visibility": "public",
+      "platform": "bluesky",
+      "role": "DevRel",
+      "line": "Example: a DevRel searched for a conversation on Bluesky",
+      "networks": [
+        "Bluesky"
+      ]
+    },
+    {
+      "id": "035ebc34-08b8-5fb7-a43c-7a57bdd0fda6",
+      "userId": "7ba737e3-f726-5ade-a7c1-f1a664737281",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-19T16:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager added reactions on an issue on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "4db8b3d3-ffd6-5a59-bfd5-8a312e4d5bd5",
+      "userId": "99a8bdfc-4847-5955-b882-f2553b11d9b5",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-20T17:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Community manager",
+      "line": "Example: a community manager added reactions on a pull request on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "fae06f0a-959c-598c-aecb-ea304f4e556c",
+      "userId": "ecacfd2a-e631-58d4-a6e4-6d06ceedb3ae",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-21T08:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Founder",
+      "line": "Example: a founder added reactions on an issue thread on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "0334e569-939a-5df0-972d-ec8a1d582466",
+      "userId": "dde38e36-1541-512d-a622-3397bca8ea95",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-22T09:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Solo founder",
+      "line": "Example: a solo founder followed an account on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "087b9c7b-e8f5-5845-9400-30b7471550cb",
+      "userId": "c7946225-7f4c-5dd7-9d65-7b37388d568c",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-23T10:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Agency",
+      "line": "Example: an agency followed a project account on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "86433f3a-11f2-5c56-b01d-008d340474d3",
+      "userId": "f5f7b572-be86-5804-97a2-c4eeb543f9bc",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-24T11:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer followed an account on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "301ee859-77f8-51e7-9eed-046b434db34c",
+      "userId": "229ce6c2-46ba-5bf7-8c15-c30245f11777",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-25T12:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "DevRel",
+      "line": "Example: a DevRel searched posts on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "ac9918e6-f984-5fc5-9523-e0516c3e45e8",
+      "userId": "3992a790-8968-5d48-948e-73f44ca9d1ff",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-26T13:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager looked up posts on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "3c79c1a3-adcb-5686-b337-d77039abc522",
+      "userId": "7c15d0bd-68af-58ab-b631-816cb6006adb",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-27T14:15:00Z",
+      "visibility": "public",
+      "platform": "github",
+      "role": "Community manager",
+      "line": "Example: a community manager searched for a conversation on GitHub",
+      "networks": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "7ff4cb9f-7c61-54f0-803c-ef6d9e76220b",
+      "userId": "236502b2-83a7-54a7-97e2-55de3694e533",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-28T15:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "Founder",
+      "line": "Example: a founder shared a launch post on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "a58580ce-3f55-5fc2-be61-89bb869cd055",
+      "userId": "6427b046-e9ee-5fb3-84ac-aa32156876c4",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-01T16:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "Solo founder",
+      "line": "Example: a solo founder published a release note on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "aaa9996a-1a5f-5f19-a438-5f75c949e5cb",
+      "userId": "dfc4166f-8e5c-5ab9-81ea-f79c520fb0f9",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-02T17:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "Agency",
+      "line": "Example: an agency shared a project update on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "8ed108a1-6298-50aa-81de-ef7a69545d0b",
+      "userId": "1dbd7341-25e2-586c-90e4-7e308b02d111",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-03T08:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer commented on a post on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "f76301a7-06e9-523d-ad51-553ad3aa3410",
+      "userId": "5d9321d4-d3ec-5430-a6f6-a2b453d62598",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-04T09:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "DevRel",
+      "line": "Example: a DevRel commented in a discussion on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "69a8c172-f9bd-5ea1-a3d9-540d556593f5",
+      "userId": "21926a88-80a5-5c66-b9c6-78dc72e08013",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-05T10:15:00Z",
+      "visibility": "public",
+      "platform": "hacker-news",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager left a comment on a thread on Hacker News",
+      "networks": [
+        "Hacker News"
+      ]
+    },
+    {
+      "id": "abad7ccb-99fa-5df8-a4c3-61ac777cb01b",
+      "userId": "1077e4bb-2045-55d4-a386-98e6def5121b",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-06T11:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Community manager",
+      "line": "Example: a community manager shared a launch post on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "dd0e9eb4-2382-535c-81a0-a2d0c96455c5",
+      "userId": "d89df3b7-346e-5b1c-b331-d739caa5125c",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-07T12:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Founder",
+      "line": "Example: a founder published a release note on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "7e160d91-5469-5b47-a9f6-e40073e42bb7",
+      "userId": "48db974a-9ff0-5678-8292-a341a2ce1cdb",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-08T13:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Solo founder",
+      "line": "Example: a solo founder shared a project update on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "891f5339-5702-5a7f-be60-8600d2565625",
+      "userId": "77fa74f6-4882-5fd6-8216-40f1c0f86caa",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-09T14:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Agency",
+      "line": "Example: an agency commented on a post on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "5a789316-797a-5961-ad63-d43b9324221a",
+      "userId": "a62a2304-26b1-5855-907e-0f847c258359",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-10T15:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer commented in a discussion on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "93c1350a-c410-54c5-b21e-13b1ef7fbba4",
+      "userId": "000012ec-d747-553a-a2fd-3c8815434b9a",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-11T16:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "DevRel",
+      "line": "Example: a DevRel left a comment on a thread on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "dca43485-fc48-5afc-b85c-eb2a13ef009c",
+      "userId": "b2b43bc2-1e42-5dd0-9c59-9a5e29dc8e2e",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-13T08:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Community manager",
+      "line": "Example: a community manager amplified a release note on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "6408fb46-734a-5100-a866-6729495c729f",
+      "userId": "8962091c-f8f8-54c4-b5c7-cd807432af75",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-14T09:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Founder",
+      "line": "Example: a founder amplified a project update on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "c033dca7-e6e5-5992-8225-e8a1a83488e5",
+      "userId": "a6fa5159-475e-5e35-a3bd-b8cebc20c961",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-15T10:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Solo founder",
+      "line": "Example: a solo founder accepted an invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "414cda40-7f00-5d5e-bf80-922caa57638a",
+      "userId": "0f24c49d-77b3-5998-860a-06260b932e42",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-16T11:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Agency",
+      "line": "Example: an agency accepted an inbound invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "c840ebc1-5b10-5599-a165-efd9c0929046",
+      "userId": "770b1eaa-3108-54f1-9d97-1edaf1cc76bd",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-17T12:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer accepted an invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "82a65184-31f3-5a88-95f6-f825e4852469",
+      "userId": "65f6f1bc-1ebc-510e-a7ab-6c2a18f98e4b",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-18T13:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "DevRel",
+      "line": "Example: a DevRel withdrew an invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "76754699-c6c5-5e2c-bd95-9abf6c9fde99",
+      "userId": "f5fbb2db-5e1c-50b3-bf09-43092bf19599",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-19T14:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager withdrew a sent invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "a248ee4c-b437-5ff7-b420-a08bf86b79db",
+      "userId": "90c72113-7897-560c-b0fc-9fc6b71af877",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-20T15:15:00Z",
+      "visibility": "public",
+      "platform": "linkedin",
+      "role": "Community manager",
+      "line": "Example: a community manager withdrew an invitation on LinkedIn",
+      "networks": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "id": "a507b6f0-7026-52ec-b9b6-43d5964a018e",
+      "userId": "c9a235be-682a-5024-bea4-bcceec35be27",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-21T16:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Founder",
+      "line": "Example: a founder shared a launch post on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "7e4a5d9e-8540-5921-9361-8e9f38710cef",
+      "userId": "ac5e8ae9-6aff-5b97-8a7b-206a8678ba19",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-22T17:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Solo founder",
+      "line": "Example: a solo founder published a release note on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "265d653e-c23f-57e0-be54-df7f926a195a",
+      "userId": "48eabe89-a602-5451-8419-6f3b836a8af4",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-23T08:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Agency",
+      "line": "Example: an agency shared a project update on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "c8e58bcf-ff2c-5bfd-96c3-860319911fef",
+      "userId": "906abce4-7fa8-5c65-b8cf-5062852267ac",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-24T09:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer commented on a post on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "56e1309b-92b7-5915-acad-67f7522dd17c",
+      "userId": "6cad3816-8b49-5e76-9654-7abea3c27796",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-25T10:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "DevRel",
+      "line": "Example: a DevRel commented in a discussion on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "2fb62157-822d-5d6f-8d0b-dea3b7c1d47d",
+      "userId": "87d1d679-2aed-5b4d-8774-d2258cdae01a",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-26T11:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager left a comment on a thread on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "d20cb3eb-9bee-5930-ae99-343dfd8caaf5",
+      "userId": "d3d9a79b-0cc2-58fc-a000-dfc7fa79375f",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-27T12:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Community manager",
+      "line": "Example: a community manager amplified a launch post on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "f6fdf602-c227-5870-8aa5-ba37c6e32b86",
+      "userId": "35dcf91f-1619-5aff-b64e-b7d23f271214",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-28T13:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Founder",
+      "line": "Example: a founder amplified a release note on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "0aa30350-0e14-5f79-90f8-15036445cba4",
+      "userId": "21eaef22-ae1b-562b-83cc-efb14daba4dc",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-01T14:15:00Z",
+      "visibility": "public",
+      "platform": "reddit",
+      "role": "Solo founder",
+      "line": "Example: a solo founder amplified a project update on Reddit",
+      "networks": [
+        "Reddit"
+      ]
+    },
+    {
+      "id": "9eb85ba7-5c50-5957-bb8b-df8bea0fdda7",
+      "userId": "864ba99c-e430-52da-af53-5b42f09fbc70",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-02T15:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "Agency",
+      "line": "Example: an agency shared a launch post on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "f2856ecb-9f8b-5594-9ce7-8ecec46a224d",
+      "userId": "8f56d32e-6369-5c01-ba09-5310a23b7ea8",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-03T16:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer published a release note on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "71c21a1f-a9fa-59e6-8c12-296ba65fcb81",
+      "userId": "5cd30d2a-c310-594b-bbdf-826d054a1861",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-04T17:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "DevRel",
+      "line": "Example: a DevRel shared a project update on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "37647f5a-977d-5ee3-a1ce-551704dd3ab0",
+      "userId": "b51a0731-f570-56ef-9d6a-34fa6673e38c",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-05T08:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager replied in a thread on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "91d142cb-857c-56b5-916d-16fdc306444e",
+      "userId": "371ef389-4664-553b-ba5b-0f7dc03b6376",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-06T09:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "Community manager",
+      "line": "Example: a community manager replied to a conversation on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "259689dc-608e-5465-aa41-02d5447c730b",
+      "userId": "644698d4-7c53-5a5a-98af-1bae816266a6",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-07T10:15:00Z",
+      "visibility": "public",
+      "platform": "slack",
+      "role": "Founder",
+      "line": "Example: a founder sent a reply in a thread on Slack",
+      "networks": [
+        "Slack"
+      ]
+    },
+    {
+      "id": "79a12377-b688-5532-b244-1d7afe7d8d4f",
+      "userId": "7c18eff8-a84b-5a44-a01b-366d006fc968",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-08T11:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Solo founder",
+      "line": "Example: a solo founder shared a launch post on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "053840eb-17b0-5f32-b4e6-d594b7962fe1",
+      "userId": "d2c4d826-b6f1-586f-8ad5-112ab8a301da",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-09T12:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Agency",
+      "line": "Example: an agency published a release note on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "38b0b456-042c-511d-9608-3dffaf552406",
+      "userId": "124d46cc-6451-5421-b9e7-1ef03aa5e842",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-10T13:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer shared a project update on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "752b32f7-7d66-5d94-b437-27888e518da4",
+      "userId": "73a3a93b-4b28-5f20-bb67-b0462b1feaa3",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-11T14:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "DevRel",
+      "line": "Example: a DevRel replied in a thread on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "edba6af4-6fbc-5889-9703-048a8977fc17",
+      "userId": "52437a81-fdc2-5560-86a6-fdbec60ff6f4",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-12T15:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager replied to a conversation on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "ef199087-0d8d-5a98-ab6a-f04e3bfd498e",
+      "userId": "cdf88b60-81f8-514c-a91f-d6834ac8f85d",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-13T16:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Community manager",
+      "line": "Example: a community manager sent a reply in a thread on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "a9fc54f9-5cf8-5e0d-b388-8f93e039d88b",
+      "userId": "8380fdbd-2975-5117-b7ef-42aac8e5bc24",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-14T17:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Founder",
+      "line": "Example: a founder amplified a launch post on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "cb5914e4-0d8b-55fc-a83b-ea203b1be4bd",
+      "userId": "339c066e-818e-5694-bc66-d56cb69e949a",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-15T08:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Solo founder",
+      "line": "Example: a solo founder amplified a release note on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "8a7ff670-f01e-57bc-8742-270cbef71df1",
+      "userId": "c6b2cbb1-e7d6-585b-8548-780539841d5d",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-16T09:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Agency",
+      "line": "Example: an agency amplified a project update on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "17b81bd1-773d-59ad-83e2-2899b1c7824c",
+      "userId": "2ca07a67-fa6e-516d-99da-e7482eb29f44",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-17T10:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Open source maintainer",
+      "line": "Example: an open source maintainer followed an account on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "ae8b7f79-8c09-52c8-8281-a1a420595c9d",
+      "userId": "440fa709-d76b-52f3-b5e7-31fe964d6d03",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-18T11:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "DevRel",
+      "line": "Example: a DevRel followed a project account on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    },
+    {
+      "id": "2c65fb23-6be7-5b01-988a-04e369f41f9b",
+      "userId": "8238304d-7923-5ddb-94a1-05b0da751e63",
+      "category": "schedule",
+      "action": "completed",
+      "createdAt": "2026-10-19T12:15:00Z",
+      "visibility": "public",
+      "platform": "x",
+      "role": "Marketing manager",
+      "line": "Example: a marketing manager followed an account on X (Twitter)",
+      "networks": [
+        "X (Twitter)"
+      ]
+    }
+  ]
+}

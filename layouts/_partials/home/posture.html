@@ -1,0 +1,61 @@
+{{- /* Trust: a preview of the desktop app's Posture slider ("Major at the
+  ready", RiskSlider.tsx in the product repository). It configures nothing.
+  Copy and dials from data/posture.json (schema: schemas/posture.schema.json).
+  The three stops are a native radio group, so arrow keys move between them
+  and clicking a pose or a dot on the track picks it with no script; CSS
+  (:has) places the capsule and shows that stop's readout. Each stop has a
+  summary, with every dial behind a disclosure. The selected pose bobs unless
+  the reader asks for less motion; a stop with a "loop" clip plays it instead,
+  only while selected and on screen (assets/js/posture.js). */ -}}
+{{- $p := site.Data.posture -}}
+{{- if not $p }}{{ errorf "signal home: data/posture.json is missing" }}{{ end -}}
+{{- $docs := site.GetPage $p.docs -}}
+{{- if not $docs }}{{ errorf "data/posture.json: docs %q is not a page" $p.docs }}{{ end -}}
+{{- $fm := site.GetPage $p.promise.link.href -}}
+{{- if not $fm }}{{ errorf "data/posture.json: promise link %q is not a page" $p.promise.link.href }}{{ end -}}
+<div class="posture card card-paper section-body" data-posture>
+  <fieldset class="posture-control">
+    <legend class="label">{{ $p.label }}</legend>
+    <div class="posture-figures">
+      {{- range $p.stops }}
+      <input class="posture-radio visually-hidden" type="radio" name="posture-stop" id="posture-{{ .id }}" value="{{ .id }}"{{ if .default }} checked{{ end }}>
+      <label class="posture-figure" for="posture-{{ .id }}" data-tone="{{ .tone }}">
+        <img src="{{ .still | relURL }}" alt="" width="320" height="320" loading="lazy">
+        {{- with .loop }}
+        <video class="posture-loop" data-src="{{ . | relURL }}" muted loop playsinline preload="none" aria-hidden="true" hidden></video>
+        {{- end }}
+        <span class="visually-hidden">{{ .name }}, {{ .subtitle }}</span>
+      </label>
+      {{- end }}
+    </div>
+    <div class="posture-track" aria-hidden="true">
+      {{- range $p.stops }}
+      <label class="posture-dot" for="posture-{{ .id }}"></label>
+      {{- end }}
+      <span class="posture-thumb"></span>
+    </div>
+  </fieldset>
+  <div class="posture-readouts" aria-live="polite">
+    {{- range $p.stops }}
+    <div class="posture-readout" data-stop="{{ .id }}" data-tone="{{ .tone }}">
+      <p class="posture-name"><strong>{{ .name }}</strong>{{ if .default }} <span class="posture-default">Default</span>{{ end }}<br><span class="muted">{{ .subtitle }}</span></p>
+      <p class="posture-summary">{{ .summary }}</p>
+      <details class="posture-dials">
+        <summary class="ui">Every dial at {{ .name }}</summary>
+        <dl>
+          {{- range .dials }}
+          <div><dt>{{ .label }}</dt><dd>{{ .value }}</dd></div>
+          {{- end }}
+        </dl>
+      </details>
+    </div>
+    {{- end }}
+    <p class="posture-warmup caption muted">{{ $p.warmup }}</p>
+  </div>
+  <div class="posture-promise">
+    <p class="h4">{{ $p.promise.title }}</p>
+    <p>{{ $p.promise.body }}</p>
+    <p class="posture-links"><a href="{{ $fm.RelPermalink }}">{{ $p.promise.link.label }}</a><a href="{{ $docs.RelPermalink }}">{{ $docs.LinkTitle }}</a></p>
+    <p class="caption muted">{{ $p.note }}</p>
+  </div>
+</div>

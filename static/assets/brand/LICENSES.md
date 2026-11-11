@@ -20,6 +20,11 @@ Old Thunderlung (`mascot/thunderlung/`, PNG and WebP) is the product repository'
 `marketing/cast/major-blowhorn/thunderlung/brand-style/` cutouts of Major's bugle,
 with and without its red cord, approved 28 Oct 2026 and copied unchanged.
 
+The Field Manual (`mascot/field-manual/`, WebP) is the product repository's
+`marketing/cast/major-blowhorn/field-manual/` locked leather-tome cast art and
+open page plates (Lee locked 6 Nov 2026), copied unchanged for the public
+Field Manual pages at `/field-manual/`.
+
 The two kits on the Brand page (`/brand/blowhorn-brand-kit.zip` and
 `/brand/blowhorn-logo-kit.zip`) are built by the product repository and published
 unchanged, under the same terms. They carry no font files: the full kit's

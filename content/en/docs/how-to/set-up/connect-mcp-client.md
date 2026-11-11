@@ -105,6 +105,19 @@ command in any entry on this page for `npx` with the arguments
 On a client's command line, the same swap is `-- npx -y blowhorn-mcp`.
 It still needs the Blowhorn app installed and opened once.
 
+To pin the launcher, add its version: `npx -y blowhorn-mcp@1.0.0`. The
+latest is 1.0.0. To check that the package you run is the one listed,
+run these two commands, which print the npm version and the registry entry:
+
+```sh
+npm view blowhorn-mcp version
+curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=blowhorn"
+```
+
+The registry entry `io.github.blowhorn-ai/blowhorn` is the listing; its
+`"isLatest": true` marks the current version. Both commands need network
+access and Node.js 20 or later for `npx`.
+
 ### Fallback: the app's own Python
 
 Use this only if your app is older than 1.61.0 and has no
@@ -507,10 +520,10 @@ A Muse bot that is not running on your Mac can still read
 through the interim hosted gateway. Connect it as a custom MCP
 connector with the server URL `https://mcp.blowhorn.ai/mcp` and an
 API token for your Blowhorn account, sent as a Bearer token. The
-gateway is read-only: four tools, `listContentItems`,
-`getContentItem`, `getEvents` and `getConnections`. It has no
-OAuth sign-in, so a client that cannot send a token cannot use
-it.
+gateway proxies Cloud's `/mcp` (read tools today). RFC 9728 discovery
+is live on mcp.blowhorn.ai, but end-to-end OAuth sign-in waits on Cloud
+enabling dynamic client registration, so a client that cannot send a
+token still cannot finish sign-in yet.
 
 ### Grok
 
@@ -546,14 +559,16 @@ Put an API token for your Blowhorn account in place of `<token>`.
 The gateway is read-only, with the four tools `listContentItems`,
 `getContentItem`, `getEvents` and `getConnections`.
 
-Grok on the web cannot connect yet. Its custom connectors
+Grok on the web cannot finish connect yet. Its custom connectors
 (grok.com/connectors, New Connector, then Custom) take a public
-HTTPS MCP server with an OAuth sign-in, and the interim gateway
-takes a bearer token only. It waits on the hosted Blowhorn MCP
-server, which brings its own sign-in. The local server is a process
-on your own computer, and Grok on the web cannot start one.
+HTTPS MCP server with an OAuth sign-in. The interim gateway now
+serves RFC 9728 discovery and challenges, but Cloud still has
+dynamic client registration disabled, so the sign-in flow stops at
+registration. Use a Bearer Cloud API token instead, or wait for the
+DCR enable release. The local server is a process on your own
+computer, and Grok on the web cannot start one.
 [Vendor docs](https://docs.x.ai/grok/connectors). Grok Bot can
-connect today, read-only: see [Grok Bot](#grok-bot).
+connect today with a Bearer token: see [Grok Bot](#grok-bot).
 
 ### Grok Bot
 
@@ -584,9 +599,11 @@ You need an API token for your Blowhorn account.
    confirm.
 3. When the bot asks for the token, give it. The bot stores it as
    the `Authorization` header on the server entry, never in the URL.
-   The gateway has no OAuth sign-in, so no sign-in card appears.
-   The token passes through your chat with the bot, so use one you
-   can revoke, and revoke it when you stop using the connection (see
+   Prefer a Bearer Cloud API token today: end-to-end OAuth sign-in
+   still waits on Cloud enabling dynamic client registration, so no
+   complete sign-in card finishes yet. The token passes through your
+   chat with the bot, so use one you can revoke, and revoke it when
+   you stop using the connection (see
    [Revoke a leaked token](#revoke-a-leaked-token)).
 4. Check it in your next message. Ask:
 

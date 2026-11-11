@@ -1,7 +1,7 @@
 ---
 title: "blowhorn chrome"
 linkTitle: "chrome"
-description: "blowhorn chrome: active-tab, attach-chrome, confirm, create-profile, discover, extension-enable, extension-install, extension-mode, extension-status, map, open-profile, profiles, status, suggest, unmap."
+description: "blowhorn chrome: active-tab, attach-chrome, confirm, create-profile, discover, extension-enable, extension-install, extension-mode, extension-status, map, open-profile, profiles, remember, spaces-setup, status, suggest, unmap."
 weight: 103
 ---
 
@@ -23,6 +23,8 @@ The `blowhorn chrome` commands. Each one's `--help` prints the same text.
 | [`chrome map`](#blowhorn-chrome-map) | Map a Blowhorn profile to one of this machine's Chrome profiles, by the Chrome profile's directory name as `blowhorn chrome profiles` prints it (`Default`, `Profile 12`). |
 | [`chrome open-profile`](#blowhorn-chrome-open-profile) | Open a window in the Chrome profile a Blowhorn profile is mapped to on this machine, so you can look at it or sign in to a platform there yourself. |
 | [`chrome profiles`](#blowhorn-chrome-profiles) | List every profile Chrome knows. |
+| [`chrome remember`](#blowhorn-chrome-remember) | Remember the confirm screen's choices as they stand, before Confirm. |
+| [`chrome spaces-setup`](#blowhorn-chrome-spaces-setup) | Set up Blowhorn's desktop on this Mac: a macOS desktop (Space) for Blowhorn's Chrome window, so runs stop landing on your own desktop. |
 | [`chrome status`](#blowhorn-chrome-status) | Report whether Google Chrome is installed, whether it is running, whether its remote-debugging switch is on (chrome://inspect/#remote-debugging), the debugging port it recorded, how many profiles i... |
 | [`chrome suggest`](#blowhorn-chrome-suggest) | Print a proposed mapping from every Blowhorn profile in the store to a Chrome profile on this machine, matched by display name (a Chrome profile named `Company` proposes for the Blowhorn profile co... |
 | [`chrome unmap`](#blowhorn-chrome-unmap) | Remove one of a Blowhorn profile's Chrome profile mappings on this machine. |
@@ -128,7 +130,7 @@ Output: json with `--json`, text otherwise.
 
 ## blowhorn chrome create-profile
 
-Give Blowhorn a Google Chrome profile of its own, for a Chrome that has only its main profile. Asks Chrome to open a new window in the profile directory `Blowhorn`. Chrome creates that profile the first time and opens it again every time after, so running this twice makes no second one. Chrome gives the new profile a default name such as `Person 1`, which Blowhorn shows as Blowhorn's profile. Sign in there to LinkedIn, X and the other sites Blowhorn should use, then `blowhorn chrome discover` finds the profile and its accounts. Reads Local State only to say whether the profile was already listed; writes nothing, maps nothing, and drives nothing in the window. If no Chrome is running, Chrome starts to open the window and is left running. Your own profiles, windows and tabs are left as they are.
+Give Blowhorn a Google Chrome profile of its own, for a Chrome that has only its main profile. Asks Chrome to open a new window in a Blowhorn profile directory. With no `--profile-directory` it opens the first unused one in Local State: `Blowhorn`, else `Blowhorn 2`, `Blowhorn 3`, and so on, so adding another identity never touches a profile of yours. Chrome creates that profile the first time and opens it again every time after, so running this twice makes no second one. Chrome gives the new profile a default name such as `Person 1`, which Blowhorn shows as Blowhorn's profile. After the window opens, Local State is read back until a short bounded wait runs out, so the answer says whether Chrome listed the profile (`confirmed`): a missing directory after the wait is a named failure, not a silent spinner. With `--sign-in`, the window opens on that platform's sign-in page instead of a new tab, so the setup wizard can guide the single sign-in in that window, one platform at a time, without a mapping. Sign in there to LinkedIn, X and the other sites Blowhorn should use, then `blowhorn chrome discover` finds the profile and its accounts. Reads Local State only, before the open and after it to confirm; writes nothing, maps nothing, and drives nothing in the window. If no Chrome is running, Chrome starts to open the window and is left running. Your own profiles, windows and tabs are left as they are.
 
 ```text
 blowhorn chrome create-profile [OPTIONS]
@@ -136,6 +138,8 @@ blowhorn chrome create-profile [OPTIONS]
 
 | Flag | Type | Default | Description |
 | --- | --- | --- | --- |
+| `--sign-in` | string |  | Open on this platform's sign-in page instead of a new tab, so the person signs in there first; the profile is not mapped yet, so no mapping is chosen. One of linkedin, x, reddit, hn, slack, bluesky, github |
+| `--profile-directory` | string |  | A Blowhorn profile directory to open: `Blowhorn` or `Blowhorn N` for N of 2 or more. Anything else is refused and nothing opens. With no directory the command picks the first unused Blowhorn directory in Local State. |
 | `--json` | boolean | `false` | Emit the report as JSON with a stable shape, for a script or the desktop app |
 | `--platform` | string |  | Accepted and ignored by `blowhorn chrome`: this command never acts on a platform, so `--platform` has no effect here -- including a value inherited from `BLOWHORN_PLATFORM` or defaults.platform in .blowhorn.yaml |
 | `--pace` | string |  | Accepted by `blowhorn chrome create-profile` because `--pace` is a global flag, but this command does no paced work -- it sleeps between nothing -- so the value changes nothing about how it runs and appears only in the Pace column of the -v summary. Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
@@ -147,7 +151,9 @@ Examples:
 
 ```bash
 blowhorn chrome create-profile
+blowhorn chrome create-profile --sign-in linkedin
 blowhorn chrome create-profile --json
+blowhorn chrome create-profile --profile-directory 'Blowhorn 2'
 ```
 
 Output: json with `--json`, text otherwise.
@@ -423,6 +429,67 @@ Examples:
 ```bash
 blowhorn chrome profiles
 blowhorn chrome profiles --json
+```
+
+Output: json with `--json`, text otherwise.
+
+## blowhorn chrome remember
+
+Remember the confirm screen's choices as they stand, before Confirm: write one Chrome profile's on/off choices into the local not-in-use record (.blowhorn.chrome-not-in-use.json beside the config file), so a choice made before Confirm survives an app restart and the next survey starts from it. The choices arrive as one JSON document on stdin (`--payload-stdin`):
+
+\{"assignments": \[\{"directory": "Profile 3", "profile": "ada-example", "in_use": true, "platforms": \{"linkedin": \{"attach": true\}, "x": \{"attach": false\}\}\}\]\}
+
+Per assignment: the Blowhorn profile the card is for (`profile`, the proposed slug when the profile does not exist yet; omitted when the screen proposes none), whether the Chrome profile is in use (`in_use`, omitted means in use), and each account shown a switch (`platforms`, `attach` false records that account not in use, true clears a recorded refusal for it on every Chrome directory of that profile). A platform left out is left as it was recorded. Nothing is created, mapped or written to your Blowhorn account: this only records what the screen shows, so the next `chrome discover` starts a turned-off account off and an account it has never seen on. It never touches defaults.exclude: adding or removing a name there is Confirm's, when the choice is confirmed. A directory Chrome no longer lists is dropped from the record. No store is read, so it works before sign-in. Each assignment answers for itself in the result, so a partial remember is a successful remember. The exit code is 0 when at least one assignment landed and 1 when none did. With `--dry-run` every check runs and nothing is written.
+
+```text
+blowhorn chrome remember [OPTIONS]
+```
+
+| Flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--payload-stdin` | boolean | `false` | Read the assignments document (JSON) from stdin, so a credential inside it reaches neither argv nor the daily log |
+| `--json` | boolean | `false` | Emit the report as JSON with a stable shape, for a script or the desktop app |
+| `--platform` | string |  | Accepted and ignored by `blowhorn chrome`: this command never acts on a platform, so `--platform` has no effect here -- including a value inherited from `BLOWHORN_PLATFORM` or defaults.platform in .blowhorn.yaml |
+| `--pace` | string |  | Pace of the random delays between `blowhorn chrome remember` actions (page loads, typing, clicks, API calls): a preset name (fast/normal/slow) or a numeric multiplier (e.g. 0.5, 2.0). Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
+| `--risk-profile` | string |  | Risk Profile this run uses: cautious, standard or brisk. For this one run it beats the schedule's value, the profile's choice and configuration. A value after the command word wins over one before it; an unrecognized value is rejected before anything runs |
+
+Also takes the [shared flags](/docs/reference/cli/shared-flags/): `--config`, `--log-dir`, `--profile`, `--exclude`, `--headless`, `--chrome-launch`, `--headed`, `--dry-run`, `--verbose`.
+
+Examples:
+
+```bash
+cat choices.json | blowhorn chrome remember --payload-stdin --json
+cat choices.json | blowhorn chrome remember --payload-stdin --dry-run --json
+```
+
+Output: json with `--json`, text otherwise.
+
+## blowhorn chrome spaces-setup
+
+Set up Blowhorn's desktop on this Mac: a macOS desktop (Space) for Blowhorn's Chrome window, so runs stop landing on your own desktop. It reuses a second desktop or display that already exists first. Otherwise, with `--create` ask (the default) and Accessibility granted to Blowhorn's helper, it makes one desktop by pressing Mission Control's add button for you; without that grant, or with `--create` guided, it opens Mission Control and waits up to 60 s for you to click + once. `--create` never makes no desktop and never asks for Accessibility. When nothing works, runs work beside your tabs and setup says why. Setup runs only when you ask for it, never during a run. `--display` names the display to use; `--no-reuse` skips the existing desktop and goes straight to making one. `--json` emits the outcome and the status document the desktop app stores on this computer. macOS only.
+
+```text
+blowhorn chrome spaces-setup [OPTIONS]
+```
+
+| Flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--create` | string | `ask` | ask (default): reuse, else one press when Accessibility is granted, else the guided click. guided: reuse, else the guided click only. never: reuse only, and never open Mission Control |
+| `--display` | string |  | The display UUID to use, as the helper reports it; omit for the main display |
+| `--no-reuse` | boolean | `false` | Skip an existing desktop you could reuse and make a new one |
+| `--json` | boolean | `false` | Emit the report as JSON with a stable shape, for a script or the desktop app |
+| `--platform` | string |  | Accepted and ignored by `blowhorn chrome`: this command never acts on a platform, so `--platform` has no effect here -- including a value inherited from `BLOWHORN_PLATFORM` or defaults.platform in .blowhorn.yaml |
+| `--pace` | string |  | Accepted by `blowhorn chrome spaces-setup` because `--pace` is a global flag, but this command does no paced work -- it sleeps between nothing -- so the value changes nothing about how it runs and appears only in the Pace column of the -v summary. Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
+| `--risk-profile` | string |  | Accepted by `blowhorn chrome spaces-setup` because `--risk-profile` is a global flag, but this command does no gated work -- no Risk Profile hold, cap or pace applies to it -- so the value changes nothing about how it runs. A value after the command word wins over one before it; an unrecognized value is rejected before anything runs |
+
+Also takes the [shared flags](/docs/reference/cli/shared-flags/): `--config`, `--log-dir`, `--profile`, `--exclude`, `--headless`, `--chrome-launch`, `--headed`, `--dry-run`, `--verbose`.
+
+Examples:
+
+```bash
+blowhorn chrome spaces-setup
+blowhorn chrome spaces-setup --create guided
+blowhorn chrome spaces-setup --no-reuse --json
 ```
 
 Output: json with `--json`, text otherwise.

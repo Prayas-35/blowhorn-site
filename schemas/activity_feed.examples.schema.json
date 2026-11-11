@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blowhorn.ai/schemas/activity_feed.examples.schema.json",
+  "title": "Bundled activity examples",
+  "description": "The collection baked into the home page hero card (data/activity_feed.examples.json). Not a feed contract: the items are EventFeedItem from event_feed_page.schema.json (ajv -r), and the envelope is a local marker saying the whole collection is illustrative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "example",
+    "data"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "example": {
+      "const": true
+    },
+    "data": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "event_feed_page.schema.json#/definitions/EventFeedItem"
+      }
+    }
+  }
+}

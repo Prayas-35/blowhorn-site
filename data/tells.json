@@ -25,8 +25,9 @@
   ],
   "bar": {
     "storage_key": "bh-tells-bar-v1",
-    "text": "Free tool: find out what websites can tell about your browser. Spoiler: plenty.",
-    "link": "Am I a Bot?"
+    "text": "Find out what websites can tell about your browser. Spoiler: plenty.",
+    "link": "Am I a Bot?",
+    "text_short": "Fingerprints?"
   },
   "nav": {
     "label": "Am I a Bot?",

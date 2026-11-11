@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blowhorn.ai/schemas/event_feed_page.schema.json",
+  "title": "EventFeedPage",
+  "description": "JSON Schema projection of EventFeedPage and EventFeedItem from meshery/schemas v1.3.117 (schemas/constructs/v1beta3/event/api.yml), the response of GET /api/events/feed on the Blowhorn account service. Meshery's schemas are the source of truth: re-project this file when the pinned version changes, never edit the contract here. assets/js/activity-feed.js mirrors it for live payloads.",
+  "$ref": "#/definitions/EventFeedPage",
+  "definitions": {
+    "EventFeedPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One page of event feed items, newest first.",
+      "required": [
+        "page",
+        "pageSize",
+        "totalCount",
+        "data"
+      ],
+      "properties": {
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "totalCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "data": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "$ref": "#/definitions/EventFeedItem"
+          }
+        }
+      }
+    },
+    "EventFeedItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "An event projected into the public feed. The owner's public profile fields (displayName, avatarUrl, organizationName, publicProfileUrl) are resolved at read time and present only for a public profile. Never includes email, description, provider or raw metadata.",
+      "required": [
+        "id",
+        "userId",
+        "category",
+        "action",
+        "createdAt",
+        "visibility",
+        "platform",
+        "role",
+        "line"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "userId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "visibility": {
+          "const": "public"
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "linkedin",
+            "x",
+            "reddit",
+            "hacker-news",
+            "slack",
+            "bluesky",
+            "github"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40
+        },
+        "line": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 120
+        },
+        "networks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "The same value PublicUser.username carries for the owner, never an email. Resolved for every served owner and omitted when empty."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 500
+        },
+        "organizationName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "publicProfileUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "maxLength": 2048
+        }
+      }
+    }
+  }
+}

@@ -51,13 +51,13 @@ Or you may configure your IDE, for example, Visual Studio Code to automatically 
 <a href="https://user-images.githubusercontent.com/7570704/64490167-98906400-d25a-11e9-8b8a-5f465b854d49.png" ><img src="https://user-images.githubusercontent.com/7570704/64490167-98906400-d25a-11e9-8b8a-5f465b854d49.png" width="50%"><a>
 
 ## <a name="contributing-docs">Site Contribution Flow</a>
-Please contribute! blowhorn.ai is a [Hugo](https://gohugo.io) site that uses [Docsy](https://www.docsy.dev) as a Hugo module, the same framework as [docs.layer5.io](https://github.com/layer5io/docs). You need Go, Node.js and npm, Python 3 and `make`; the pinned Hugo extended comes from `package.json`. The [README](README.md#working-on-the-site) maps the repository. The process of contributing follows this flow:
+Please contribute! blowhorn.ai is a [Hugo](https://gohugo.io) site that uses [Docsy](https://www.docsy.dev) as a Hugo module, the same framework as [docs.layer5.io](https://github.com/layer5io/docs). You need Go, Node.js and npm, Python 3 with PyYAML, and `make`; the pinned Hugo extended comes from `package.json`. The [README](README.md#working-on-the-site) maps the repository. The process of contributing follows this flow:
 
 1. Create a fork, if you have not already, by following the steps described [here](./CONTRIBUTING-gitflow.md)
 1. Create and checkout a new branch to make changes within
 `git checkout -b <my-changes>`
 1. Install the site's dependencies once.
-`make setup`
+`make setup`, then `python3 -m pip install --user pyyaml` for the check scripts' tests ([README](README.md#working-on-the-site) has the Homebrew variant).
 1. Edit the pages (`content/en/`), templates (`layouts/`), styles (`assets/css/site.css`) or brand files (`static/assets/brand/`).
 1. Run the site locally to preview changes at http://localhost:1313.
 `make site`

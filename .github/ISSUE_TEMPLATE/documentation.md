@@ -2,7 +2,11 @@
 name: 📄 Documentation issue
 about: Issues related to Blowhorn documentation.
 title: '[Docs] '
-labels: 'area/docs, framework/hugo, language/markdown'
+labels: 
+- area/docs
+- framework/hugo
+- language/markdown
+- help wanted
 assignees: ''
 ---
 ### Current State

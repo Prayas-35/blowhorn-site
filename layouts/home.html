@@ -35,8 +35,10 @@
     {{- $army := resources.Get "js/army.js" | minify | fingerprint }}
     <script src="{{ $army.RelPermalink }}" defer></script>
     {{- else -}}
-    {{- $signal := slice (resources.Get "js/home-signal.js") (resources.Get "js/card-deal.js") (resources.Get "js/action-filter.js") (resources.Get "js/machines.js") (resources.Get "js/hero-video.js") | resources.Concat "js/home-signal.js" | minify | fingerprint }}
+    {{- $signal := slice (resources.Get "js/home-signal.js") (resources.Get "js/card-deal.js") (resources.Get "js/action-filter.js") (resources.Get "js/machines.js") (resources.Get "js/hero-video.js") (resources.Get "js/platforms-clip.js") (resources.Get "js/posture.js") | resources.Concat "js/home-signal.js" | minify | fingerprint }}
     <script src="{{ $signal.RelPermalink }}" defer></script>
+    {{- $aiCards := resources.Get "js/ai-cards.js" | js.Build (dict "minify" true "target" "es2018") | fingerprint }}
+    <script src="{{ $aiCards.RelPermalink }}" defer></script>
     {{- end -}}
     {{- $cycle := resources.Get "js/hero-cycle.js" | minify | fingerprint }}
     <script src="{{ $cycle.RelPermalink }}" defer></script>

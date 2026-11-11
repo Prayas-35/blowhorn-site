@@ -19,8 +19,11 @@ The throwaway home is seeded from the same `.blowhorn.yaml` a packaged app
 seeds, then given a `postgres` backend. That is the file an older install
 left behind. The walk reaches the console only when the engine opens Cloud
 anyway. In the app, Activity shows the draft and Routines runs a dry fire
-check. A `blowhorn post --dry-run` then reports the fixture row without
-publishing it.
+check. A new profile starts on the cautious preset, whose quiet hours are
+22:00 to 07:00 on the computer's clock. Inside them the dry fire says the
+activity would be held for quiet hours and exits 1, and the walk accepts
+that; at any other time it must exit 0. A `blowhorn post --dry-run` then
+reports the fixture row without publishing it.
 
 It runs four walks. The happy path and `linkedin-session` are the same walk,
 but `linkedin-session` first plants a cookie named `li_at` in the throwaway
