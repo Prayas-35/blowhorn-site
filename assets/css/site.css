@@ -3746,19 +3746,19 @@ a.docs-card.platform-card::before {
   width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--white) no-repeat center / 24px 24px;
   box-shadow: inset 0 0 0 1px var(--line);
 }
-a.docs-card.platform-card[href$="/linkedin/"]::before { background-image: url("/assets/platforms/linkedin-in-bug.png"); }
-a.docs-card.platform-card[href$="/x/"]::before { background-image: url("/assets/platforms/x-logo-black.png"); background-size: 20px 20px; }
-a.docs-card.platform-card[href$="/reddit/"]::before { background-image: url("/assets/platforms/reddit-logo.png"); }
-a.docs-card.platform-card[href$="/hacker-news/"]::before { background-image: url("/assets/platforms/hacker-news-y18.svg"); background-size: 20px 20px; }
-a.docs-card.platform-card[href$="/slack/"]::before { background-image: url("/assets/platforms/slack-mark.svg"); }
-a.docs-card.platform-card[href$="/bluesky/"]::before { background-image: url("/assets/platforms/bluesky-butterfly-blue.svg"); }
-a.docs-card.platform-card[href$="/github/"]::before { background-image: url("/assets/platforms/github-invertocat-black.svg"); }
+a.docs-card.platform-card[href$="/linkedin/"]::before { background-image: url("../assets/platforms/linkedin-in-bug.png"); }
+a.docs-card.platform-card[href$="/x/"]::before { background-image: url("../assets/platforms/x-logo-black.png"); background-size: 20px 20px; }
+a.docs-card.platform-card[href$="/reddit/"]::before { background-image: url("../assets/platforms/reddit-logo.png"); }
+a.docs-card.platform-card[href$="/hacker-news/"]::before { background-image: url("../assets/platforms/hacker-news-y18.svg"); background-size: 20px 20px; }
+a.docs-card.platform-card[href$="/slack/"]::before { background-image: url("../assets/platforms/slack-mark.svg"); }
+a.docs-card.platform-card[href$="/bluesky/"]::before { background-image: url("../assets/platforms/bluesky-butterfly-blue.svg"); }
+a.docs-card.platform-card[href$="/github/"]::before { background-image: url("../assets/platforms/github-invertocat-black.svg"); }
 .agent-actions-platform .logo-tile { width: 36px; height: 36px; }
 .agent-actions-platform .logo-tile img { width: 22px; height: 22px; }
-a.docs-card.platform-card[href$="/youtube/"]::before { background-image: url("/assets/platforms/youtube-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/instagram/"]::before { background-image: url("/assets/platforms/instagram-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/tiktok/"]::before { background-image: url("/assets/platforms/tiktok-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("/assets/platforms/facebook-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/youtube/"]::before { background-image: url("../assets/platforms/youtube-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/instagram/"]::before { background-image: url("../assets/platforms/instagram-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/tiktok/"]::before { background-image: url("../assets/platforms/tiktok-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("../assets/platforms/facebook-simple-icons.svg"); background-size: 22px 22px; }
 
 /* ---------- Cast pages (/for/<slug>/, /use-cases/<slug>/, /solutions/<slug>/)
    Shared layout (layouts/_partials/cast-page.html) reuses these classes.

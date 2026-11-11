@@ -62,7 +62,10 @@ Every CI step that runs repository logic is a make target, and the workflow call
 | Target | What it runs | Run by |
 |---|---|---|
 | `setup-ci` | `npm ci` (the locked dependencies) | `site.yml` |
-| `workflow-check` | actionlint on `site.yml`, `publish-dmg.yml`, `sync-docs.yml`, `cloud-auth-smoke.yml`, `product-ci.yml`, `internal-site.yml`, `internal-site-auto.yml` and `publish-blowhorn-axi.yml` | `site.yml` |
+| `site-preview-metadata` | Save PR action, number and head SHA in the preview build artifact | `build-site-preview.yml` |
+| `site-preview-validate` | Validate artifact provenance and skip closed or superseded PR heads | `deploy-site-preview.yml` |
+| `site-preview-prune` | Keep six most recently updated previews, retrying concurrent branch pushes | `deploy-site-preview.yml` |
+| `workflow-check` | actionlint on `site.yml`, `build-site-preview.yml`, `deploy-site-preview.yml`, `publish-dmg.yml`, `sync-docs.yml`, `cloud-auth-smoke.yml`, `product-ci.yml`, `internal-site.yml`, `internal-site-auto.yml` and `publish-blowhorn-axi.yml` | `site.yml` |
 | `test-activity-feed` | `node --test` for the hero activity card (`assets/js/activity-feed.test.mjs`) | `test-scripts` |
 | `test-scripts` | unit tests for the check scripts in `.github/scripts/`, plus `test-activity-feed` | `site.yml` |
 | `site-check` | one production build, then the checks below | `site.yml` |
@@ -113,7 +116,9 @@ The site also publishes [`/llms.txt`](https://blowhorn.ai/llms.txt), [`/llms-ful
 
 | Workflow | When | What it does |
 |---|---|---|
-| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, runs the check-script unit tests, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check` and uploads the Pages artifact. On `master` it deploys the artifact to GitHub Pages. |
+| [`site.yml`](.github/workflows/site.yml) | Pull requests, pushes to `master`, manual runs | Lints the workflows, runs the check-script unit tests, builds the site with the pinned Hugo, Go and Node.js, runs `make site-check`. On `master` it publishes the checked build to `gh-pages` with existing previews preserved. |
+| [`build-site-preview.yml`](.github/workflows/build-site-preview.yml) | Public-site changes in PRs to `master` | Builds a noindex preview and uploads it with PR metadata. |
+| [`deploy-site-preview.yml`](.github/workflows/deploy-site-preview.yml) | Successful preview build (`workflow_run`) | Validates and publishes `/pr-preview/pr-N/`, comments its URL and keeps the six newest previews. Requires the [one-time Pages source handoff](docs/deploy.md#one-time-handoff-after-merge-repository-administrator). |
 | [`publish-dmg.yml`](.github/workflows/publish-dmg.yml) | Manual, or `repository_dispatch` (`publish-dmg`) from product CI | Downloads a built DMG over HTTPS, checks it, verifies signing and notarization on a macOS runner (required for any public release), then creates the release with versioned assets, the `Blowhorn-mac.dmg` alias and checksums. Drafts by default; never overwrites. |
 | [`sync-docs.yml`](.github/workflows/sync-docs.yml) | Manual, or `repository_dispatch` (`sync-docs`) from product CI | Checks out the product docs at the requested ref, opens or updates the `docs-sync` pull request (`docs: sync from <ref>`), starts the site checks on it itself (`gh workflow run site.yml`), merges it once those checks pass, and starts the `master` run that deploys. |
 | [`internal-site.yml`](.github/workflows/internal-site.yml) | Manual (`make site-internal-deploy`), `repository_dispatch` (`deploy-internal-site`) from the product repo, or called by `internal-site-auto.yml` | Builds the internal site from a read-only checkout of the product repo and deploys it to internal.blowhorn.ai behind Cloudflare Access ([docs/deploy.md](docs/deploy.md#internal-site-hosting-internalblowhornai-cloudflare-access)). |

@@ -1,0 +1,95 @@
+name: Build Site Preview
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'content/**'
+      - 'assets/**'
+      - 'layouts/**'
+      - 'data/**'
+      - 'static/**'
+      - 'config/**'
+      - 'i18n/**'
+      - 'archetypes/**'
+      - 'themes/**'
+      - 'api/**'
+      - 'schemas/**'
+      - 'hugo.*'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'npm-shrinkwrap.json'
+      - '.npmrc'
+      - '.nvmrc'
+      - 'go.mod'
+      - 'go.sum'
+      - 'postcss.config.*'
+      - 'Makefile'
+      - '.github/build/**'
+      - '.github/scripts/**'
+      - '.github/workflows/site.yml'
+      - '.github/workflows/build-site-preview.yml'
+      - '.github/workflows/deploy-site-preview.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - name: Checkout PR
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: make setup-ci
+
+      # layouts/robots.txt already disallows all crawlers with HUGO_PREVIEW.
+      # The build also disables analytics and marks every page noindex, nofollow.
+      - name: Build PR preview
+        env:
+          HUGO_PREVIEW: "true"
+          BASE_URL: /pr-preview/pr-${{ github.event.pull_request.number }}/
+        run: make build-preview
+
+      - name: Save PR metadata
+        run: make site-preview-metadata
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: site-preview-build
+          path: |
+            public/
+            pr/
+          if-no-files-found: error
+          retention-days: 7
