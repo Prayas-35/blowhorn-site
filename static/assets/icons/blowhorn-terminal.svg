@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 88" role="img" aria-label="Terminal prompt">
   <title>Terminal prompt</title>
-  <rect x="7" y="7" width="86" height="74" rx="12" fill="#000000"/>
+  <rect x="7" y="7" width="86" height="74" rx="12" fill="#3C494F"/>
   <path d="M28 26 L46 44 L28 62" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="55" y="55" width="23" height="9" rx="4.5" fill="#ffffff"/>
 </svg>

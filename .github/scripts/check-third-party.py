@@ -25,11 +25,22 @@ scripts from third parties other than the ones it discloses: Google Analytics
   redirects).
   A refresh is a top-level navigation the reader asked for by opening that
   path, not a subresource load; every other refresh host fails.
-  A third: Google's gtag.js may come from a host in ANALYTICS_SCRIPT_HOSTS,
+  A third: the home hero activity card's data-feed-url (any element) may name
+  the same Blowhorn host (params.cloud_url). assets/js/activity-feed.js reads
+  that attribute and fetches the public event feed from the reader's browser;
+  the privacy page discloses the request. Every other host there fails.
+  A fourth: Google's gtag.js may come from a host in ANALYTICS_SCRIPT_HOSTS,
   either as a <script src> or named in a script a page loads. Today
   layouts/_partials/analytics.html loads it directly on every production
   page. The privacy page discloses Google
   Analytics 4. Every other attribute naming that host still fails.
+  A fifth: the home hero activity card loads live profile pictures at runtime
+  from the hosts in assets/js/activity-feed.js's AVATAR_HOSTS (bare hostnames,
+  so the JavaScript scan below never sees them as URLs). The privacy page
+  discloses them. The check parses that constant, the one source of truth, and
+  fails if it names a host missing from the reviewed AVATAR_HOSTS set here, so
+  adding an avatar host takes a reviewed change to this checker. It also fails
+  if the constant cannot be found.
 - CSS: every url(...) and @import in each stylesheet a page loads.
 - JavaScript: every absolute URL in each script a page loads. The Download section's script
   (assets/js/download.js) asks GitHub's public API for the newest release, a
@@ -40,7 +51,7 @@ A stylesheet or script a page loads by an absolute first-party URL
 (https://blowhorn.ai/...) is read from the build and checked like a local one.
 Files no page loads (Docsy ships a few in its static/ directory) are not
 checked either: they are never requested.
-Usage: check-third-party.py BUILD_DIR [FIRST_PARTY_HOST]
+Usage: check-third-party.py BUILD_DIR [FIRST_PARTY_HOST] [--avatar-source JS_FILE]
 """
 
 import re
@@ -58,6 +69,38 @@ ANALYTICS_SCRIPT_HOSTS = {"www.googletagmanager.com"}
 # api.blowhorn.ai is Blowhorn's own signup service (a Cloudflare Worker), not
 # a third party: the coming-soon and newsletter forms post there.
 FORM_ACTION_HOSTS = {"calcotestudios.us15.list-manage.com", "api.blowhorn.ai"}
+
+# Hosts the hero activity card may load live avatars from. Disclosed on the
+# privacy page. Must cover every host in activity-feed.js's AVATAR_HOSTS.
+AVATAR_HOSTS = {
+    "pbs.twimg.com",
+    "abs.twimg.com",
+    "avatars.githubusercontent.com",
+    "media.licdn.com",
+    "cdn.bsky.app",
+    "avatars.slack-edge.com",
+    "ca.slack-edge.com",
+    "styles.redditmedia.com",
+    "www.redditstatic.com",
+    "cloud.blowhorn.ai",
+    "lh3.googleusercontent.com",
+}
+AVATAR_SOURCE = Path(__file__).resolve().parents[2] / "assets" / "js" / "activity-feed.js"
+AVATAR_CONST = re.compile(r"AVATAR_HOSTS\s*=\s*Object\.freeze\(\[(.*?)\]\)", re.DOTALL)
+
+
+def avatar_problems(source: Path) -> list:
+    """Hosts in the JS AVATAR_HOSTS constant that this checker has not reviewed."""
+    try:
+        text = source.read_text(encoding="utf-8")
+    except OSError as err:
+        return [f"{source}: cannot read AVATAR_HOSTS source ({err})"]
+    match = AVATAR_CONST.search(text)
+    if not match:
+        return [f"{source}: AVATAR_HOSTS = Object.freeze([...]) not found"]
+    hosts = re.findall(r"[\"']([^\"']+)[\"']", match.group(1))
+    return [f"{source}: AVATAR_HOSTS names unreviewed host {h}" for h in hosts if h.lower() not in AVATAR_HOSTS]
+
 
 def _cloud_host() -> str:
     """Host of params.cloud_url in hugo.toml, the one allowed refresh target."""
@@ -175,10 +218,10 @@ def local_file(root: Path, source: Path, ref: str, first_party: set):
     return target if target.is_file() else None
 
 
-def main(root: Path, first_party: str) -> int:
+def main(root: Path, first_party: str, avatar_source: Path = AVATAR_SOURCE) -> int:
     root = root.resolve()
     allowed = {first_party, "www." + first_party}
-    problems = []
+    problems = avatar_problems(avatar_source)
     pages = sorted(root.rglob("*.html"))
     if not pages:
         print(f"no HTML pages found under {root}", file=sys.stderr)
@@ -190,6 +233,8 @@ def main(root: Path, first_party: str) -> int:
         for tag, attr, ref in collector.refs:
             host = host_of(ref)
             if attr == "refresh" and host in REFRESH_HOSTS:
+                continue
+            if attr == "data-feed-url" and host in REFRESH_HOSTS:
                 continue
             if tag == "script" and attr == "src" and host in ANALYTICS_SCRIPT_HOSTS:
                 continue
@@ -233,5 +278,13 @@ def main(root: Path, first_party: str) -> int:
 
 
 if __name__ == "__main__":
-    build = Path(sys.argv[1] if len(sys.argv) > 1 else "public")
-    sys.exit(main(build, sys.argv[2] if len(sys.argv) > 2 else FIRST_PARTY))
+    args = sys.argv[1:]
+    source = AVATAR_SOURCE
+    if "--avatar-source" in args:
+        at = args.index("--avatar-source")
+        if at + 1 >= len(args):
+            sys.exit("--avatar-source needs a path")
+        source = Path(args[at + 1])
+        del args[at:at + 2]
+    build = Path(args[0] if args else "public")
+    sys.exit(main(build, args[1] if len(args) > 1 else FIRST_PARTY, source))

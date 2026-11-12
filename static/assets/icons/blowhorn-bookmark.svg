@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 88" role="img" aria-label="Bookmark">
   <title>Bookmark</title>
-  <rect x="7" y="7" width="86" height="74" rx="12" fill="#000000"/>
+  <rect x="7" y="7" width="86" height="74" rx="12" fill="#3C494F"/>
   <path d="M34 20 H66 V68 L50 56 L34 68 Z" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

@@ -403,6 +403,89 @@
           "page": "/for/social-media"
         }
       ]
+    },
+    {
+      "slug": "agent-publishing",
+      "name": "Agent publishing",
+      "title": "Blowhorn for agent publishing",
+      "weight": 50,
+      "headline": "Your agent drafts. You approve. Nothing posts itself.",
+      "lead": "Hand your coding agent the Blowhorn CLI and it drafts, dry-runs and schedules posts for you. Every action is scripted, every write is a dry run until you confirm, and only posts you approve go out.",
+      "description": "Let Claude Code, Codex, Cursor or your coding agent of choice draft, dry-run and schedule posts through the Blowhorn CLI, with you approving every post before it goes out.",
+      "art": {
+        "src": "assets/brand/cast/robo-recruit-base.webp",
+        "alt": "Robo-Recruit, five tin-can robot chickens in grey helmets with wind-up keys, each holding a teal and gold bullhorn"
+      },
+      "pains": [
+        {
+          "t": "An agent that posts on its own",
+          "b": "A model that decides what to click can post the wrong thing while you are looking away."
+        },
+        {
+          "t": "Drafts scattered across chats",
+          "b": "Your agent drafts a post in one chat, you paste it into a composer, and the schedule lives nowhere you can pause it."
+        },
+        {
+          "t": "Approval by hope",
+          "b": "If nothing in the queue stops an unapproved post, the only check is remembering to look before it goes out."
+        }
+      ],
+      "gets": [
+        {
+          "t": "Scripted actions, rehearsed first",
+          "b": "Every action is scripted and can be dry-run first. No model decides what to click."
+        },
+        {
+          "t": "The same queue and limits you have",
+          "b": "Agents get the same queue and limits you do: one queue, human-paced, with CAPTCHA and 2FA handed to you."
+        },
+        {
+          "t": "Only approved posts go out",
+          "b": "An agent queues a draft and you approve it with blowhorn content approve. A caller marked as an agent is refused, so an agent can never approve its own content."
+        },
+        {
+          "t": "Built for agents to read",
+          "b": "--help with examples, --json and --check-queue, so your agent can show you what it queued and what a run would do."
+        }
+      ],
+      "prompt": "Draft the launch post from CHANGELOG.md for LinkedIn and X, dry-run it with blowhorn post --dry-run, show me the result, then wait for me to approve it.",
+      "major": "An order is an order, soldier. No improvising.",
+      "faq": [
+        {
+          "q": "Can my agent approve its own posts?",
+          "a": "No. Activities an agent queues wait for approval, and approving is a person's act: a caller marked as an agent is refused. You approve with blowhorn content approve, and the approval records who approved it and when."
+        },
+        {
+          "q": "What do I see before I approve?",
+          "a": "--check-queue lists what a run would do, opening nothing, and --dry-run rehearses a post without sending it. With --json the output is machine-readable JSON, so your agent can show you exactly what it queued."
+        },
+        {
+          "q": "Which agents work with it?",
+          "a": "Any agent that can run the Blowhorn CLI on your own computer: Claude Code, Codex, Cursor and similar. Per-agent setup lives on the agents pages. Bring-your-own-model rules per platform and profile are Coming soon."
+        },
+        {
+          "q": "Does it post as a bot?",
+          "a": "No. Blowhorn types and clicks in your own browser, signed in as you, at human pace. The post goes out as you, never as a bot, and nothing is branded sent via Blowhorn."
+        }
+      ],
+      "related": [
+        {
+          "label": "Run Blowhorn from your coding agent",
+          "page": "/agents"
+        },
+        {
+          "label": "Blowhorn for DevRel",
+          "page": "/for/devrel"
+        },
+        {
+          "label": "Blowhorn for founders",
+          "page": "/for/founders"
+        },
+        {
+          "label": "Post from the CLI",
+          "page": "/docs/how-to/publish/post-content"
+        }
+      ]
     }
   ]
 }

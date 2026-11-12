@@ -137,8 +137,9 @@
     var card = panel.querySelector('.machines-thunder');
     var wires = card.querySelector('.machines-voice-wires');
     var major = card.querySelector('.machines-thunder-major > img');
-    var voices = card.querySelectorAll('.machines-voice img');
-    stagger(card.querySelectorAll('.machines-thunder-plats li'), 0, 240);
+    var voices = card.querySelectorAll('.machines-voice > img');
+    stagger(card.querySelectorAll('.machines-thunder-plats li'), 0, 120);
+    stagger(card.querySelectorAll('.machines-voice-plat'), 0, 120);
     function center(el, side) {
       var b = card.getBoundingClientRect(), r = el.getBoundingClientRect();
       return [r.left - b.left + r.width * side, r.top - b.top + r.height / 2];
@@ -161,12 +162,17 @@
           d = 'M' + a[0] + ',' + a[1] + ' C' + (a[0] + m[0]) / 2 + ',' + a[1] + ' ' + (a[0] + m[0]) / 2 + ',' + m[1] + ' ' + m[0] + ',' + m[1];
         }
         h += '<path class="machines-voice-wire' + (v.parentNode.classList.contains('is-mate') ? ' is-mate' : '') + '" d="' + d + '" style="--d:' + (i * 180) + 'ms"/>';
-        h += '<circle class="machines-voice-packet' + (v.parentNode.classList.contains('is-mate') ? ' is-mate' : '') + '" r="4" style="offset-path:path(\'' + d + '\');--d:' + (900 + i * 330) + 'ms"/>';
+        // Two packets share each line: the voice reporting in, then the
+        // Major's signal running back out (the same path, reversed in CSS).
+        h += '<circle class="machines-voice-packet' + (v.parentNode.classList.contains('is-mate') ? ' is-mate' : '') + '" r="4" style="offset-path:path(\'' + d + '\');--d:' + (i * 120) + 'ms"/>';
+        h += '<circle class="machines-voice-signal" r="5" style="offset-path:path(\'' + d + '\');--d:' + (i * 60) + 'ms"/>';
       });
       wires.innerHTML = h;
     }
     draw();
-    if ('ResizeObserver' in window) new ResizeObserver(draw).observe(card); else window.addEventListener('resize', draw);
+    // The Major's picture loads lazily, so watch it as well as the card:
+    // drawn before it loads, every line would end at the middle of the panel.
+    if ('ResizeObserver' in window) { var ro = new ResizeObserver(draw); ro.observe(card); ro.observe(major); } else { window.addEventListener('resize', draw); major.addEventListener('load', draw); }
   }
 
   // Call to Arms: the four beats play once on the timeline; Replay replays.

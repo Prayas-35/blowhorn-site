@@ -8,36 +8,42 @@
     "cards": [
       {
         "title": "MCP server",
+        "art": "mcp",
         "tag": "Standard issue for every assistant",
         "body": "Every Blowhorn action on the MCP roster. Claude, Copilot, Grok Bot and any MCP-ready assistant can find it and use it, with your limits attached.",
         "href": "/ai/mcp"
       },
       {
         "title": "REST API",
+        "art": "web",
         "tag": "Coming soon",
         "body": "Planned: every action over HTTP, from the same schema as the CLI. Until it lands, use the CLI or MCP.",
         "href": "/docs/reference/cli"
       },
       {
         "title": "Scriptable CLI",
+        "art": "cli",
         "tag": "Every order has a command",
         "body": "Everything the app does is a command. --json for answers, --dry-run for drills, and a full published reference.",
         "href": "/docs/reference/cli"
       },
       {
         "title": "Agent-tuned CLI",
+        "art": "cli",
         "tag": "A field radio built for agents",
         "body": "blowhorn-axi answers in TOON, a compact format agents read fast. A dry run unless told to fire, and a next step on every reply.",
         "href": "/ai/blowhorn-axi"
       },
       {
         "title": "AI skills",
+        "art": "desktop",
         "tag": "Basic training in one file",
         "body": "Skills teach Claude Code, Codex and OpenCode the drill: read first, rehearse, then ask before firing.",
         "href": "/agents/claude-code"
       },
       {
         "title": "Model provider plugins",
+        "art": "extension",
         "tag": "Blowhorn where your AI already works",
         "body": "Plug Blowhorn into Codex, Claude, Grok Bot, Muse, Copilot and more. Your assistant gives the order; your computers carry it out.",
         "href": "/agents"

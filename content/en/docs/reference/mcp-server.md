@@ -620,25 +620,40 @@ startup:
 
 ### The interim hosted gateway
 
-Until Cloud serves `/mcp` itself, an interim, read-only gateway runs at
-`https://mcp.blowhorn.ai/mcp` (`hosted/` in blowhorn-ai/blowhorn-mcp). It
-takes your Cloud API token as `Authorization: Bearer <token>` and offers four
-read tools. Every `tools/call` it serves is recorded as one event in your
-Cloud activity, written with your own token:
+Until Cloud answers on `mcp.blowhorn.ai` itself, an interim transport proxy
+runs at `https://mcp.blowhorn.ai/mcp` (`hosted/` in blowhorn-ai/blowhorn-mcp).
+It forwards each MCP request to Blowhorn's `/mcp` and Cloud's answer
+back. Cloud owns the tools, token checks and activity events. The Worker
+serves RFC 9728 protected-resource metadata locally (both
+`/.well-known/oauth-protected-resource` and
+`/.well-known/oauth-protected-resource/mcp`), naming Cloud's Blowhorn
+authorization server, and rewrites Cloud's `401` `WWW-Authenticate` so
+`resource_metadata` points at this origin.
 
-| Field | Value |
-|---|---|
-| `category` / `action` | `mcp` / `tool_called` |
-| `severity` | `informational` on success, `warning` for a caller fault (unknown tool, invalid arguments, a refused request, a Cloud 4xx), `error` when Cloud or the path to it failed |
-| `operationId` | The request's W3C `traceparent` trace id, else a random UUID per request |
-| `metadata` | Tool, outcome, HTTP status, duration, the arguments with secret-named values redacted, and on failure `error`: a MeshKit error with a `blowhorn-mcp-1000` to `blowhorn-mcp-1009` code, probable causes and suggested remediations |
+Connect today with a Blowhorn API token as `Authorization: Bearer <token>`.
+Create one on the Tokens page of your Blowhorn account; the steps are in
+[Get a Blowhorn API token](/docs/how-to/set-up/connect-mcp-client/#get-a-blowhorn-api-token). The
+Blowhorn desktop app has no screen for creating one.
+Standards-following MCP OAuth clients can discover the authorization server
+from the metadata, but end-to-end sign-in stays gated until Cloud enables
+dynamic client registration (`POST /oauth2/register` currently returns 403).
 
-The event is posted after the tool result and never delays or changes it. A
-call with a missing or malformed token, or one Cloud answers `401`, records
-nothing in Cloud. `initialize` and `tools/list` record nothing. The codes are
-provisional until the structured error code registry allocates them.
+The gateway is read-only today. Cloud serves four tools through it,
+`listContentItems`, `getContentItem`, `getEvents` and `getConnections`, so a
+client can read your queue, a post, your activity and your connections, but
+cannot post, schedule or change anything. Writes with approval come with the
+hosted Blowhorn MCP server.
 
-If the token this server uses leaks, see
+The gateway is stateless: every MCP message is its own JSON-RPC `POST` to
+`/mcp`. Opening `/mcp` in a browser sends a `GET` without a token, so it
+answers with a JSON error, such as `Bearer token required` or
+`Method not allowed: this stateless gateway answers POST only.`, rather than a
+page. That is by design; see
+[Opening the gateway URL in a browser](/docs/how-to/set-up/connect-mcp-client/#opening-the-gateway-url-in-a-browser).
+`GET /healthz` answers `{"ok": true, ...}` without calling Cloud, so use it to
+check that the gateway is up.
+
+If a token you send through this gateway leaks, see
 [Revoke a leaked token](/docs/how-to/set-up/connect-mcp-client/#revoke-a-leaked-token).
 
 ## Checking it

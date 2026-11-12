@@ -21,15 +21,20 @@ def page(head="", body=""):
 
 
 class CheckThirdPartyTest(unittest.TestCase):
-    def run_check(self, files):
+    def run_check(self, files, avatar_js=None):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp) / "public"
             for name, text in files.items():
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
+            extra = []
+            if avatar_js is not None:
+                source = Path(tmp) / "activity-feed.js"
+                source.write_text(avatar_js, encoding="utf-8")
+                extra = ["--avatar-source", str(source)]
             result = subprocess.run(
-                [sys.executable, str(SCRIPT), str(root)], capture_output=True, text=True, check=False
+                [sys.executable, str(SCRIPT), str(root), *extra], capture_output=True, text=True, check=False
             )
         return result.returncode, result.stderr
 
@@ -49,6 +54,18 @@ class CheckThirdPartyTest(unittest.TestCase):
             "css/site.css": "body{background:url(../img/a.png)}",
             "js/app.js": 'fetch("https://api.github.com/repos/x/releases")',
         })
+
+    def test_avatar_hosts_must_be_reviewed(self):
+        home = {"index.html": page()}
+        reviewed = 'export const AVATAR_HOSTS = Object.freeze([\n  "pbs.twimg.com",\n  "cdn.bsky.app",\n]);'
+        code, err = self.run_check(home, reviewed)
+        self.assertEqual(code, 0, err)
+        code, err = self.run_check(home, reviewed.replace('"cdn.bsky.app",', '"cdn.bsky.app",\n  "img.tracker.example",'))
+        self.assertEqual(code, 1, err)
+        self.assertIn("img.tracker.example", err)
+        code, err = self.run_check(home, "export const HOSTS = [];")
+        self.assertEqual(code, 1, err)
+        self.assertIn("AVATAR_HOSTS", err)
 
     def test_external_script_and_stylesheet_fail(self):
         self.assert_fails_naming({"index.html": page('<script src="https://cdn.example/x.js"></script>')}, "cdn.example")
@@ -72,6 +89,11 @@ class CheckThirdPartyTest(unittest.TestCase):
         self.assert_fails_naming({"index.html": page('<meta http-equiv="refresh" content="0; url=https://evil.example/">')},
                                  "evil.example")
         self.assert_fails_naming({"index.html": page(body=f'<img src="https://{cloud_host}/x.png" alt="">')}, cloud_host)
+
+    def test_activity_feed_url_is_allowed_only_on_the_cloud_host(self):
+        cloud_url = tomllib.loads(HUGO_TOML.read_text(encoding="utf-8"))["params"]["cloud_url"]
+        self.assert_passes({"index.html": page(body=f'<aside data-feed-url="{cloud_url}/api/events/feed?page=0"></aside>')})
+        self.assert_fails_naming({"index.html": page(body='<aside data-feed-url="https://evil.example/feed"></aside>')}, "evil.example")
 
     def test_gtag_script_src_is_the_one_allowed_analytics_load(self):
         self.assert_passes({"index.html": page('<script async src="https://www.googletagmanager.com/gtag/js?id=G-2ZLYGVE3HN"></script>'

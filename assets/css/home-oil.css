@@ -5,7 +5,7 @@
    "evening gallery": warm walls dimmed, paintings lit. */
 @font-face {
   font-family: "Fraunces";
-  src: url("/assets/alt-style/Fraunces-Variable.woff2") format("woff2");
+  src: url("../assets/alt-style/Fraunces-Variable.woff2") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }

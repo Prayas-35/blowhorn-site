@@ -367,8 +367,12 @@ html[data-machines="battalion-map"] #how .section-head .body-lg { margin-inline:
   grid-template-columns: repeat(2, minmax(0, auto));
   gap: var(--space-4) var(--space-6);
 }
-.machines-voice { display: grid; justify-items: start; gap: var(--space-2); }
-.machines-voice img { width: 112px; border-radius: 6px; display: block; }
+.machines-voice { display: grid; justify-items: start; gap: var(--space-2); position: relative; }
+/* The platform this voice posts to: a small white tile on the corner of its
+   picture, shown outright without motion, lit by the loop with it. */
+.machines-voice-plat { position: absolute; top: -8px; left: 92px; width: 28px; height: 28px; border-radius: 50%; background: var(--white); display: grid; place-items: center; box-shadow: 0 0 0 2px var(--teal-bright, #00D3A9); }
+.machines-voice-plat img { width: 16px; height: 16px; }
+.machines-voice > img { width: 112px; border-radius: 6px; display: block; }
 .machines-thunder-major { margin: 0; position: relative; justify-self: center; }
 .machines-thunder-major > img { width: min(430px, 100%); border-radius: 6px; display: block; }
 .machines-arcs {
@@ -554,30 +558,50 @@ button.machines-add:focus-visible, button.machines-pill:focus-visible { outline:
 
 /* One Thunder */
 @keyframes machines-flow { to { stroke-dashoffset: -20; } }
-@keyframes machines-voice-run { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
-@keyframes machines-arc-out {
-  0% { opacity: 0; transform: translateY(-50%) translateX(-14px) scale(0.85); }
-  35% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-50%) translateX(18px) scale(1.08); }
+/* One six-second loop, every part on the same clock (small --d staggers
+   only): 0-32% the voices report in to the Major, 32-44% the Major sounds
+   the call, 38-62% the signal runs back out to every voice, 62-94% each
+   voice posts and its platform tile lights, as the call lands on the
+   platforms at the right. */
+@keyframes machines-voice-run { 0% { offset-distance: 0%; opacity: 0; } 3% { opacity: 1; } 28% { opacity: 1; } 31% { offset-distance: 100%; opacity: 0; } 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes machines-voice-signal { 0%, 38% { offset-distance: 100%; opacity: 0; } 41% { opacity: 1; } 58% { opacity: 1; } 62% { offset-distance: 0%; opacity: 0; } 100% { offset-distance: 0%; opacity: 0; } }
+@keyframes machines-voice-post {
+  0%, 60% { opacity: 0; box-shadow: 0 0 0 2px var(--teal-bright, #00D3A9); }
+  64% { opacity: 1; box-shadow: 0 0 0 2px var(--teal-bright, #00D3A9); }
+  76% { box-shadow: 0 0 0 10px transparent; }
+  92% { opacity: 1; box-shadow: 0 0 0 2px var(--teal-bright, #00D3A9); }
+  97%, 100% { opacity: 0; }
 }
-@keyframes machines-land {
-  0%, 100% { box-shadow: 0 0 0 0 transparent; }
-  12% { box-shadow: 0 0 0 4px var(--teal-bright, #00D3A9); }
-  40% { box-shadow: 0 0 0 10px transparent; }
+@keyframes machines-major-call { 0%, 32%, 46%, 100% { transform: translateY(0) rotate(0); } 36%, 42% { transform: translateY(-3px) rotate(-1deg); } 39% { transform: translateY(0) rotate(0); } }
+@keyframes machines-arcs-call {
+  0%, 34% { opacity: 0; transform: translateY(-50%) translateX(-14px) scale(0.85); }
+  42% { opacity: 1; }
+  62%, 100% { opacity: 0; transform: translateY(-50%) translateX(18px) scale(1.08); }
+}
+@keyframes machines-land-call {
+  0%, 62%, 100% { box-shadow: 0 0 0 0 transparent; }
+  67% { box-shadow: 0 0 0 4px var(--teal-bright, #00D3A9); }
+  80% { box-shadow: 0 0 0 10px transparent; }
 }
 .machines-thunder { position: relative; overflow-x: clip; }
-.machines-voice-wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+/* Above the Major's picture, so a voice's report and the Major's signal
+   back are seen along the whole line, not only in the gap before him. */
+.machines-voice-wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 2; }
 .machines-voice-wire { fill: none; stroke: color-mix(in srgb, var(--teal) 70%, transparent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 4 6; }
 .machines-voice-wire.is-mate { stroke: color-mix(in srgb, var(--yellow) 70%, transparent); }
 .machines-voice-packet.is-mate { fill: var(--yellow); }
 .machines-voice-packet { fill: var(--teal-bright, #00D3A9); offset-rotate: 0deg; opacity: 0; }
+.machines-voice-signal { fill: var(--teal-bright, #00D3A9); stroke: var(--white); stroke-width: 1.5; offset-rotate: 0deg; opacity: 0; }
+.machines-panel.is-armed:not(.is-live) .machines-voice-plat { opacity: 0; }
 .machines-panel.is-armed:not(.is-live) .machines-voice-wire { stroke-dashoffset: 0; opacity: 0; }
 .machines-panel.is-live .machines-voice-wire { opacity: 1; transition: opacity 0.5s ease-out var(--d, 0ms); animation: machines-flow 1s linear infinite; }
-.machines-panel.is-live .machines-voice-packet { animation: machines-voice-run 2s ease-in var(--d, 0ms) infinite; }
+.machines-panel.is-live .machines-voice-packet { animation: machines-voice-run 6s ease-in var(--d, 0ms) infinite; }
+.machines-panel.is-live .machines-voice-signal { animation: machines-voice-signal 6s ease-out var(--d, 0ms) infinite; }
+.machines-panel.is-live .machines-voice-plat { animation: machines-voice-post 6s ease-out var(--d, 0ms) infinite both; }
 .machines-thunder-people, .machines-thunder-major, .machines-thunder-plats { position: relative; z-index: 1; }
-.machines-panel.is-live .machines-arcs { animation: machines-arc-out 1.6s ease-out infinite; }
-.machines-panel.is-live .machines-thunder-major > img { animation: stage-bark 1.6s ease-in-out infinite; transform-origin: 50% 100%; }
-.machines-panel.is-live .machines-thunder-plats li { animation: machines-land 2.4s ease-out calc(var(--d, 0ms) + 600ms) infinite; }
+.machines-panel.is-live .machines-arcs { animation: machines-arcs-call 6s ease-out infinite; }
+.machines-panel.is-live .machines-thunder-major > img { animation: machines-major-call 6s ease-in-out infinite; transform-origin: 50% 100%; }
+.machines-panel.is-live .machines-thunder-plats li { animation: machines-land-call 6s ease-out var(--d, 0ms) infinite; }
 
 /* Call to Arms */
 @keyframes machines-beat-on {
@@ -975,6 +999,18 @@ html[data-theme="signal"] #platforms .logo-tile img[src*="github-invertocat-blac
 }
 .constellation-label { display: block; font: 500 14px var(--font-sans); color: var(--ink-muted); margin: var(--space-2) 0; }
 .constellation-ctl { z-index: 1; margin-top: var(--space-4); }
+/* The platforms clip (platforms-clip.html): one framed loop under the section
+   head; its Pause motion reuses the constellation button. */
+.plat-clip { max-width: 960px; margin: var(--space-8) auto 0; text-align: center; }
+.plat-clip-video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--line), var(--shadow-soft);
+  background: var(--surface-raised);
+}
+.plat-clip-ctl { margin-top: var(--space-3); }
 .constellation-pause {
   height: 38px;
   padding: 0 14px;
@@ -1191,5 +1227,96 @@ html[data-theme="signal"] #platforms .logo-tile img[src*="github-invertocat-blac
     position: static;
     margin: 0;
     transform: none;
+  }
+}
+
+/* Trust: the Posture preview (layouts/_partials/home/posture.html), after
+   the desktop app's rules-of-engagement slider: three poses over a thin
+   track with a dot per stop and a capsule ringed in the stop's tone, then
+   that stop's summary, every dial behind a disclosure, and the hard-cap
+   promise. A radio group underneath; :has() places the capsule and shows
+   the readout. Tones: Safety on teal deep, Weapons tight teal, Weapons free
+   amber (coral stays the rooster's). */
+.posture { display: grid; gap: var(--space-6) var(--space-12); padding: var(--space-8); border-radius: var(--radius-xl); }
+@media (min-width: 960px) { .posture { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .posture-promise { grid-column: 1 / -1; } }
+.posture [data-tone="safe"] { --tone: var(--teal-deep); }
+.posture [data-tone="live"] { --tone: var(--teal); }
+.posture [data-tone="warn"] { --tone: var(--amber); }
+.posture-control { margin: 0; padding: 0; border: 0; min-width: 0; }
+.posture-control legend { margin-bottom: var(--space-3); color: var(--card-muted); }
+.posture-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; }
+.posture-figure { position: relative; display: block; cursor: pointer; opacity: 0.4; border-radius: var(--radius-md); }
+.posture-figure img, .posture-loop { display: block; width: 100%; max-width: 10rem; height: auto; margin: 0 auto; }
+.posture-loop { position: absolute; inset: 0; height: 100%; object-fit: contain; }
+.posture-figure.is-playing img { visibility: hidden; }
+.posture-radio:checked + .posture-figure { opacity: 1; }
+.posture-radio:focus-visible + .posture-figure { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.posture-track { position: relative; height: 2px; margin: var(--space-3) calc(100% / 6) var(--space-2); background: var(--card-muted); border-radius: 999px; }
+.posture-dot { position: absolute; top: 50%; width: 22px; height: 22px; transform: translate(-50%, -50%); cursor: pointer; }
+.posture-dot::before { content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--card-muted); }
+.posture-dot:nth-of-type(1) { left: 0; }
+.posture-dot:nth-of-type(2) { left: 50%; }
+.posture-dot:nth-of-type(3) { left: 100%; }
+.posture-thumb { position: absolute; top: 50%; left: 50%; width: 2.25rem; height: 1.5rem; border-radius: 999px; background: var(--card-bg); border: 2px solid var(--teal); transform: translate(-50%, -50%); pointer-events: none; }
+.posture:has(#posture-cautious:checked) .posture-thumb { left: 0; border-color: var(--teal-deep); }
+.posture:has(#posture-brisk:checked) .posture-thumb { left: 100%; border-color: var(--amber); }
+/* Readouts: the checked stop's only. Without :has() the default stays. */
+.posture-readout { display: none; }
+.posture-readout[data-stop="standard"] { display: block; }
+.posture:has(#posture-cautious:checked) .posture-readout[data-stop="standard"],
+.posture:has(#posture-brisk:checked) .posture-readout[data-stop="standard"] { display: none; }
+.posture:has(#posture-cautious:checked) .posture-readout[data-stop="cautious"],
+.posture:has(#posture-brisk:checked) .posture-readout[data-stop="brisk"] { display: block; }
+.posture-name { margin: 0 0 var(--space-2); font-size: 1.25rem; line-height: 1.35; color: var(--card-ink); }
+.posture-name strong { color: var(--card-ink); box-shadow: inset 0 -0.3em 0 color-mix(in srgb, var(--tone) 35%, transparent); }
+.posture-name .muted { font-size: 0.95rem; color: var(--card-muted); }
+.posture-default { display: inline-block; margin-left: var(--space-2); padding: 0.05em 0.6em; border-radius: 999px; border: 1px solid var(--card-ink); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; vertical-align: 0.2em; }
+.posture-summary { margin: 0 0 var(--space-3); }
+.posture-dials summary { cursor: pointer; font-weight: 600; color: var(--card-ink); }
+.posture-dials dl { margin: var(--space-3) 0 0; }
+.posture-dials dl > div { display: flex; justify-content: space-between; gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid color-mix(in srgb, var(--card-ink) 15%, transparent); font-size: 0.9rem; }
+.posture-dials dt { color: var(--card-muted); }
+.posture-dials dd { margin: 0; text-align: right; color: var(--card-ink); font-weight: 600; }
+.posture-warmup { margin: var(--space-4) 0 0; color: var(--card-muted); }
+.posture-promise { padding-top: var(--space-6); border-top: 1.5px solid var(--card-ink); }
+.posture-promise .h4 { margin: 0 0 var(--space-2); font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--card-ink); }
+.posture-promise p { margin: 0 0 var(--space-3); max-width: 62rem; }
+.posture-promise p:last-child { margin-bottom: 0; color: var(--card-muted); }
+.posture-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) {
+  .posture-figure { transition: opacity 200ms ease-out; }
+  .posture-thumb { transition: left 240ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 240ms ease-out; }
+  .posture-radio:checked + .posture-figure img { animation: posture-bob 2.6s ease-in-out infinite; }
+}
+@keyframes posture-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (max-width: 599px) { .posture { padding: var(--space-6) var(--space-4); } }
+
+/* Distributed teams (#teams): the activity card sits beside the intro on
+   wide screens (intro two thirds, card one third of the wrap) and under the
+   intro on phones. It is not wrapped in another card, so its hairline does
+   not stack on a second border. Grid gap is the only space between the
+   head, the card, the points and the CTA. */
+.home-signal #teams .teams-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+.home-signal #teams .activity-feed-slot { min-width: 0; }
+.home-signal #teams .activity-feed { margin-top: 0; width: 100%; }
+.home-signal #teams .teams-layout > .section-body { margin-top: 0; }
+@media (min-width: 960px) {
+  .home-signal #teams .teams-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: var(--space-12);
+    row-gap: var(--space-8);
+    align-items: start;
+  }
+  .home-signal #teams .section-head { grid-column: 1; grid-row: 1; }
+  .home-signal #teams .activity-feed-slot {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .home-signal #teams .teams-layout > .grid,
+  .home-signal #teams .teams-layout > .section-body {
+    grid-column: 1 / -1;
   }
 }

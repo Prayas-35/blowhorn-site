@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blowhorn.ai/schemas/posture.schema.json",
+  "title": "Home page Posture preview",
+  "description": "data/posture.json: the rules-of-engagement preview in the Signal home page's Trust section, rendered by layouts/_partials/home/posture.html. It configures nothing. Each stop's dials mirror the engine's presets (blowhorn-ai/blowhorn engine/blowhorn/risk_profile.py PRESETS, desktop/src/shared/risk-presets.ts); never state a platform's published-limit numbers here. Plain text, hyphens never em dashes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["label", "note", "docs", "stops", "warmup", "promise"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "label": { "type": "string", "minLength": 1 },
+    "note": { "description": "Says the preview changes nothing.", "type": "string", "minLength": 1 },
+    "docs": { "description": "Site path of the how-to the readout links to.", "$ref": "#/definitions/path" },
+    "stops": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "subtitle", "tone", "still", "summary", "dials"],
+        "properties": {
+          "id": { "description": "The stored preset value.", "enum": ["cautious", "standard", "brisk"] },
+          "name": { "type": "string", "minLength": 1 },
+          "subtitle": { "type": "string", "minLength": 1 },
+          "tone": { "enum": ["safe", "live", "warn"] },
+          "default": { "description": "The stop selected on load; exactly one stop sets it.", "type": "boolean" },
+          "still": { "description": "Major Blowhorn's pose for this stop (static/).", "$ref": "#/definitions/path" },
+          "loop": { "description": "Optional muted loop (WebM) of the same pose, played only while this stop is selected and motion is allowed. Leave out until the clip is approved.", "$ref": "#/definitions/path" },
+          "summary": { "type": "string", "minLength": 1 },
+          "dials": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["label", "value"],
+              "properties": { "label": { "type": "string", "minLength": 1 }, "value": { "type": "string", "minLength": 1 } }
+            }
+          }
+        }
+      }
+    },
+    "warmup": { "type": "string", "minLength": 1 },
+    "promise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "body", "link"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 },
+        "link": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "href"],
+          "properties": { "label": { "type": "string", "minLength": 1 }, "href": { "$ref": "#/definitions/path" } }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "path": { "type": "string", "pattern": "^/" }
+  }
+}

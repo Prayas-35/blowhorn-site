@@ -16,7 +16,7 @@
     "_serve": "npm run _hugo-dev -- --cleanDestinationDir --minify --watch=false server",
     "_check:links": "python3 .github/scripts/check-site-links.py public",
     "build": "npm run _build",
-    "build:preview": "npm run _hugo-dev -- --cleanDestinationDir --minify --baseURL \"${BASE_URL:-${DEPLOY_PRIME_URL:-/}}\"",
+    "build:preview": "npm run _hugo-dev -- --cleanDestinationDir --minify --baseURL \"${BASE_URL:-${DEPLOY_PRIME_URL:-/}}\" && python3 .github/scripts/site_preview.py rebase",
     "build:production": "npm run _hugo -- --cleanDestinationDir --minify --gc",
     "build:internal": "npm run _hugo -- --environment internal --cleanDestinationDir --minify --gc --destination public-internal",
     "site": "npm run _site",
@@ -31,5 +31,8 @@
     "hugo-extended": "0.158.0",
     "postcss": "^8.5.25",
     "postcss-cli": "^11.0.1"
+  },
+  "dependencies": {
+    "motion": "14.10.1"
   }
 }

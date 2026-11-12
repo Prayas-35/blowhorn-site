@@ -12,6 +12,9 @@
           <ul class="grid grid-3 section-body ai-agent-cards">
             {{- range $i, $ac := $a.cards }}
             <li class="card {{ partial "card-variant.html" (dict "i" $i "grid" "grid-3" "n" (len $a.cards)) }}">
+              {{- /* The same interface art as this way in on the Product menu;
+                assets/js/ai-cards.js animates it with Motion. */}}
+              {{- with .art }}{{ partial "interface-art.html" . }}{{ end }}
               <h3 class="h3">{{ .title }}</h3>
               {{- with .tag }}
               <p class="label">{{ . }}</p>

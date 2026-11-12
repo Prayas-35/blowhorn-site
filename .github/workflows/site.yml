@@ -1,7 +1,7 @@
 name: Site
 
 # Builds and checks blowhorn.ai on every pull request and push to master, and
-# deploys it to GitHub Pages (Settings > Pages > Source: GitHub Actions) on
+# deploys it to gh-pages (Settings > Pages > Source: gh-pages / root) on
 # master. The toolchain is pinned in the repository: Go by go.mod (Hugo
 # modules), Node.js by .nvmrc, and Hugo extended by package.json
 # (hugo-extended). See docs/deploy.md.
@@ -74,10 +74,14 @@ jobs:
       - name: Fail if the public build contains /internal/
         run: .github/scripts/check-no-internal.sh public
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+      - name: Upload production build
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          path: public
+          name: site-production-build
+          path: public/
+          if-no-files-found: error
+          retention-days: 1
 
   deploy:
     name: Deploy to GitHub Pages
@@ -85,11 +89,30 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: write
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - name: Harden Runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Download production build
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site-production-build
+          path: public
+
+      # keep_files preserves pr-preview/ across production deployments.
+      # peaceiris creates gh-pages on the first master deploy and adds .nojekyll.
+      - name: Publish production without removing previews
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          keep_files: true
+          cname: blowhorn.ai

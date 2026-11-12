@@ -59,19 +59,30 @@ override the standing per-platform paces. `blowhorn config show --json`
 reports the effective pace for every platform and which setting supplied
 it.
 
-In the app, the **by platform** table on the Posture screen shows the same
-per-platform paces: pick a pace for one platform there (or **a number…** for
-a multiplier such as 1.5), or press × to run at the pace again, then **save
-limits**. While `BLOWHORN_PACE` is set, the table says that pace is in effect
-on every platform.
+In the app, **by platform** on the Posture screen shows the same per-platform
+paces: pick a platform by its logo, then choose **fast**, **normal** or **slow**
+for it, or **default** to run at the pace for every platform again. A pace set
+as a number in the file shows as its own read-only segment (such as `1.5x`);
+choosing any other pace replaces it. Each choice saves as you make it. While
+`BLOWHORN_PACE` is set, the window says that pace is in effect on every platform.
 
 ## Cap a day's actions
 
-Every platform and action has a built-in daily ceiling. The **by platform**
-table on the Posture screen shows each one as the empty box's placeholder:
-type a lower cap of your own there, or press × to go back to the ceiling.
-The cap saves when you close the window. A cap of your own can only lower the ceiling, never
-raise it.
+Every platform and action has a built-in daily ceiling, the safe limit. In
+**by platform** on the Posture screen each action is a standing slider with its
+safe limit marked and the track past it hatched as out of bounds. Slide a cap
+down to set your own; the thumb stops at the safe limit, and a thumb left at the
+top means no cap of your own, so the ceiling applies. Double-click a slider, or
+choose **Reset to safe limits**, to put it back. A cap saves when you let go of
+the thumb. A cap of your own can only lower the ceiling, never raise it.
+
+The same window draws how runs overlap under the rules in force, with one
+sentence that says it in words: Safety on runs one activity at a time across every
+profile, Weapons tight lets different platforms run side by side while profiles
+on one platform take turns, and Weapons free lets different profiles run side by
+side, even on the same platform, while each profile does one thing at a time on
+that platform. A concurrency setting of your own beats the preset in the
+picture, as it does in the engine; see [Concurrency](/docs/reference/configuration/#concurrency).
 
 ```bash
 blowhorn config set defaults.caps.x.post_per_day 3

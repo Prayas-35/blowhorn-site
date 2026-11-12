@@ -2,12 +2,12 @@
 title: Privacy
 heading: What Blowhorn stores, and where
 description: What the Blowhorn website and the Blowhorn app store, where they store it, and what the app sends.
-lead: Last updated 25 October 2026. This page covers this website, the Blowhorn app and its Chrome extension. Your account is covered by the [account privacy policy](https://layer5.io/company/legal/privacy/) of Layer5, Inc., which makes Blowhorn.
+lead: Last updated 11 November 2026. This page covers this website, the Blowhorn app and its Chrome extension. Your account is covered by the [account privacy policy](https://layer5.io/company/legal/privacy/) of Layer5, Inc., which makes Blowhorn.
 layout: legal
 weight: 10
 aliases:
   - /privacy.html
-lastmod: 2026-10-27
+lastmod: 2026-11-11
 sitemap:
   changefreq: yearly
   priority: 0.3
@@ -15,10 +15,11 @@ sitemap:
 
 ## This website
 
-blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. That is its one script from a third party, and its cookies are the only ones the site sets. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The site's other requests to another host are the download page's release lookup and the signup forms described below. The newsletter form in the footer sends nothing unless you submit it.
+blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. That is its one script from a third party, and its cookies are the only ones the site sets. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The site's other requests to another host are the download page's release lookup, the home page's recent-activity card, and the signup forms described below. The newsletter form in the footer sends nothing unless you submit it.
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The download page asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the download button still works.
+- The home page's recent-activity card asks the Blowhorn account service (cloud.blowhorn.ai) for recently completed public activity from your browser. The request sends no cookies and no account details. It reaches Blowhorn like any other request your browser makes, with your IP address and the usual request headers. When a person has made their activity public, the card also loads their profile picture from the network the person uses (X, LinkedIn, Reddit, Bluesky, Slack or GitHub), from their Google account photo, or from Blowhorn's account service, with no referrer. If the request fails or nothing is public yet, the card shows labelled examples. With JavaScript off, no request is made.
 
 ### Google Analytics {#google-analytics}
 
@@ -90,7 +91,7 @@ Keeping this in your account is what lets you install Blowhorn on any number of 
 
 ### Failure reports {#failure-reports}
 
-When the app shows a failure, such as a store it cannot reach, it sends a small failure report to Blowhorn. The report helps fix the problem. It is anonymous: it works while signed out, and it carries no account information. A report is sent when a failure is first shown, at most once per cause per day.
+When the app shows a failure, such as a store it cannot reach, it saves a small failure report on your computer, at most one per cause per day. The report helps fix the problem. It is anonymous: it works while signed out, and it carries no account information. Saved reports can be sent to Blowhorn when reporting is available. Until then, they stay on your computer.
 
 - What is sent, field by field:
   - `diagnosticId`: an id generated for this one report.
@@ -106,7 +107,7 @@ When the app shows a failure, such as a store it cannot reach, it sends a small 
 - What is never sent: your email address, posts, account names, content, config files, logs and Chrome data.
 - How long reports are kept: Blowhorn keeps failure reports for 90 days.
 - Support follow-up: if you contact support about a failure, you may type in an email address for a follow-up. That address is sent only when you type it in. The automatic report itself contains no email address.
-- Turning it off: failure reports are on by default. Turn them off in Settings under "Send failure reports". When off, no report is stored or sent.
+- Turning it off: failure reports are on by default. Turn them off in Posture, in the "Where your sign-ins live" card, under "Send failure reports". When off, no report is stored or sent.
 
 ## Frequently Asked Questions {#questions}
 

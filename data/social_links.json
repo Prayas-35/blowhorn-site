@@ -1,0 +1,9 @@
+{
+  "$schema": "../schemas/social_links.schema.json",
+  "links": [
+    { "id": "x", "name": "X", "url": "https://x.com/blowhorn_ai", "icon": "assets/platforms/x-logo-black.png" },
+    { "id": "youtube", "name": "YouTube", "url": "https://www.youtube.com/@blowhorn-ai", "icon": "assets/platforms/youtube-simple-icons.svg" },
+    { "id": "facebook", "name": "Facebook", "url": "https://www.facebook.com/BlowhornAI", "icon": "assets/platforms/facebook-simple-icons.svg" },
+    { "id": "github", "name": "GitHub", "url": "https://github.com/blowhorn-ai", "icon": "assets/platforms/github-invertocat-black.svg" }
+  ]
+}

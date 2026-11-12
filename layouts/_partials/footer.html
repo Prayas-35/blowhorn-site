@@ -1,4 +1,5 @@
-{{- /* One footer for every page: a top band with the brand on the left and
+{{- /* One footer for every page: a top band with the brand (and Blowhorn's
+  social profiles from data/social_links.json) on the left and
   the newsletter on the right, then one row of short titled link columns
   (Compare spans two and lists in two columns; below 1080px Free tools and
   Compare each take a full row), and a bottom bar with the
@@ -15,10 +16,19 @@
           <div class="footer-top">
             <div class="footer-brand">
               <a class="footer-logo" href="{{ "" | relURL }}" aria-label="Blowhorn home">
-                <img class="logo-on-light" src="{{ "assets/brand/logo/layer5-blowhorn-lockup.svg" | relURL }}" alt="Layer5 Blowhorn" width="220" height="60">
-                <img class="logo-on-dark" src="{{ "assets/brand/logo/layer5-blowhorn-lockup-on-dark.svg" | relURL }}" alt="" width="220" height="60">
+                <img class="logo-on-light" src="{{ "assets/brand/logo/blowhorn-lockup-horizontal.svg" | relURL }}" alt="Blowhorn" width="200" height="50">
+                <img class="logo-on-dark" src="{{ "assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" | relURL }}" alt="" width="200" height="50">
               </a>
-              <p class="footer-tagline">One message out, many ears in.</p>
+              <p class="footer-tagline">Your voice, at full volume.</p>
+              {{- with site.Data.social_links.links }}
+              <nav class="footer-social" aria-label="Blowhorn on social media">
+                <ul>
+                  {{- range . }}
+                  <li><a href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }}"><img src="{{ .icon | relURL }}" alt="" width="20" height="20"></a></li>
+                  {{- end }}
+                </ul>
+              </nav>
+              {{- end }}
             </div>
             <div class="footer-news">
               {{ partial "newsletter.html" . }}

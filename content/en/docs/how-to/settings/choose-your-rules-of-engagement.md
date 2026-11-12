@@ -107,9 +107,9 @@ will use, and you change them in Posture.
 ## Adjust the limits yourself
 
 Under the grid, **The limits Blowhorn keeps** starts from the preset: change
-the pace and daily caps per platform in the **by platform** table, and the
-other limits below it, including typing and pointer timing, then **save
-limits**. The header reads "Custom, based on Weapons tight, 3 dials changed" once
+the pace and daily caps per platform in **by platform** (pick a platform by its
+logo, then slide each cap), and the other limits below it, including typing and
+pointer timing. Each change saves as you make it. The header reads "Custom, based on Weapons tight, 3 dials changed" once
 dials move, and **reset to preset** puts every dial back. No dial may exceed a
 built-in ceiling: your own cap can only lower a ceiling, never raise it.
 Two dials carry a driver note: pauses and mistakes run on the Playwright

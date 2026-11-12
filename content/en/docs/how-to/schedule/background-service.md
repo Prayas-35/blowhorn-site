@@ -50,6 +50,35 @@ signal (logging out, for example) has nobody to answer the prompt, so with the
 setting off and a pass in flight it takes **finish, then stop**. With the
 setting on, no quit of any kind touches the service.
 
+## When the service keeps exiting
+
+If This computer says the background service keeps exiting, the service starts,
+stops at once, and macOS starts it again, so nothing scheduled goes out. The
+**Service** row on the Status tab names the likely cause in one line. Choose **See
+how to fix it** to open the Troubleshooting tab, where a card says why, read from
+the service's own log:
+
+- **The likely cause**, and what to do about it. A step Blowhorn can take for you
+  is a button: **Register the service**, **Update Blowhorn**, **Open service log**
+  or **Contact support**. When Blowhorn itself crashed, **Open service log** opens
+  the error log that holds the full details. After you take one, the card reads the service again and
+  says whether it now runs or still exits. That answer stays only while the service
+  is in the state it describes; when the service changes again, the card shows the
+  new state instead.
+- **The last line the service logged**, and an **error code** such as
+  `blowhorn-engine-1007` to quote to support.
+
+Below that card, the Troubleshooting tab has the rest: how the service last exited,
+who registered it, and the service log's last lines, with **Open log** and **Show in Finder**.
+If the log can't be opened, the screen says why.
+From the command line, `blowhorn service status --json` carries the same facts
+under `last_exit`, `logs` and `diagnosis`.
+
+Blowhorn 1.100.0 through 2.0.1 had one such cause on every signed-in computer: the
+service's control connection lived inside the account's log folder, whose path is
+longer than macOS allows for one. Update Blowhorn, and the service starts on its
+own.
+
 ## A separate data folder
 
 A run that sets `BLOWHORN_USER_DATA_DIR` (a test, a packaged check, or a second

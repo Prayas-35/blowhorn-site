@@ -26,6 +26,9 @@
           {{- range $rot.arts }}
           {{ partial (printf "hero-art/%s.html" .) $ }}
           {{- end }}
+          <div class="activity-feed-slot">
+            {{ partial "activity-feed.html" . }}
+          </div>
         </div>
       </section>
 

@@ -20,6 +20,7 @@
             <h2 id="platforms-title" class="display">{{ $data.headline }}</h2>
             <p class="body-lg muted">{{ $data.lede }}</p>
           </div>
+          {{- with $data.clip }}{{ partial "home/platforms-clip.html" . }}{{ end }}
           <div class="plat-toolbar">
             <div class="plat-tabs" role="tablist" aria-label="Compare how the map looks">
               {{- range $i, $t := $data.treatments }}

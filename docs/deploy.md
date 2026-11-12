@@ -34,13 +34,65 @@ every push to `master`:
    - `make check-urls`: every public URL and every anchor the site has
      published still exists
      ([`check-site-contract.py`](../.github/scripts/check-site-contract.py)).
-4. `public/` is uploaded as the Pages artifact.
-5. On `master` only (a push or a manual run), the `deploy` job publishes that
-   artifact with `actions/deploy-pages` under the `github-pages` environment.
-   The job needs `pages: write` and `id-token: write`, which it declares itself.
+4. On `master` only (a push or a manual run), `public/` is uploaded as
+   `site-production-build`. Pull request checks do not upload this artifact.
+5. After the checks pass, the `deploy` job downloads that exact build and
+   publishes it to `gh-pages` with `peaceiris/actions-gh-pages`. The job has
+   `contents: write`, sets `CNAME` to `blowhorn.ai`, and adds `.nojekyll`.
+   `keep_files: true` preserves `pr-preview/` when production is updated.
+   Like layer5io/docs, this also retains deleted production files; removing
+   an obsolete published file requires deliberate cleanup on `gh-pages`.
+   If production publishing loses a concurrent `gh-pages` push, rerun `Site`
+   on `master`; unlike retention, the production publisher does not retry.
 
-A pull request never deploys. Its run still uploads the built site as the
-`github-pages` artifact, which you can download from the run to inspect.
+### Pull request deployment previews
+
+The preview flow mirrors [layer5io/docs](https://github.com/layer5io/docs):
+
+1. [`build-site-preview.yml`](../.github/workflows/build-site-preview.yml)
+   runs on opened, reopened or updated pull requests targeting `master`
+   when public site inputs or preview workflows change. It uses the same
+   pinned toolchain, `make setup-ci`, and `make build-preview` with
+   `HUGO_PREVIEW=true` and `BASE_URL=/pr-preview/pr-N/`. The preview-only
+   post-build helper rebases browser URL attributes (including video/cast
+   data URLs) without rewriting documentation examples or script text.
+   Stylesheet asset URLs are relative, so they work in production and previews.
+2. It uploads `public/` plus `pr/action`, `pr/number` and `pr/sha` in the
+   `site-preview-build` artifact, retained for seven days. Preview builds
+   include draft, future and expired public content. They disable analytics,
+   mark pages `noindex, nofollow`, and write a disallow-all `robots.txt`.
+3. After a successful build,
+   [`deploy-site-preview.yml`](../.github/workflows/deploy-site-preview.yml)
+   runs through `workflow_run` on trusted default-branch code. It validates
+   the artifact metadata against the originating run and live PR before
+   deploying, skips closed or superseded heads, and never executes artifact
+   code. Only in-repository PR branches deploy automatically. Fork builds
+   receive no write token or live preview: arbitrary fork HTML/JS must not
+   run on the production origin. A maintainer can review the change and
+   bring it to an in-repository branch. Only the post-build workflow can
+   write `gh-pages` and PR comments.
+4. `rossjrw/pr-preview-action` publishes `public/` under `pr-preview/pr-N/`
+   on `gh-pages`. A sticky PR comment links to
+   `https://blowhorn.ai/pr-preview/pr-N/` and identifies the commit. The
+   comment is posted before Pages finishes publishing; follow its deployment
+   link and refresh if the URL is not ready yet.
+5. After deployment, retention keeps the six most recently updated previews,
+   matching docs' `PREVIEW_RETENTION_LIMIT=6`. Pruning recomputes from fresh
+   branch state and retries a non-fast-forward push up to five times. Only
+   successfully pruned previews get their sticky comment replaced with a
+   removal notice. Housekeeping failure does not fail a deployed preview.
+   Closing a PR does not immediately remove its preview; retention removes
+   it as newer previews arrive. Push a public-site change to regenerate it.
+
+These are public, same-origin previews, not private staging or a security
+sandbox. Never put secrets or private/internal content in public PRs. A
+preview's `robots.txt` is below the domain root, so crawlers may ignore it;
+per-page `noindex` is the indexing safeguard. Bot-created PRs that suppress
+`pull_request` events do not start preview builds automatically.
+
+New `workflow_run` workflows only become active after they reach `master`.
+The first preview must therefore be verified on a new or updated PR after
+this change is merged and the one-time Pages handoff below is complete.
 
 ## Relationship to layer5io/docs workflows
 
@@ -108,23 +160,49 @@ at the Pages URL within a minute of the `deploy` job finishing:
 
 ## Pages configuration
 
-Pages is configured to publish from GitHub Actions (`build_type: workflow`),
-not from a branch. The one-time setup, done with an account that administers
-the repository:
+Production and previews share the root of **`gh-pages`**. Pages must use
+`build_type: legacy` with source branch `gh-pages`, path `/`, as layer5io/docs
+already does. The custom domain stays `blowhorn.ai`; no DNS change is needed.
 
-```bash
-gh-axi api -X POST repos/blowhorn-ai/blowhorn-site/pages --field build_type=workflow
-# or, if Pages already exists:
-gh-axi api -X PUT repos/blowhorn-ai/blowhorn-site/pages --field build_type=workflow
-```
+### One-time handoff after merge (repository administrator)
 
-This was done on 2026-10-08: Pages exists with `build_type: workflow` and the
-custom domain `blowhorn.ai`. HTTPS enforcement is set once GitHub issues the
-certificate, which needs the DNS records below.
+The repository was using `build_type: workflow` when this change was written.
+This pull request does not change Pages settings or pre-create a branch.
 
-`static/CNAME` (published as `/CNAME`) carries `blowhorn.ai` for completeness. With a workflow
-deployment GitHub ignores the file; the custom domain is the one set through
-the API or Settings > Pages, below.
+1. After merge, wait for the `Site` run on `master` to finish. The production
+   publisher creates `gh-pages` if missing, populated with the full site,
+   `CNAME` and `.nojekyll`. Do not switch Pages to a minimal/empty branch.
+2. Confirm the branch has production `index.html`, `CNAME` (`blowhorn.ai`) and
+   `.nojekyll`. Then, with administrator approval, change the publishing
+   source once ([GitHub REST API](https://docs.github.com/en/rest/pages/pages#update-information-about-a-github-pages-site)):
+
+   ```bash
+   gh-axi api -X PUT repos/blowhorn-ai/blowhorn-site/pages \
+     --field build_type=legacy \
+     --field 'source[branch]=gh-pages' --field 'source[path]=/'
+   gh-axi api repos/blowhorn-ai/blowhorn-site/pages \
+     --jq '{build_type: .build_type, source: .source, cname: .cname}'
+   ```
+
+3. Run `Site` on `master` again if needed for the first branch-based
+   deployment, and watch the automatic `pages-build-deployment` workflow.
+   Verify the homepage and a deep link before considering the handoff done.
+4. Open or update a public-site PR. Wait for `Build Site Preview`,
+   `Site Preview Post-Build` and the Pages deployment; inspect its sticky
+   preview URL, nested navigation and assets. Confirm a later production
+   deploy leaves that preview reachable.
+
+The first production branch push alone does not replace the live site while
+Pages still uses the old Actions source. The administrator handoff is needed
+before new production updates and preview URLs can become live. Keep the
+current live deployment in place until the full `gh-pages` tree is ready.
+GitHub's branch publishing requires this initial source selection when using
+`GITHUB_TOKEN`; if a successful branch push does not publish, check the Pages
+run and administrator/verified-email setup rather than assuming it is live.
+
+`static/CNAME` is copied into production output and the publisher also sets
+`cname: blowhorn.ai`. The branch publisher creates `.nojekyll` so GitHub serves
+Hugo's already-built output without Jekyll processing.
 
 ## Custom domain: blowhorn.ai (the apex)
 

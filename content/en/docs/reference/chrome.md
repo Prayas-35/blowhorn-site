@@ -66,12 +66,14 @@ folder is refused by name, with no fallback.
 
 And Blowhorn never starts Chrome from a session that cannot reach your
 login keychain -- an SSH session, a CI runner, or a shell with no
-desktop session behind it. Chrome keeps its sign-in keys in the
-keychain; started without it, Chrome cannot read them and signs the
-profile out. A command that would have to start Chrome from such a
-session refuses and says why; run it from a terminal on this computer
-instead. Asking a Chrome that is already running to open a tab starts
-nothing and is not refused.
+desktop session of yours behind it (on a Mac: nobody signed in at the
+desktop, or somebody else signed in there). Chrome keeps its sign-in
+keys in the keychain; started without it, Chrome cannot read them and
+signs the profile out. A command that would have to start Chrome from
+such a session refuses and says why; use Blowhorn from this computer's
+desktop session, signed in to your account, instead. Asking a Chrome
+that is already running to open a tab or a profile starts nothing and
+is not refused.
 
 A test or check run that points Blowhorn's Chrome folders at a throwaway
 folder under the system temp directory (`BLOWHORN_USER_DATA_DIR`,

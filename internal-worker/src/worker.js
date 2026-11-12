@@ -34,10 +34,17 @@ let certsCache = { url: '', keys: null, fetchedAt: 0 };
 
 const certsUrl = (teamDomain) => `https://${teamDomain}/cdn-cgi/access/certs`;
 
+const SECURITY_HEADERS = {
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+};
+
 const DENY_HEADERS = {
   'content-type': 'text/plain; charset=utf-8',
   'cache-control': 'no-store',
   'x-robots-tag': 'noindex, nofollow',
+  ...SECURITY_HEADERS,
 };
 
 function deny(status = 403) {
@@ -45,6 +52,7 @@ function deny(status = 403) {
 }
 
 function b64urlToBytes(s) {
+  if (s.length % 4 === 1) throw new Error('invalid base64url length');
   const pad = s.length % 4 === 0 ? '' : '='.repeat(4 - (s.length % 4));
   const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/') + pad);
   const out = new Uint8Array(bin.length);
@@ -93,7 +101,8 @@ export async function verifyAccessToken(token, env, fetchImpl = fetch, nowSec = 
   } catch {
     return null;
   }
-  if (header.alg !== 'RS256' || !header.kid) return null;
+  if (!header || typeof header !== 'object' || header.alg !== 'RS256' || !header.kid) return null;
+  if (!claims || typeof claims !== 'object') return null;
   const hadCachedKeys = certsCache.url === certsUrl(env.TEAM_DOMAIN) && Boolean(certsCache.keys);
   let keys = await accessKeys(env.TEAM_DOMAIN, fetchImpl);
   let jwk = keys.find((k) => k.kid === header.kid);
@@ -110,17 +119,28 @@ export async function verifyAccessToken(token, env, fetchImpl = fetch, nowSec = 
     false,
     ['verify'],
   );
-  const ok = await crypto.subtle.verify(
-    'RSASSA-PKCS1-v1_5',
-    key,
-    b64urlToBytes(parts[2]),
-    new TextEncoder().encode(`${parts[0]}.${parts[1]}`),
-  );
+  let sigBytes;
+  try {
+    sigBytes = b64urlToBytes(parts[2]);
+  } catch {
+    return null;
+  }
+  let ok = false;
+  try {
+    ok = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      sigBytes,
+      new TextEncoder().encode(`${parts[0]}.${parts[1]}`),
+    );
+  } catch {
+    return null;
+  }
   if (!ok) return null;
   const aud = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
   if (!aud.includes(env.POLICY_AUD)) return null;
   if (claims.iss !== `https://${env.TEAM_DOMAIN}`) return null;
-  if (typeof claims.exp !== 'number' || claims.exp <= nowSec) return null;
+  if (typeof claims.exp !== 'number' || !Number.isFinite(claims.exp) || claims.exp <= nowSec) return null;
   if (typeof claims.nbf === 'number' && claims.nbf > nowSec + 60) return null;
   const email = String(claims.email || '').toLowerCase();
   if (!emailAllowed(email, listFrom(env.ALLOWED_EMAILS), listFrom(env.ALLOWED_EMAIL_DOMAINS))) return null;
@@ -226,6 +246,7 @@ export async function handle(request, env, fetchImpl = fetch) {
   const out = new Response(res.body, res);
   out.headers.set('cache-control', 'private, no-store');
   out.headers.set('x-robots-tag', 'noindex, nofollow');
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) out.headers.set(name, value);
   return out;
 }
 
@@ -257,6 +278,7 @@ export function csvCell(v) {
 const ADMIN_HEADERS = {
   'cache-control': 'no-store',
   'x-robots-tag': 'noindex, nofollow',
+  ...SECURITY_HEADERS,
 };
 
 async function handleSignupsAdmin(url, env) {
@@ -342,7 +364,9 @@ function num(v) {
 
 function parseBody(row) {
   try {
-    return JSON.parse(row.body);
+    const data = JSON.parse(row.body);
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return null;
+    return { ...data, collected_at: row.collected_at || data.collected_at };
   } catch {
     return null;
   }
@@ -362,9 +386,10 @@ function csvOf(fields, rows) {
 
 function staleNote(snap, kind, nowMs) {
   if (!snap) return `<p class="stale">No ${kind} snapshot yet.</p>`;
-  const age = nowMs - new Date(snap.collected_at).getTime();
+  const t = new Date(snap.collected_at).getTime();
+  const age = nowMs - t;
   const when = `Collected ${escHtml(fmtCentral(snap.collected_at))} on ${escHtml(snap.collector_host || '')}`;
-  if (age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
+  if (Number.isNaN(age) || age > FLEET_STALE_MS[kind]) return `<p class="stale">${when}. Stale: the cron has missed at least two runs.</p>`;
   return `<p>${when}.</p>`;
 }
 

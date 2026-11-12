@@ -1,0 +1,114 @@
+{{- /* Activity card. The first bundled example is in the HTML, so the
+   card is readable with no JavaScript and the script's first paint does not
+   move it. assets/js/activity-feed.js asks the account service for the
+   public event feed (data-feed-url, built from params.cloud_url) and shows
+   it only while it is fresh; on an empty feed, a failure or an invalid
+   payload it rotates the bundled examples, labelled as such. Platform names
+   and first-party logo paths come from data/platforms/*.yaml (data-platforms).
+   The monogram hue class is the first 8 hex digits of userId mod 12, the same
+   rule as monogramHue() in the script. The network badges on the avatar
+   follow networksFor() and badgeStack(): networks (else platform) resolved
+   to data/platforms by id or name, without repeats, in platform weight order
+   then unknown names as listed, three at most with a +N badge past that.
+   docs/activity-feed.md */ -}}
+{{- $feed := index site.Data "activity_feed.examples" -}}
+{{- if not $feed -}}
+  {{- with index site.Data "activity_feed" -}}
+    {{- $feed = index . "examples" -}}
+  {{- end -}}
+{{- end -}}
+{{- $cloud := site.Params.cloud_url | default "" | strings.TrimSuffix "/" -}}
+{{- $feedURL := "" -}}
+{{- if $cloud }}{{ $feedURL = printf "%s/api/events/feed?page=0&pagesize=20&category=schedule&action=completed" $cloud }}{{ end -}}
+{{- if not $feed }}{{ errorf "activity feed: data/activity_feed.examples.json is missing" }}{{ end -}}
+{{- $first := index $feed.data 0 -}}
+{{- if not $first }}{{ errorf "activity feed: data/activity_feed.examples.json has no data" }}{{ end -}}
+{{- $platforms := dict -}}
+{{- range $id, $p := site.Data.platforms -}}
+  {{- $platforms = merge $platforms (dict $id (dict "name" (replaceRE ` \(.*\)$` "" $p.name) "logo" ($p.logo | relURL))) -}}
+{{- end -}}
+{{- $fp := index $platforms $first.platform -}}
+{{- if not $fp }}{{ errorf "activity feed: no data/platforms entry for %q" $first.platform }}{{ end -}}
+{{- /* Network badges for the static first example, as networksFor() and badgeStack() build them. */ -}}
+{{- $names := $first.networks | default (slice $fp.name) -}}
+{{- $known := slice -}}
+{{- range sort site.Data.platforms "weight" -}}
+  {{- $id := .key -}}
+  {{- $bare := lower (replaceRE ` \(.*\)$` "" .name) -}}
+  {{- range $names -}}
+    {{- $n := lower (replaceRE ` \(.*\)$` "" (trim . " ")) -}}
+    {{- if and (or (eq $n $id) (eq $n $bare)) (not (in $known $id)) }}{{ $known = $known | append $id }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- $nets := slice -}}
+{{- range $known }}{{ $nets = $nets | append (index $platforms .) }}{{ end -}}
+{{- $seen := slice -}}
+{{- range $names -}}
+  {{- $raw := trim . " " -}}
+  {{- $n := lower (replaceRE ` \(.*\)$` "" $raw) -}}
+  {{- $hit := false -}}
+  {{- range $id, $p := $platforms }}{{ if or (eq $n $id) (eq $n (lower $p.name)) }}{{ $hit = true }}{{ end }}{{ end -}}
+  {{- if and (not $hit) (not (in $seen (lower $raw))) -}}
+    {{- $seen = $seen | append (lower $raw) -}}
+    {{- $nets = $nets | append (dict "name" $raw "logo" "") -}}
+  {{- end -}}
+{{- end -}}
+{{- $cap := 3 -}}
+{{- $shown := $nets -}}
+{{- $hidden := slice -}}
+{{- if gt (len $nets) $cap }}{{ $shown = first (sub $cap 1) $nets }}{{ $hidden = after (sub $cap 1) $nets }}{{ end -}}
+{{- $words := split $first.role " " -}}
+{{- $initials := upper (substr (index $words 0) 0 1) -}}
+{{- if gt (len $words) 1 }}{{ $initials = printf "%s%s" $initials (upper (substr (index $words 1) 0 1)) }}{{ end -}}
+{{- $hue := mod (int (printf "0x%s" (substr $first.userId 0 8))) 12 -}}
+<aside class="activity-feed" data-activity-feed data-state="examples"{{ with $feedURL }} data-feed-url="{{ . }}"{{ end }} data-platforms="{{ $platforms | jsonify }}" aria-labelledby="activity-feed-label">
+  <div class="af-head">
+    <p class="af-status">
+      <span class="af-live" data-activity-live hidden><span class="af-pulse" aria-hidden="true"></span>Live</span>
+      <span class="af-badge" data-activity-examples>Examples</span>
+      <span id="activity-feed-label" class="af-label">Recent activity</span>
+    </p>
+    <div class="af-nav activity-feed-nav">
+      <button type="button" class="af-nav-btn" data-activity-prev aria-label="Previous activity"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="af-nav-btn" data-activity-next aria-label="Next activity"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+  <p class="af-note" data-activity-note>Illustrative examples, not real customer activity.</p>
+  <div class="af-stage" data-activity-stage>
+    <div class="af-identity">
+      <span class="af-avatar">
+        <span class="af-avatar-media" data-activity-avatar aria-hidden="true">
+          <span class="af-monogram af-hue-{{ $hue }}" data-activity-monogram>{{ $initials }}</span>
+        </span>
+        <span class="af-badges" data-activity-badges>
+          {{- range $shown -}}
+            {{- if .logo -}}
+              <span class="af-platform-badge" title="{{ .name }}"><img src="{{ .logo }}" alt="{{ .name }}" width="16" height="16"></span>
+            {{- else -}}
+              <span class="af-platform-badge af-badge-initial" title="{{ .name }}" role="img" aria-label="{{ .name }}">{{ upper (substr .name 0 1) }}</span>
+            {{- end -}}
+          {{- end -}}
+          {{- with $hidden -}}
+            {{- $names := slice }}{{ range . }}{{ $names = $names | append .name }}{{ end -}}
+            {{- $label := printf "Also on %s" (delimit $names ", ") -}}
+            <span class="af-platform-badge af-badge-more" title="{{ $label }}" role="img" aria-label="{{ $label }}">+{{ len . }}</span>
+          {{- end -}}
+        </span>
+      </span>
+      <div class="af-who">
+        <p class="af-name"><span data-activity-name>{{ $first.role }}</span><span class="af-org" data-activity-org hidden></span></p>
+        <p class="af-meta"><span class="af-handle" data-activity-handle hidden></span><span data-activity-platform>{{ $fp.name }}</span><span class="af-dot" aria-hidden="true">·</span><time data-activity-when datetime="{{ $first.createdAt }}">Example activity</time></p>
+      </div>
+    </div>
+    <p class="af-line" data-activity-line>{{ $first.line }}</p>
+  </div>
+  <div class="af-empty" data-activity-empty hidden>
+    <span class="af-empty-stack" aria-hidden="true"><span></span><span></span><span></span></span>
+    <p class="af-empty-title">No public activity yet</p>
+    <p class="af-empty-sub">Completed activity shows up here as it happens.</p>
+  </div>
+  <div class="af-progress" data-activity-progress aria-hidden="true"></div>
+</aside>
+<script type="application/json" id="activity-feed-data">{{ $feed | jsonify | safeJS }}</script>
+{{- $js := resources.Get "js/activity-feed.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" type="module" defer></script>

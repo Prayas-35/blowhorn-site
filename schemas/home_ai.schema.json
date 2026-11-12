@@ -27,6 +27,7 @@
             "required": ["title", "body"],
             "properties": {
               "title": { "$ref": "#/definitions/short" },
+              "art": { "description": "The card's picture: the interface art (layouts/_partials/interface-art.html) of its way in on the Product menu, shared, never copied.", "enum": ["desktop", "extension", "web", "cli", "mcp"] },
               "tag": { "description": "One-line kicker under the title.", "$ref": "#/definitions/short" },
               "body": { "$ref": "#/definitions/text" },
               "href": { "$ref": "#/definitions/path" }

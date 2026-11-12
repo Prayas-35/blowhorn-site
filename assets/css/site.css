@@ -79,6 +79,10 @@
   --surface: #FFFFFF;
   --surface-raised: #F4F7F6;
   --surface-tint: #DDF4F1;
+  /* Mega-menu panel fill. Light follows --surface-tint; dark uses a neutral
+     offset (#222) so the menu stands apart from the Signal olive page without
+     recolouring every --surface-tint consumer. */
+  --nav-panel: var(--surface-tint);
   --ink: #1E2117;
   --ink-muted: #5B6A70;
   --ink-wordmark: #3C494F;
@@ -145,6 +149,7 @@
     --surface: #1E2117;
     --surface-raised: #2A2E25;
     --surface-tint: #173A34;
+    --nav-panel: #222;
     --ink: #EDEDED;
     --ink-muted: #A3AEB2;
     --ink-wordmark: #FFFFFF;
@@ -460,12 +465,14 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
      blurring the page, so the panel carries the glass look without relying on it. */
   background:
     linear-gradient(180deg, var(--glass-sheen), transparent 46%),
-    var(--glass-fill-solid);
+    var(--nav-panel);
+  /* Lifted off the Signal field: --nav-panel, a strong rim and the lift
+     shadow set the panel apart from the ambient surface. */
   box-shadow:
     inset 0 1px 0 0 var(--glass-specular),
-    inset 0 0 0 1px var(--glass-rim),
+    inset 0 0 0 1px var(--line-strong),
     0 0 0 1px var(--glass-edge),
-    var(--glass-shadow);
+    var(--glass-shadow-lift);
 }
 .mm-panel-wide { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .site-header:not(.is-enhanced) .mm-item:hover > .mm-panel,
@@ -474,6 +481,8 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
 @media (prefers-reduced-motion: no-preference) {
   .mm-item.is-open > .mm-panel { animation: mm-in 160ms ease-out; }
   @keyframes mm-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  /* Sibling swap: the surface stays put, only its content changes. */
+  .site-header.is-mm-swap .mm-item.is-open > .mm-panel { animation: none; }
 }
 .mm-intro-title,
 .mm-group-title {
@@ -521,6 +530,16 @@ pre code { background: none; padding: 0; overflow-wrap: normal; }
 .mm-card {
   position: relative; display: grid; gap: var(--space-2); align-content: start;
   padding: var(--space-4); border-radius: var(--radius-lg); color: var(--ink);
+}
+/* Light: panel fill is --surface-tint, so field cards take --surface and
+   unfilled-card chips take it too. Dark: panel is neutral #222 (--nav-panel),
+   so field cards return to the tint fill and chips on unfilled cards take the
+   tint so they stay visible on the grey panel. */
+.mm-panel :is(.card-stamp, .card-plain) { --card-chip: var(--surface); }
+.mm-panel .card-field { --card-bg: var(--surface); --card-chip: var(--surface-tint); }
+@media (prefers-color-scheme: dark) {
+  .mm-panel :is(.card-stamp, .card-plain) { --card-chip: var(--surface-tint); }
+  .mm-panel .card-field { --card-bg: var(--surface-tint); --card-chip: var(--surface); }
 }
 .mm-card-title { grid-row: 2; grid-column: 1; font-size: 15px; line-height: 21px; font-weight: 700; padding-right: var(--space-6); }
 .mm-card:hover .mm-card-title { color: var(--link); }
@@ -1421,6 +1440,22 @@ html[data-hero-art="fan"] .platforms-fan { display: none; }
   letter-spacing: -0.005em;
   color: var(--ink-wordmark);
 }
+/* Social profiles (data/social_links.json): the owners' logos as files on
+   small white tiles, like .logo-tile, so the black marks hold in dark mode. */
+.footer-social { margin-top: var(--space-4); }
+.footer-social ul { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.footer-social a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 var(--stroke-hairline) var(--line);
+}
+.footer-social a:hover { box-shadow: 0 0 0 var(--stroke-hairline) var(--line), var(--shadow-soft); }
+.footer-social a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-md); }
+.footer-social img { width: 20px; height: 20px; object-fit: contain; }
 .footer-news .newsletter { margin-top: 0; max-width: none; }
 .footer-cols {
   display: grid;
@@ -2990,9 +3025,31 @@ a.card.docs-card > * { margin-top: 0; }
 .proof-flag { display: inline-block; padding: 0.1em 0.55em; border-radius: 999px; background: #FFE08A; color: #3A2E00; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: middle; }
 .proof-avatar { display: inline-grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--glass-fill-strong); border: var(--stroke-hairline, 1px) solid var(--glass-edge); box-shadow: var(--glass-shadow); font-weight: 700; font-size: 0.8rem; }
 .proof-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
-.proof-big { max-width: 46rem; margin: 0 auto; text-align: center; }
-.proof-big blockquote { margin: 0 0 var(--space-4); }
-.proof-big blockquote::before { content: "\201C"; display: block; font-family: var(--font-display); font-size: 4rem; line-height: 0.6; color: var(--teal-deep); }
+/* The pull-quote: a big Keppel-to-Caribbean quote mark beside the words,
+   the first sentence leading in full ink, the rest quieter, and the person
+   (photo, name, role) under it. Stacks and centres on narrow screens. */
+.proof-big { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--space-8); align-items: start; max-width: 60rem; margin: 0 auto; }
+.proof-big-mark { grid-row: span 2; font-family: var(--font-display); font-weight: 800; font-size: clamp(8rem, 16vw, 13rem); line-height: 0.8; background: linear-gradient(160deg, var(--teal), var(--teal-bright)); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; }
+.proof-big-quote { margin: 0 0 var(--space-6); font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 3.1vw, 2.5rem); line-height: 1.2; letter-spacing: -0.01em; color: var(--ink-muted); text-wrap: pretty; }
+.proof-big-lead { color: var(--ink-wordmark); background: linear-gradient(color-mix(in srgb, var(--teal-bright) 30%, transparent), color-mix(in srgb, var(--teal-bright) 30%, transparent)) no-repeat 0 88% / 100% 0.32em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.proof-big-who { display: flex; align-items: center; gap: var(--space-3); margin: 0; }
+.proof-big-who .proof-avatar { width: 3.5rem; height: 3.5rem; border: 2px solid var(--teal); box-shadow: none; }
+@media (max-width: 720px) {
+  .proof-big { grid-template-columns: minmax(0, 1fr); text-align: center; }
+  .proof-big-mark { grid-row: auto; font-size: 7rem; line-height: 1; margin-bottom: -0.45em; }
+  .proof-big-who { justify-content: center; text-align: left; }
+}
+/* Motion: only where the browser can tie it to scrolling and the reader has
+   not asked for less. The mark settles in and the marker sweeps under the
+   lead as the quote enters view; otherwise both simply sit in place. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .proof-big-mark { animation: proof-mark-in linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+    .proof-big-lead { animation: proof-lead-sweep linear both; animation-timeline: view(); animation-range: entry 30% cover 50%; }
+  }
+}
+@keyframes proof-mark-in { from { opacity: 0; transform: translateY(0.4em) scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes proof-lead-sweep { from { background-size: 0% 0.32em; } to { background-size: 100% 0.32em; } }
 
 /* Ticker: the user organisations' horizontal logos (data/user_logos.json,
    files in static/assets/orgs/), directly under the hero. The track is
@@ -3047,6 +3104,239 @@ a.card.docs-card > * { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   .proof-ticker-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
   .proof-ticker-track { animation: none; flex-wrap: wrap; width: auto; row-gap: var(--space-3); }
+}
+
+/* Activity card (layouts/_partials/activity-feed.html). A premium,
+   product-style panel rather than a site card: a tinted gradient surface,
+   layered soft depth with a hairline highlight, a 24px radius, circular ghost
+   arrows and swatch dots. Colours are card-local custom properties (--af-*)
+   so the card can break from the site palette while light and dark follow
+   the OS like every other component. The stage reserves its height so a
+   rotation never moves the page; the controls hold their space before the
+   script marks the card ready. The script never announces rotations.
+   docs/activity-feed.md */
+.activity-feed-slot { min-width: 0; }
+@media (min-width: 900px) {
+  .hero-grid .activity-feed-slot { grid-column: 1; }
+}
+@media (max-width: 899px) {
+  .hero-copy { order: 1; }
+  .hero-grid .activity-feed-slot { order: 2; }
+  .hero-film-cell, .hero-grid > .hero-art { order: 3; }
+}
+.activity-feed {
+  --af-surface-1: #FBFCFA;
+  --af-surface-2: #EEF4F1;
+  --af-tint: rgba(0, 166, 140, 0.10);
+  --af-ink: #1B2124;
+  --af-muted: #55636A;
+  --af-hairline: rgba(27, 33, 36, 0.08);
+  --af-highlight: rgba(255, 255, 255, 0.9);
+  --af-ghost: rgba(255, 255, 255, 0.72);
+  --af-ghost-hover: #FFFFFF;
+  --af-ghost-border: rgba(27, 33, 36, 0.12);
+  --af-chip: rgba(27, 33, 36, 0.06);
+  --af-ring: #1B2124;
+  --af-dot: rgba(27, 33, 36, 0.18);
+  --af-live: #0A6B49;
+  --af-badge: #FCE7A6;
+  --af-badge-ink: #5A4300;
+  --af-shadow:
+    0 1px 1px rgba(16, 24, 20, 0.04),
+    0 4px 10px -2px rgba(16, 24, 20, 0.06),
+    0 24px 48px -16px rgba(16, 24, 20, 0.18);
+  --af-ease: cubic-bezier(.2, .7, .2, 1);
+  --af-avatar: 64px;
+  --af-pad: 24px;
+  position: relative;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  max-width: 36rem;
+  margin-top: var(--space-6);
+  padding: var(--af-pad);
+  border-radius: 24px;
+  color: var(--af-ink);
+  font-family: var(--font-sans);
+  text-align: left;
+  background:
+    radial-gradient(120% 80% at 100% 0%, var(--af-tint), transparent 60%),
+    linear-gradient(180deg, var(--af-surface-1), var(--af-surface-2));
+  box-shadow: inset 0 1px 0 var(--af-highlight), 0 0 0 1px var(--af-hairline), var(--af-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  overflow: hidden;
+  isolation: isolate;
+}
+@media (prefers-color-scheme: dark) {
+  .activity-feed {
+    --af-surface-1: #1E2629;
+    --af-surface-2: #161C1E;
+    --af-tint: rgba(0, 211, 169, 0.12);
+    --af-ink: #F2F5F3;
+    --af-muted: #A9B6B9;
+    --af-hairline: rgba(255, 255, 255, 0.08);
+    --af-highlight: rgba(255, 255, 255, 0.07);
+    --af-ghost: rgba(255, 255, 255, 0.06);
+    --af-ghost-hover: rgba(255, 255, 255, 0.14);
+    --af-ghost-border: rgba(255, 255, 255, 0.14);
+    --af-chip: rgba(255, 255, 255, 0.08);
+    --af-ring: #F2F5F3;
+    --af-dot: rgba(255, 255, 255, 0.22);
+    --af-live: #3DDC97;
+    --af-badge: #4A3B08;
+    --af-badge-ink: #FCE7A6;
+    --af-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.3),
+      0 8px 16px -4px rgba(0, 0, 0, 0.35),
+      0 28px 56px -18px rgba(0, 0, 0, 0.6);
+  }
+}
+.activity-feed p { margin: 0; color: inherit; }
+.activity-feed [hidden] { display: none !important; }
+
+.af-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.af-status { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 13px; line-height: 20px; }
+.af-label { color: var(--af-muted); font-weight: 500; }
+.af-live, .af-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 10px; border-radius: 999px;
+  font-size: 12px; line-height: 18px; font-weight: 600;
+}
+.af-live { color: var(--af-live); background: color-mix(in srgb, var(--af-live) 12%, transparent); }
+.af-badge { color: var(--af-badge-ink); background: var(--af-badge); }
+.af-pulse { position: relative; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.af-pulse::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: currentColor; animation: af-pulse 2s var(--af-ease) infinite;
+}
+@keyframes af-pulse { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(2.8); opacity: 0; } }
+
+.af-nav { display: flex; gap: 8px; flex: none; visibility: hidden; }
+.activity-feed.is-ready .af-nav { visibility: visible; }
+.af-nav-btn {
+  display: grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border-radius: 50%; border: 1px solid var(--af-ghost-border);
+  background: var(--af-ghost); color: var(--af-ink); cursor: pointer;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  transition: background-color 200ms var(--af-ease), transform 200ms var(--af-ease), border-color 200ms var(--af-ease);
+}
+.af-nav-btn:hover { background: var(--af-ghost-hover); border-color: color-mix(in srgb, var(--af-ink) 24%, transparent); }
+.af-nav-btn:active { transform: scale(0.94); }
+.af-nav-btn:focus-visible {
+  outline: 2px solid var(--af-ring); outline-offset: 2px;
+}
+.af-note { margin-top: -8px !important; font-size: 13px; line-height: 18px; color: var(--af-muted) !important; }
+
+.af-stage { display: grid; gap: 16px; }
+.af-identity { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.af-avatar { position: relative; flex: none; width: var(--af-avatar); height: var(--af-avatar); }
+.af-avatar-media {
+  display: block; width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+  box-shadow: 0 0 0 2px var(--af-surface-1), 0 0 0 3px var(--af-hairline), 0 6px 16px -6px rgba(16, 24, 20, 0.35);
+}
+.af-monogram {
+  display: grid; place-items: center; width: 100%; height: 100%;
+  color: #FFFFFF; font-weight: 600; font-size: calc(var(--af-avatar) * 0.36); letter-spacing: 0.02em;
+  background: linear-gradient(135deg, hsl(var(--af-hue, 170) 68% var(--af-l1, 30%)), hsl(calc(var(--af-hue, 170) + 36) 72% var(--af-l2, 30%)));
+}
+/* Twelve monogram hues, one per userId step (monogramHue). */
+.af-hue-0 { --af-hue: 0; --af-l1: 46%; --af-l2: 34%; }
+.af-hue-1 { --af-hue: 30; --af-l1: 39%; --af-l2: 27%; }
+.af-hue-2 { --af-hue: 60; --af-l1: 27%; --af-l2: 29%; }
+.af-hue-3 { --af-hue: 90; --af-l1: 29%; --af-l2: 30%; }
+.af-hue-4 { --af-hue: 120; --af-l1: 31%; --af-l2: 29%; }
+.af-hue-5 { --af-hue: 150; --af-l1: 30%; --af-l2: 31%; }
+.af-hue-6 { --af-hue: 180; --af-l1: 29%; --af-l2: 34%; }
+.af-hue-7 { --af-hue: 210; --af-l1: 46%; --af-l2: 34%; }
+.af-hue-8 { --af-hue: 240; --af-l1: 46%; --af-l2: 34%; }
+.af-hue-9 { --af-hue: 270; --af-l1: 46%; --af-l2: 34%; }
+.af-hue-10 { --af-hue: 300; --af-l1: 46%; --af-l2: 34%; }
+.af-hue-11 { --af-hue: 330; --af-l1: 46%; --af-l2: 34%; }
+.af-avatar-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Each implicated network's logo, stacked on the avatar's bottom-right
+   corner. The badge stays white in dark mode so the black X and GitHub marks
+   read. Overlapping badges share one surface-coloured gap ring, no border. */
+.af-badges {
+  position: absolute; right: -4px; bottom: -4px;
+  display: flex;
+}
+.af-platform-badge {
+  display: grid; place-items: center; flex: none;
+  width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF;
+  box-shadow: 0 0 0 2px var(--af-surface-2), 0 2px 6px rgba(16, 24, 20, 0.25);
+}
+.af-platform-badge + .af-platform-badge { margin-left: -8px; }
+.af-platform-badge img { width: 14px; height: 14px; object-fit: contain; }
+.af-badge-initial, .af-badge-more {
+  color: #1B2124; font-size: 11px; line-height: 1; font-weight: 600; letter-spacing: -0.01em;
+}
+.af-who { display: grid; gap: 2px; min-width: 0; }
+.af-name { font-size: 17px; line-height: 24px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.af-org { color: var(--af-muted); font-weight: 500; }
+.af-dot { margin: 0 6px; }
+.af-meta { font-size: 14px; line-height: 20px; color: var(--af-muted) !important; }
+.af-handle { color: var(--af-ink); font-weight: 500; }
+.af-handle:not([hidden])::after { content: "\00B7"; margin: 0 6px; color: var(--af-muted); font-weight: 400; }
+.af-line {
+  font-size: 20px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em;
+  min-height: calc(2em * 1.35); overflow-wrap: anywhere; text-wrap: pretty;
+}
+.af-progress { display: flex; align-items: center; gap: 10px; min-height: 16px; }
+.af-swatch {
+  position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--af-dot);
+  transition: background-color 300ms var(--af-ease);
+}
+.af-swatch.is-active { background: var(--af-ring); }
+.af-swatch.af-dot-edge { width: 5px; height: 5px; }
+.af-swatch.is-active::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 1.5px solid var(--af-ring);
+}
+/* The autoplay cue: the active swatch's ring draws in over the interval. */
+.activity-feed.is-playing .af-swatch.is-active::after {
+  -webkit-mask: conic-gradient(#000 var(--af-fill, 0deg), transparent 0);
+  mask: conic-gradient(#000 var(--af-fill, 0deg), transparent 0);
+  animation: af-fill var(--af-interval, 8000ms) linear forwards;
+}
+@property --af-fill { syntax: "<angle>"; inherits: false; initial-value: 360deg; }
+@keyframes af-fill { from { --af-fill: 0deg; } to { --af-fill: 360deg; } }
+
+.af-empty { display: grid; justify-items: center; gap: 6px; padding: 12px 0 8px; text-align: center; }
+.af-empty-stack { display: flex; margin-bottom: 8px; }
+.af-empty-stack span {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--af-chip);
+  box-shadow: 0 0 0 3px var(--af-surface-1);
+}
+.af-empty-stack span + span { margin-left: -10px; }
+.af-empty-title { font-size: 17px; line-height: 24px; font-weight: 600; }
+.af-empty-sub { font-size: 14px; line-height: 20px; color: var(--af-muted) !important; }
+
+/* Swap: outgoing content lifts 6px with a slight blur; incoming fades in
+   with a short stagger (avatar, name, line). */
+.af-identity .af-avatar, .af-who, .af-line {
+  transition: opacity 160ms var(--af-ease), transform 160ms var(--af-ease), filter 160ms var(--af-ease);
+}
+.activity-feed.is-swap .af-avatar, .activity-feed.is-swap .af-who,
+.activity-feed.is-swap .af-line {
+  opacity: 0; transform: translateY(-6px); filter: blur(2px);
+}
+.activity-feed.is-entering .af-avatar { animation: af-in 260ms var(--af-ease) both; }
+.activity-feed.is-entering .af-who { animation: af-in 260ms var(--af-ease) 30ms both; }
+.activity-feed.is-entering .af-line { animation: af-in 260ms var(--af-ease) 60ms both; }
+@keyframes af-in { from { opacity: 0; transform: translateY(6px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+
+@media (max-width: 599px) {
+  .activity-feed { --af-avatar: 52px; --af-pad: 18px; gap: 16px; border-radius: 22px; }
+  .af-line { font-size: 19px; min-height: calc(3em * 1.35); }
+  .af-name { font-size: 17px; }
+  .af-platform-badge { width: 22px; height: 22px; }
+  .af-platform-badge img { width: 13px; height: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .activity-feed *, .activity-feed *::after { animation: none !important; transition: none !important; }
+  .activity-feed.is-swap .af-avatar, .activity-feed.is-swap .af-who,
+  .activity-feed.is-swap .af-line { opacity: 1; transform: none; filter: none; }
 }
 
 /* ---------- Pricing (/pricing/) ----------
@@ -3456,19 +3746,19 @@ a.docs-card.platform-card::before {
   width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--white) no-repeat center / 24px 24px;
   box-shadow: inset 0 0 0 1px var(--line);
 }
-a.docs-card.platform-card[href$="/linkedin/"]::before { background-image: url("/assets/platforms/linkedin-in-bug.png"); }
-a.docs-card.platform-card[href$="/x/"]::before { background-image: url("/assets/platforms/x-logo-black.png"); background-size: 20px 20px; }
-a.docs-card.platform-card[href$="/reddit/"]::before { background-image: url("/assets/platforms/reddit-logo.png"); }
-a.docs-card.platform-card[href$="/hacker-news/"]::before { background-image: url("/assets/platforms/hacker-news-y18.svg"); background-size: 20px 20px; }
-a.docs-card.platform-card[href$="/slack/"]::before { background-image: url("/assets/platforms/slack-mark.svg"); }
-a.docs-card.platform-card[href$="/bluesky/"]::before { background-image: url("/assets/platforms/bluesky-butterfly-blue.svg"); }
-a.docs-card.platform-card[href$="/github/"]::before { background-image: url("/assets/platforms/github-invertocat-black.svg"); }
+a.docs-card.platform-card[href$="/linkedin/"]::before { background-image: url("../assets/platforms/linkedin-in-bug.png"); }
+a.docs-card.platform-card[href$="/x/"]::before { background-image: url("../assets/platforms/x-logo-black.png"); background-size: 20px 20px; }
+a.docs-card.platform-card[href$="/reddit/"]::before { background-image: url("../assets/platforms/reddit-logo.png"); }
+a.docs-card.platform-card[href$="/hacker-news/"]::before { background-image: url("../assets/platforms/hacker-news-y18.svg"); background-size: 20px 20px; }
+a.docs-card.platform-card[href$="/slack/"]::before { background-image: url("../assets/platforms/slack-mark.svg"); }
+a.docs-card.platform-card[href$="/bluesky/"]::before { background-image: url("../assets/platforms/bluesky-butterfly-blue.svg"); }
+a.docs-card.platform-card[href$="/github/"]::before { background-image: url("../assets/platforms/github-invertocat-black.svg"); }
 .agent-actions-platform .logo-tile { width: 36px; height: 36px; }
 .agent-actions-platform .logo-tile img { width: 22px; height: 22px; }
-a.docs-card.platform-card[href$="/youtube/"]::before { background-image: url("/assets/platforms/youtube-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/instagram/"]::before { background-image: url("/assets/platforms/instagram-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/tiktok/"]::before { background-image: url("/assets/platforms/tiktok-simple-icons.svg"); background-size: 22px 22px; }
-a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("/assets/platforms/facebook-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/youtube/"]::before { background-image: url("../assets/platforms/youtube-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/instagram/"]::before { background-image: url("../assets/platforms/instagram-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/tiktok/"]::before { background-image: url("../assets/platforms/tiktok-simple-icons.svg"); background-size: 22px 22px; }
+a.docs-card.platform-card[href$="/facebook/"]::before { background-image: url("../assets/platforms/facebook-simple-icons.svg"); background-size: 22px 22px; }
 
 /* ---------- Cast pages (/for/<slug>/, /use-cases/<slug>/, /solutions/<slug>/)
    Shared layout (layouts/_partials/cast-page.html) reuses these classes.
@@ -3804,6 +4094,8 @@ html[data-tells-bar="off"] .tells-bar { display: none; }
 .ai-agents-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .ai-content-price { color: var(--ink); }
 .ai-agent-cards .cli-flag { white-space: nowrap; }
+/* Each card leads with its way in's interface art (as on the Product menu). */
+.ai-agent-cards .iface-art { margin-bottom: var(--space-4); }
 
 /* Signup form honeypot: off-screen, not display:none, so naive bots still
    fill it while sighted visitors never see it. The Worker answers such

@@ -84,6 +84,10 @@ file to the post. Three things are worth knowing when such a post fails:
   [Messages and exit codes](/docs/reference/messages/) for the sentence each
   refusal prints.
 
+In New order, a file you drop still needs its link pasted below the landing
+zone: Blowhorn posts media from a link, so a dropped file with no link is
+refused when you deploy.
+
 ## Related
 
 - [Manage the content queue](/docs/how-to/publish/manage-the-content-worksheet/) - adding and

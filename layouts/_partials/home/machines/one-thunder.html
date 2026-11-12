@@ -1,9 +1,12 @@
 {{- /* Computers design 3, One Thunder: teammates and computers wired into the
   Major's one call. Copy and layout from the Figma concept in
   data/machines.json (id "one-thunder"). Animation in assets/js/machines.js:
-  voice lines flow into the Major, the rings leave the bullhorn and each
-  platform tile lights as the call lands. The logos themselves never move
-  (Bluesky's and X's brand rules). */ -}}
+  one six-second loop in three beats. Every voice reports in along its line
+  to the Major; the Major sounds the call and the signal runs back out to
+  every voice; then each voice posts, its platform tile lighting up beside
+  it, as the call lands on the platforms. Without motion the tiles simply
+  sit beside each voice. The logos themselves never move, only fade (Bluesky's
+  and X's brand rules). */ -}}
 <div class="machines-panel" data-machines-only="one-thunder">
   <div class="machines-actions machines-actions-end">
     <a class="button button-primary" href="{{ "download/" | relURL }}">Enlist a computer</a>
@@ -12,12 +15,12 @@
   <div class="machines-card card-dispatch machines-thunder">
     <svg class="machines-voice-wires" aria-hidden="true" focusable="false"></svg>
     <div class="machines-thunder-people">
-      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/drill-instructor-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>Teammate</span></span>
-      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/general-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>You</span></span>
-      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/drill-instructor-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>Another teammate</span></span>
-      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-imac.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Desk rig</span></span>
-      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-laptop-lap.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Laptop</span></span>
-      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-mac-studio.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Studio box</span></span>
+      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/drill-instructor-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/linkedin-in-bug.png" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>Teammate</span></span>
+      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/general-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/x-logo-black.png" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>You</span></span>
+      <span class="machines-voice is-mate"><img src="{{ "assets/brand/cast/drill-instructor-base.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/bluesky-butterfly-blue.svg" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot is-gold" aria-hidden="true"></span>Another teammate</span></span>
+      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-imac.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/reddit-logo.png" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Desk rig</span></span>
+      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-laptop-lap.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/github-invertocat-black.svg" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Laptop</span></span>
+      <span class="machines-voice"><img src="{{ "assets/brand/cast/recruit-chick-mac-studio.webp" | relURL }}" alt="" width="480" height="270" loading="lazy"><span class="machines-voice-plat" aria-hidden="true"><img src="{{ "assets/platforms/hacker-news-y18.svg" | relURL }}" alt="" width="16" height="16" loading="lazy"></span><span class="machines-unit-label"><span class="machines-dot" aria-hidden="true"></span>Studio box</span></span>
     </div>
     <figure class="machines-thunder-major">
       <img src="{{ "assets/brand/cast/major-6-hat-left-horn.webp" | relURL }}" alt="Major Blowhorn sounding one call through his bullhorn" width="480" height="270" loading="lazy">
