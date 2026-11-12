@@ -1,0 +1,1 @@
+(function(){"use strict";var e,t=document.getElementById("download-fallback");if(!t)return;if(e=window.performance&&performance.getEntriesByType&&performance.getEntriesByType("navigation")[0],e&&e.type==="reload")return;window.setTimeout(function(){window.location.href=t.href},400)})()

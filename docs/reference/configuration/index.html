@@ -1,0 +1,1527 @@
+<!DOCTYPE html><html lang="en" data-theme="reveille">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><script>
+      (function () {
+        var allowed = ["signal","reveille"], param = "theme", q = null, i;
+        try { q = new URLSearchParams(window.location.search).get(param); } catch (e) {}
+        if (!q) return;
+        for (i = 0; i < allowed.length; i++) {
+          if (allowed[i] === q) {
+            document.documentElement.setAttribute('data-theme', q);
+            return;
+          }
+        }
+      })();
+    </script>
+
+    <script>
+      (function () {
+        try {
+          if (window.localStorage.getItem("bh-tells-bar-v1")) document.documentElement.setAttribute('data-tells-bar', 'off');
+        } catch (e) {   }
+      })();
+    </script>
+<title>Configuration reference: Blowhorn</title>
+    <meta name="description" content="Precedence, every `.blowhorn.yaml` option, environment variables, and output logging.">
+    <link rel="canonical" href="https://blowhorn.ai/docs/reference/configuration/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Blowhorn">
+    <meta property="og:title" content="Configuration reference: Blowhorn">
+    <meta property="og:description" content="Precedence, every `.blowhorn.yaml` option, environment variables, and output logging.">
+    <meta property="og:url" content="https://blowhorn.ai/docs/reference/configuration/">
+    <meta property="og:image" content="https://blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="900">
+    <meta property="og:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Configuration reference: Blowhorn">
+    <meta name="twitter:description" content="Precedence, every `.blowhorn.yaml` option, environment variables, and output logging.">
+    <meta name="twitter:image" content="https://blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <meta name="twitter:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/assets/brand/logo/blowhorn-favicon-32.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/brand/logo/blowhorn-apple-touch-icon-180.png"><link rel="preload" href="/scss/main.min.e160ee0f1470a9e785221c16912777c236fedbb0c8ef27e3b9b728e96d70e6c7.css" as="style" integrity="sha256-4WDuDxRwqeeFIhwWkSd3wjb&#43;27DI7yfjubco6W1w5sc=" crossorigin="anonymous">
+<link href="/scss/main.min.e160ee0f1470a9e785221c16912777c236fedbb0c8ef27e3b9b728e96d70e6c7.css" rel="stylesheet" integrity="sha256-4WDuDxRwqeeFIhwWkSd3wjb&#43;27DI7yfjubco6W1w5sc=" crossorigin="anonymous">
+
+<link rel="stylesheet" href="/css/site.min.4a0f5dc736649425d0a54f89356a77372218febfedf5e530d6f95fd9dde14c89.css">
+
+    <script src="/js/vendor/jquery.min.fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a.js"></script>
+    <script src="/js/vendor/lunr.min.d802a4db88ab7be6be90d8c44a31a0f1697db28c254179baa75e704d51723068.js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      gtag('js', new Date());
+      gtag('config', 'G-2ZLYGVE3HN');
+    </script>
+    <script src="/js/consent.min.87a540c5c86603eab7872bd71d23e8f0460cec66cc2ab450f6ab59bd6a2839fe.js" data-ga-id="G-2ZLYGVE3HN" defer></script>
+
+  </head>
+  <body class="docs">
+    <a class="skip-link ui" href="#main">Skip to content</a><svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <symbol id="glyph-menubar" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+        <path d="M3 9h18"></path>
+        <path d="M7 6.5h.01M10 6.5h.01"></path>
+        <path d="M8 14h8M8 17h5"></path>
+      </symbol>
+      <symbol id="glyph-terminal" viewBox="0 0 24 24">
+        <path d="M5 7l5 5-5 5"></path>
+        <path d="M12 17h7"></path>
+      </symbol>
+      <symbol id="glyph-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 2"></path>
+      </symbol>
+      <symbol id="glyph-extension" viewBox="0 0 24 24">
+        <path d="M10 4a2 2 0 1 1 4 0v1h3a1 1 0 0 1 1 1v3h-1a2 2 0 1 0 0 4h1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 1 0-4 0v1H5a1 1 0 0 1-1-1v-4h1a2 2 0 1 0 0-4H4V6a1 1 0 0 1 1-1h5z"></path>
+      </symbol>
+      <symbol id="glyph-download" viewBox="0 0 24 24">
+        <path d="M12 4v11"></path>
+        <path d="M7 11l5 5 5-5"></path>
+        <path d="M4 19h16"></path>
+      </symbol>
+    </svg>
+
+    <aside class="tells-bar" aria-label="Announcement" data-tells-bar data-key="bh-tells-bar-v1">
+      <div class="wrap tells-bar-inner">
+        <div class="tells-bar-cluster">
+          <p class="tells-bar-text">
+            <span class="tells-bar-text-full">Find out what websites can tell about your browser. Spoiler: plenty.</span>
+            <span class="tells-bar-text-short">Fingerprints?</span>
+          </p>
+          <a class="tells-bar-cta" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=bar">
+            <span class="tells-bar-cta-label">Am I a Bot?</span>
+            <span class="tells-bar-pill">Free</span>
+          </a>
+        </div>
+        <button type="button" class="tells-bar-close" aria-label="Dismiss" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
+    </aside>
+    <script src="/js/tells-bar.min.35471ceb2a867b0a8500cdeabc0e8f1fa9f0707e82ddb81569f0769014f94c63.js" defer></script>
+<header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Blowhorn home">
+          <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="176" height="44">
+          <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="176" height="44">
+        </a>
+        <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="site-menu" hidden>
+          <span class="mm-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mm-toggle-text">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-menu" aria-label="Primary">
+          <ul class="mm-list">
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-product">Product<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-cards" id="mm-product">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Product</p>
+                  <p class="mm-intro-text">One product. Every way in.</p>
+                  <p class="mm-intro-sub">Not a shelf of products to buy one by one. One subscription, and every interface below is included: same queue, same profiles, same limits.</p>
+                  <p class="mm-intro-more"><a href="/pricing/">See the one plan</a></p>
+                </div>
+                <div class="mm-cards-wrap">
+                  <ul class="mm-cards">
+                    <li><a class="mm-card card-field" href="/download/">
+                      <span class="iface-art iface-art-desktop" aria-hidden="true"><span class="ia-panel ia-app">
+    <span class="ia-app-rail">
+      <span class="ia-lights"><i></i><i></i><i></i></span>
+      <span class="ia-app-brand"><picture><source srcset="/assets/brand/logo/blowhorn-icon-on-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/brand/logo/blowhorn-icon.svg" alt="" width="11" height="11"></picture><picture><source srcset="/assets/brand/logo/blowhorn-wordmark-white.svg" media="(prefers-color-scheme: dark)"><img class="ia-app-word" src="/assets/brand/logo/blowhorn-wordmark.svg" alt="" width="34" height="7"></picture></span>
+      <span class="ia-app-new"><b>+</b>New activity</span>
+      <span class="ia-app-nav">
+        <span class="ia-app-item">Home</span>
+        <span class="ia-app-item on">Activity<em>3 ready</em></span>
+        <span class="ia-app-item">Profiles<em>4</em></span>
+        <span class="ia-app-item">Performance</span>
+        <span class="ia-app-item">Safety</span>
+      </span>
+      <span class="ia-app-status"><i></i>On watch</span>
+    </span>
+    <span class="ia-app-main">
+      <span class="ia-app-bar"><span class="ia-seg"><b class="on">Upcoming</b><b>Routines</b><b>History</b></span></span>
+      <span class="ia-app-head"><span></span><span>Status</span><span>Preview</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4l14 16M19 4L5 20"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Release notes</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 10.5C10.4 7.2 7.2 4 4.8 4 3.4 4 3 5 3 6.2c0 1.2.5 4.6 1.1 5.6.8 1.4 2.6 1.9 4.6 1.6-2.4.5-3.6 2-2.4 3.6 1.8 2.3 4.1 1 5.7-3 1.6 4 3.9 5.3 5.7 3 1.2-1.6 0-3.1-2.4-3.6 2 .3 3.8-.2 4.6-1.6.6-1 1.1-4.4 1.1-5.6C21 5 20.6 4 19.2 4 16.8 4 13.6 7.2 12 10.5z"/></svg>
+<span class="ia-state wait"><i></i>2:00 PM</span><span class="ia-prev">Team recap</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Desktop app</span>
+                      <span class="mm-card-desc">The full console on your computer: queue, profiles, approvals</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-stamp" href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">
+                      <span class="mm-card-art">
+                        <span class="iface-art iface-art-extension" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-tab-title">Feed | LinkedIn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">linkedin.com/feed</span></span><img class="ia-pin" src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="11" height="11"><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-card"><span class="ia-who"><i class="ia-face"></i><span class="ia-line w45"></span></span><span class="ia-line w75"></span><span class="ia-line w60"></span></span>
+      <span class="ia-row sweep"><span class="ia-line w50"></span><span class="ia-pill ok">Sent as you</span></span>
+    </span>
+  </span></span>
+
+                        <img class="mm-card-chrome" src="/assets/platforms/google-chrome-logo.svg" alt="" width="28" height="28">
+                      </span>
+                      <span class="mm-card-title">Browser extension</span>
+                      <span class="mm-card-desc">Blowhorn inside your own browser, where the work happens</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-plain" href="https://cloud.blowhorn.ai">
+                      <span class="iface-art iface-art-web" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="9" height="9"><span class="ia-tab-title">Blowhorn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">cloud.blowhorn.ai</span></span><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-page-head"><span class="ia-page-title">Activity</span><span class="ia-live"><i></i>Live</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="14" rx="7.5" ry="5.5"/><path d="M12 8.5l1.2-4.5 3.3.9M9.5 16.5c1.5 1.2 3.5 1.2 5 0"/><circle cx="17.5" cy="5" r="1.2"/></svg>
+<span class="ia-state wait"><i></i>Needs you</span><span class="ia-prev">AMA thread</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Web app</span>
+                      <span class="mm-card-desc">Your queue from any browser, at cloud.blowhorn.ai</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-dispatch" href="/ai/blowhorn-axi/">
+                      <span class="iface-art iface-art-cli" aria-hidden="true"><span class="ia-panel ia-term">
+    <span class="ia-bar"><span class="ia-lights"><i></i><i></i><i></i></span><span class="ia-caption">zsh · blowhorn</span></span>
+    <span class="ia-code"><span class="ia-cline"><b>$</b> blowhorn post launch.md --dry-run</span><span class="ia-cline ok">✓ rehearsed · 3 profiles, nothing sent</span><span class="ia-cline"><b>$</b> blowhorn post launch.md --go <span class="ia-cursor"></span></span></span>
+  </span></span>
+
+                      <span class="mm-card-title">Command line</span>
+                      <span class="mm-card-desc">Every action as a command: for you, scripts and agents</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-field" href="/ai/mcp/">
+                      <span class="iface-art iface-art-mcp" aria-hidden="true"><span class="ia-panel ia-diagram">
+    <span class="ia-flow">
+      <span class="ia-chip"><span class="ia-chip-name">Claude</span><span class="ia-chip-sub">assistant</span></span>
+      <span class="ia-link"><i class="ia-pulse"></i></span>
+      <span class="ia-chip ia-chip-hub"><span class="ia-chip-name">MCP</span><span class="ia-chip-sub">tools/list</span></span>
+      <span class="ia-link"><i class="ia-pulse d2"></i></span>
+      <span class="ia-chip"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="14" height="14"><span class="ia-chip-sub">Blowhorn</span></span>
+    </span>
+    <span class="ia-mono ia-diagram-note">post · amplify · schedule · approval rules on</span>
+  </span></span>
+
+                      <span class="mm-card-title">MCP server</span>
+                      <span class="mm-card-desc">Plug Blowhorn into Claude and other AI assistants</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card mm-card-plan card-stamp" href="/pricing/">
+                      <span class="mm-card-plan-mark" aria-hidden="true">1</span>
+                      <span class="mm-card-title">One subscription</span>
+                      <span class="mm-card-desc">Every way in, one subscription</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                  </ul>
+                  <p class="mm-cards-foot">
+                    <a href="/#platforms">Platforms</a>
+                    <a href="/integrations/actions/">Action matrix</a>
+                    <a href="/#how">How you run it</a>
+                    <a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a>
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-solutions">Solutions<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-wide" id="mm-solutions">
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/for/">By role</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/for/devrel/"><span class="mm-link-title">DevRel</span></a></li><li><a class="mm-link" href="/for/marketing/"><span class="mm-link-title">Marketing managers</span></a></li><li><a class="mm-link" href="/for/founders/"><span class="mm-link-title">Founders</span></a></li><li><a class="mm-link" href="/for/open-source/"><span class="mm-link-title">Open source maintainers</span></a></li><li><a class="mm-link" href="/for/community/"><span class="mm-link-title">Community managers</span></a></li><li><a class="mm-link" href="/for/agencies/"><span class="mm-link-title">Agencies and consultants</span></a></li><li><a class="mm-link" href="/for/social-media/"><span class="mm-link-title">Social media managers</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/use-cases/">By use case</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/use-cases/launch-day/"><span class="mm-link-title">Launch day</span></a></li><li><a class="mm-link" href="/use-cases/open-source-release/"><span class="mm-link-title">Open source release</span></a></li><li><a class="mm-link" href="/use-cases/conference/"><span class="mm-link-title">Conference</span></a></li><li><a class="mm-link" href="/use-cases/linkedin-outreach/"><span class="mm-link-title">Careful LinkedIn outreach</span></a></li><li><a class="mm-link" href="/use-cases/team-amplification/"><span class="mm-link-title">Team amplification</span></a></li><li><a class="mm-link" href="/use-cases/agent-publishing/"><span class="mm-link-title">Agent publishing</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/solutions/">By category</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/solutions/developer-distribution/"><span class="mm-link-title">Developer distribution</span></a></li><li><a class="mm-link" href="/solutions/employee-advocacy/"><span class="mm-link-title">Employee advocacy</span></a></li><li><a class="mm-link" href="/solutions/distributed-teams/"><span class="mm-link-title">Distributed teams</span></a></li><li><a class="mm-link" href="/solutions/social-scheduling/"><span class="mm-link-title">Social scheduling</span></a></li><li><a class="mm-link" href="/solutions/linkedin-automation/"><span class="mm-link-title">LinkedIn automation</span></a></li><li><a class="mm-link" href="/solutions/multi-profile/"><span class="mm-link-title">Multi-profile</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/ai/">AI native</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/ai/"><span class="mm-link-title">AI native</span><span class="mm-link-desc">Built so agents can run it safely</span></a></li><li><a class="mm-link" href="/ai/blowhorn-axi/"><span class="mm-link-title">blowhorn-axi</span><span class="mm-link-desc">The command line made for agents</span></a></li><li><a class="mm-link" href="/ai/mcp/"><span class="mm-link-title">MCP server</span><span class="mm-link-desc">Plug Blowhorn into any MCP client</span></a></li><li><a class="mm-link" href="/agents/"><span class="mm-link-title">Agentic AI marketing</span><span class="mm-link-desc">Let your AI agent run the launch</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/agents/">Works with</a></p>
+                  <ul class="mm-links mm-compact"><li><a class="mm-link" href="/agents/claude-code/"><span class="mm-link-title">Claude Code</span></a></li><li><a class="mm-link" href="/agents/opencode/"><span class="mm-link-title">OpenCode</span></a></li><li><a class="mm-link" href="/agents/pi/"><span class="mm-link-title">Pi</span></a></li><li><a class="mm-link" href="/agents/codex/"><span class="mm-link-title">Codex</span></a></li><li><a class="mm-link" href="/agents/grok/"><span class="mm-link-title">Grok</span></a></li><li><a class="mm-link" href="/agents/deepseek/"><span class="mm-link-title">DeepSeek</span></a></li><li><a class="mm-link" href="/agents/cli/"><span class="mm-link-title">CLI</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-compare">Compare<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-compare">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/compare/">How Blowhorn compares</a></p>
+                  <p class="mm-intro-text">Side by side with schedulers, LinkedIn tools, advocacy suites and AI agents. Where they win too.</p>
+                  <p class="mm-intro-more"><a href="/versus/">All comparisons</a></p>
+                </div>
+                <ul class="mm-links mm-cols-3 mm-compact"><li><a class="mm-link" href="/compare/buffer/"><span class="mm-link-title">Buffer</span></a></li><li><a class="mm-link" href="/compare/hootsuite/"><span class="mm-link-title">Hootsuite</span></a></li><li><a class="mm-link" href="/compare/socialbee/"><span class="mm-link-title">SocialBee</span></a></li><li><a class="mm-link" href="/compare/postiz/"><span class="mm-link-title">Postiz</span></a></li><li><a class="mm-link" href="/compare/taplio/"><span class="mm-link-title">Taplio</span></a></li><li><a class="mm-link" href="/compare/expandi/"><span class="mm-link-title">Expandi</span></a></li><li><a class="mm-link" href="/compare/phantombuster/"><span class="mm-link-title">PhantomBuster</span></a></li><li><a class="mm-link" href="/compare/mokumokuren/"><span class="mm-link-title">mokumokuren</span></a></li><li><a class="mm-link" href="/compare/native-scheduling/"><span class="mm-link-title">Native scheduling</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-resources">Resources<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-resources">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/resources/">Resources</a></p>
+                  <p class="mm-intro-text">Guides, answers and the story behind the horn.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/docs/"><span class="mm-link-title">Docs</span><span class="mm-link-desc">Set up, how-to guides and reference</span></a></li><li><a class="mm-link" href="/resources/videos/"><span class="mm-link-title">Videos</span><span class="mm-link-desc">Short films and walkthroughs</span></a></li><li><a class="mm-link" href="/resources/articles/"><span class="mm-link-title">Articles</span><span class="mm-link-desc">Product intelligence and tips</span></a></li><li><a class="mm-link" href="/field-manual/"><span class="mm-link-title">Field Manual</span><span class="mm-link-desc">What each feed rewards and punishes</span></a></li><li><a class="mm-link" href="/docs/reference/support/"><span class="mm-link-title">Get help</span><span class="mm-link-desc">Support and troubleshooting</span></a></li><li><a class="mm-link" href="/major/"><span class="mm-link-title">Meet Major</span><span class="mm-link-desc">Our mascot and his troops</span></a></li><li><a class="mm-link" href="/brand/"><span class="mm-link-title">Brand</span><span class="mm-link-desc">Logo, colors and the brand kit</span></a></li><li><a class="mm-link" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=nav"><span class="mm-link-title">Am I a Bot?</span><span class="mm-link-desc">Free check: what sites can see about your browser</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-trust">Trust<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-trust">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Trust</p>
+                  <p class="mm-intro-text">Every action runs on your own computer. Here is how we handle the rest.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/legal/"><span class="mm-link-title">Trust Center</span><span class="mm-link-desc">Your data, sessions and accounts</span></a></li><li><a class="mm-link" href="/#trust"><span class="mm-link-title">Yours to keep</span><span class="mm-link-desc">Why your accounts stay yours</span></a></li><li><a class="mm-link" href="/legal/privacy/"><span class="mm-link-title">Privacy</span><span class="mm-link-desc">What we collect and why</span></a></li><li><a class="mm-link" href="/legal/terms/"><span class="mm-link-title">Terms</span><span class="mm-link-desc">The rules for using Blowhorn</span></a></li><li><a class="mm-link" href="mailto:security@blowhorn.ai"><span class="mm-link-title">Security</span><span class="mm-link-desc">Report a security issue</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item"><a class="mm-top" href="/pricing/">Pricing</a></li>
+            <li class="mm-item mm-item-download"><a class="button button-primary mm-download" href="/download/">Download</a></li>
+          </ul>
+        </nav>
+        <a class="button button-primary site-cta" href="/download/">Download</a>
+      </div>
+    </header>
+    <script src="/js/nav.min.a132d70d42c7069eaa5a663137d6e20b5f76669ec259f035688202fc35474362.js" defer></script>
+
+    <div class="wrap docs-wrap">
+      <aside class="docs-sidebar" aria-label="Docs sections">
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  <form class="td-sidebar__search d-flex align-items-center">
+    <div class="td-search td-search--offline">
+      <div class="td-search__icon"></div>
+      <input type="search" name="q" class="td-search__input form-control" placeholder="Search this site…" aria-label="Search this site…" autocomplete="off" data-offline-search-index-json-src="/offline-search-index.b06d3f88e2b9c70e18e61307bd39ad76.json" data-offline-search-base-href="/" data-offline-search-max-results="10">
+      <button type="submit" class="visually-hidden">Search this site…</button>
+    </div>
+    <button class="btn btn-link td-sidebar__toggle" type="button" data-bs-toggle="collapse" data-bs-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  <nav class="td-sidebar-nav collapse" id="td-section-nav"
+      aria-label="Docs">
+    <ul class="td-sidebar-nav__section pe-md-3 ul-0">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docs-li">
+    <a href="/docs/" title="Blowhorn docs" class="align-left ps-0 td-sidebar-link td-sidebar-link__section tree-root" id="m-docs"><span class="">Docs</span></a>
+    <ul class="ul-1" id="m-docs-ul">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docstutorials-li">
+    <div class="td-sidebar-row"><a href="/docs/tutorials/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docstutorials"><span class="">Get started</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docstutorials-ul"><span class="visually-hidden">Get started</span></button></div>
+    <ul class="ul-2 foldable" id="m-docstutorials-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docstutorialsfirst-mcp-connection-li">
+    <a href="/docs/tutorials/first-mcp-connection/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docstutorialsfirst-mcp-connection"><span class="">Connect an assistant and send your first post</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-to-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-to"><span class="">How-to guides</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-to-ul"><span class="visually-hidden">How-to guides</span></button></div>
+    <ul class="ul-2 foldable" id="m-docshow-to-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-toset-up-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/set-up/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-toset-up"><span class="">Set up</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-toset-up-ul"><span class="visually-hidden">Set up</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-toset-up-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upinstall-the-app-li">
+    <a href="/docs/how-to/set-up/install-the-app/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upinstall-the-app"><span class="">Install the app</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upfirst-muster-setup-li">
+    <a href="/docs/how-to/set-up/first-muster-setup/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upfirst-muster-setup"><span class="">Set up Blowhorn at first muster</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upcreate-an-account-li">
+    <a href="/docs/how-to/set-up/create-an-account/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upcreate-an-account"><span class="">Create a Blowhorn account</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upfinish-setup-li">
+    <a href="/docs/how-to/set-up/finish-setup/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upfinish-setup"><span class="">Finish setup on this computer</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upcheck-onboarding-li">
+    <a href="/docs/how-to/set-up/check-onboarding/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upcheck-onboarding"><span class="">Check that onboarding still finishes</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upinstall-the-chrome-extension-li">
+    <a href="/docs/how-to/set-up/install-the-chrome-extension/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upinstall-the-chrome-extension"><span class="">Install the Chrome extension</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upmap-chrome-profiles-li">
+    <a href="/docs/how-to/set-up/map-chrome-profiles/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upmap-chrome-profiles"><span class="">Map Blowhorn profiles to Chrome profiles</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upplatform-accounts-li">
+    <a href="/docs/how-to/set-up/platform-accounts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upplatform-accounts"><span class="">Sign a profile in to each platform</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upconnect-mcp-client-li">
+    <a href="/docs/how-to/set-up/connect-mcp-client/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upconnect-mcp-client"><span class="">Connect an AI assistant over MCP</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-topublish-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/publish/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-topublish"><span class="">Publish</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-topublish-ul"><span class="visually-hidden">Publish</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-topublish-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-content-li">
+    <a href="/docs/how-to/publish/post-content/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-content"><span class="">Post content</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishmanage-the-content-worksheet-li">
+    <a href="/docs/how-to/publish/manage-the-content-worksheet/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishmanage-the-content-worksheet"><span class="">Manage the content queue</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishamplify-a-post-li">
+    <a href="/docs/how-to/publish/amplify-a-post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishamplify-a-post"><span class="">Amplify an existing post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishamplify-on-github-li">
+    <a href="/docs/how-to/publish/amplify-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishamplify-on-github"><span class="">Amplify an issue or pull request on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-to-reddit-and-bluesky-li">
+    <a href="/docs/how-to/publish/post-to-reddit-and-bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-to-reddit-and-bluesky"><span class="">Post to Reddit and Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-to-hacker-news-li">
+    <a href="/docs/how-to/publish/post-to-hacker-news/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-to-hacker-news"><span class="">Post to Hacker News</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishreply-to-a-post-li">
+    <a href="/docs/how-to/publish/reply-to-a-post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishreply-to-a-post"><span class="">Reply to a post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishsend-a-slack-message-li">
+    <a href="/docs/how-to/publish/send-a-slack-message/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishsend-a-slack-message"><span class="">Send a Slack message</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-togrow-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/grow/" title="Grow your audience" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-togrow"><span class="">Grow</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-togrow-ul"><span class="visually-hidden">Grow</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-togrow-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfollow-on-github-li">
+    <a href="/docs/how-to/grow/follow-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfollow-on-github"><span class="">Follow accounts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowstar-on-github-li">
+    <a href="/docs/how-to/grow/star-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowstar-on-github"><span class="">Star repositories on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfind-on-bluesky-li">
+    <a href="/docs/how-to/grow/find-on-bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfind-on-bluesky"><span class="">Find conversations on Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowbuild-a-github-audience-li">
+    <a href="/docs/how-to/grow/build-a-github-audience/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowbuild-a-github-audience"><span class="">Build a GitHub audience</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfind-on-github-li">
+    <a href="/docs/how-to/grow/find-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfind-on-github"><span class="">Find issues and pull requests on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowaccept-invitations-li">
+    <a href="/docs/how-to/grow/accept-invitations/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowaccept-invitations"><span class="">Accept incoming invitations</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowsquatter-sweep-li">
+    <a href="/docs/how-to/grow/squatter-sweep/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowsquatter-sweep"><span class="">Sweep stalled GitHub assignments</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowwithdraw-invitations-li">
+    <a href="/docs/how-to/grow/withdraw-invitations/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowwithdraw-invitations"><span class="">Withdraw stale invitations</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-toschedule-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/schedule/" title="Schedule and automate" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-toschedule"><span class="">Schedule</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-toschedule-ul"><span class="visually-hidden">Schedule</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-toschedule-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toscheduleschedule-a-job-li">
+    <a href="/docs/how-to/schedule/schedule-a-job/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toscheduleschedule-a-job"><span class="">Schedule a job</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulepause-li">
+    <a href="/docs/how-to/schedule/pause/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulepause"><span class="">Pause and resume posting</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulewhy-not-run-li">
+    <a href="/docs/how-to/schedule/why-not-run/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulewhy-not-run"><span class="">Find out why a job did not run</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulebackground-service-li">
+    <a href="/docs/how-to/schedule/background-service/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulebackground-service"><span class="">Keep posting when the app is closed</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tomeasure-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/measure/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tomeasure"><span class="">Measure</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tomeasure-ul"><span class="visually-hidden">Measure</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tomeasure-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomeasureanalytics-li">
+    <a href="/docs/how-to/measure/analytics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomeasureanalytics"><span class="">Collect and read your analytics</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomeasurereview-runs-li">
+    <a href="/docs/how-to/measure/review-runs/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomeasurereview-runs"><span class="">Review what ran</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tosettings-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/settings/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tosettings"><span class="">Settings</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tosettings-ul"><span class="visually-hidden">Settings</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tosettings-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingschoose-your-rules-of-engagement-li">
+    <a href="/docs/how-to/settings/choose-your-rules-of-engagement/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingschoose-your-rules-of-engagement"><span class="">Choose your rules of engagement</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsdefaults-li">
+    <a href="/docs/how-to/settings/defaults/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsdefaults"><span class="">Change your defaults</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsappearance-li">
+    <a href="/docs/how-to/settings/appearance/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsappearance"><span class="">Change how the app looks</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingslaunch-mode-li">
+    <a href="/docs/how-to/settings/launch-mode/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingslaunch-mode"><span class="">Choose how Blowhorn reaches Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingswhere-blowhorn-works-li">
+    <a href="/docs/how-to/settings/where-blowhorn-works/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingswhere-blowhorn-works"><span class="">Choose where Blowhorn works in Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsshare-usage-data-li">
+    <a href="/docs/how-to/settings/share-usage-data/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsshare-usage-data"><span class="">Turn anonymous usage data on or off</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsshare-activity-li">
+    <a href="/docs/how-to/settings/share-activity/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsshare-activity"><span class="">Share your activity publicly or keep it in your org</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-totroubleshoot-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/troubleshoot/" title="Troubleshooting" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-totroubleshoot"><span class="">Troubleshoot</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-totroubleshoot-ul"><span class="visually-hidden">Troubleshoot</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-totroubleshoot-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshoottroubleshooting-li">
+    <a href="/docs/how-to/troubleshoot/troubleshooting/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshoottroubleshooting"><span class="">Troubleshooting</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootclicked-not-confirmed-li">
+    <a href="/docs/how-to/troubleshoot/clicked-not-confirmed/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootclicked-not-confirmed"><span class="">Settle something Blowhorn could not confirm</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootsign-in-problems-li">
+    <a href="/docs/how-to/troubleshoot/sign-in-problems/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootsign-in-problems"><span class="">Fix a sign-in that stopped working</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootx-posting-li">
+    <a href="/docs/how-to/troubleshoot/x-posting/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootx-posting"><span class="">Post to X when it will not confirm</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootextension-connection-li">
+    <a href="/docs/how-to/troubleshoot/extension-connection/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootextension-connection"><span class="">Fix the Chrome extension connection</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootstore-unavailable-li">
+    <a href="/docs/how-to/troubleshoot/store-unavailable/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootstore-unavailable"><span class="">Fix cannot reach your account</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootengine-wont-start-li">
+    <a href="/docs/how-to/troubleshoot/engine-wont-start/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootengine-wont-start"><span class="">Fix Blowhorn when its engine won&#39;t start</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootdiagnostics-li">
+    <a href="/docs/how-to/troubleshoot/diagnostics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootdiagnostics"><span class="">Run a diagnostics check with Tells</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootbounces-in-dock-li">
+    <a href="/docs/how-to/troubleshoot/bounces-in-dock/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootbounces-in-dock"><span class="">The Blowhorn desktop app bounces in my dock and won&#39;t start. Why?</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootdamaged-cant-be-opened-li">
+    <a href="/docs/how-to/troubleshoot/damaged-cant-be-opened/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootdamaged-cant-be-opened"><span class="">Fix &#34;Blowhorn is damaged and can&#39;t be opened&#34;</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tomanage-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/manage/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tomanage"><span class="">Manage</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tomanage-ul"><span class="visually-hidden">Manage</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tomanage-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanagewatch-and-take-over-a-run-li">
+    <a href="/docs/how-to/manage/watch-and-take-over-a-run/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanagewatch-and-take-over-a-run"><span class="">Watch, pause or take over a run in Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanageupdate-blowhorn-li">
+    <a href="/docs/how-to/manage/update-blowhorn/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanageupdate-blowhorn"><span class="">Update Blowhorn</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanageuninstall-li">
+    <a href="/docs/how-to/manage/uninstall/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanageuninstall"><span class="">Uninstall Blowhorn</span></a>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docsreference-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreference"><span class="">Reference</span></a><button type="button" class="td-sidebar-fold" aria-expanded="true" aria-controls="m-docsreference-ul"><span class="visually-hidden">Reference</span></button></div>
+    <ul class="ul-2 foldable" id="m-docsreference-ul">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencerequirements-li">
+    <a href="/docs/reference/requirements/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencerequirements"><span class="">System requirements</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceuse-the-desktop-app-li">
+    <a href="/docs/reference/use-the-desktop-app/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceuse-the-desktop-app"><span class="">The Blowhorn app, screen by screen</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsreferenceplatforms-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/platforms/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceplatforms"><span class="">Platforms</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsreferenceplatforms-ul"><span class="visually-hidden">Platforms</span></button></div>
+    <ul class="ul-3 foldable" id="m-docsreferenceplatforms-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsactions-li">
+    <a href="/docs/reference/platforms/actions/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceplatformsactions"><span class="">All actions</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformslinkedin-li">
+    <a href="/docs/reference/platforms/linkedin/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformslinkedin"><span class="">LinkedIn</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsx-li">
+    <a href="/docs/reference/platforms/x/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsx"><span class="">X (Twitter)</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsreddit-li">
+    <a href="/docs/reference/platforms/reddit/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsreddit"><span class="">Reddit</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformshacker-news-li">
+    <a href="/docs/reference/platforms/hacker-news/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformshacker-news"><span class="">Hacker News</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsslack-li">
+    <a href="/docs/reference/platforms/slack/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsslack"><span class="">Slack</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsbluesky-li">
+    <a href="/docs/reference/platforms/bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsbluesky"><span class="">Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsgithub-li">
+    <a href="/docs/reference/platforms/github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsgithub"><span class="">GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsyoutube-li">
+    <a href="/docs/reference/platforms/youtube/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsyoutube"><span class="">YouTube</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsinstagram-li">
+    <a href="/docs/reference/platforms/instagram/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsinstagram"><span class="">Instagram</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformstiktok-li">
+    <a href="/docs/reference/platforms/tiktok/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformstiktok"><span class="">TikTok</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsfacebook-li">
+    <a href="/docs/reference/platforms/facebook/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsfacebook"><span class="">Facebook</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecontent-queue-li">
+    <a href="/docs/reference/content-queue/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecontent-queue"><span class="">Content queue columns and activity states</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencejobs-li">
+    <a href="/docs/reference/jobs/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencejobs"><span class="">Job options and schedules</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsreferencecli-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/cli/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferencecli"><span class="">CLI reference</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsreferencecli-ul"><span class="visually-hidden">CLI reference</span></button></div>
+    <ul class="ul-3 foldable" id="m-docsreferencecli-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliblowhorn-axi-li">
+    <a href="/docs/reference/cli/blowhorn-axi/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliblowhorn-axi"><span class="">blowhorn-axi</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclishared-flags-li">
+    <a href="/docs/reference/cli/shared-flags/" title="blowhorn shared flags" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclishared-flags"><span class="">Shared flags</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliaccept-li">
+    <a href="/docs/reference/cli/accept/" title="blowhorn accept" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliaccept"><span class="">accept</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclianalytics-li">
+    <a href="/docs/reference/cli/analytics/" title="blowhorn analytics" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclianalytics"><span class="">analytics</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliauth-li">
+    <a href="/docs/reference/cli/auth/" title="blowhorn auth" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliauth"><span class="">auth</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclichrome-li">
+    <a href="/docs/reference/cli/chrome/" title="blowhorn chrome" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclichrome"><span class="">chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliclassify-url-li">
+    <a href="/docs/reference/cli/classify-url/" title="blowhorn classify-url" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliclassify-url"><span class="">classify-url</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclicomment-li">
+    <a href="/docs/reference/cli/comment/" title="blowhorn comment" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclicomment"><span class="">comment</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliconfig-li">
+    <a href="/docs/reference/cli/config/" title="blowhorn config" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliconfig"><span class="">config</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclicontent-li">
+    <a href="/docs/reference/cli/content/" title="blowhorn content" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclicontent"><span class="">content</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclidesktop-li">
+    <a href="/docs/reference/cli/desktop/" title="blowhorn desktop" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclidesktop"><span class="">desktop</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclifind-li">
+    <a href="/docs/reference/cli/find/" title="blowhorn find" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclifind"><span class="">find</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclifollow-li">
+    <a href="/docs/reference/cli/follow/" title="blowhorn follow" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclifollow"><span class="">follow</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecligithub-li">
+    <a href="/docs/reference/cli/github/" title="blowhorn github" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecligithub"><span class="">github</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliorg-li">
+    <a href="/docs/reference/cli/org/" title="blowhorn org" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliorg"><span class="">org</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliplatforms-li">
+    <a href="/docs/reference/cli/platforms/" title="blowhorn platforms" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliplatforms"><span class="">platforms</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclipost-li">
+    <a href="/docs/reference/cli/post/" title="blowhorn post" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclipost"><span class="">post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliprofile-li">
+    <a href="/docs/reference/cli/profile/" title="blowhorn profile" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliprofile"><span class="">profile</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclireport-li">
+    <a href="/docs/reference/cli/report/" title="blowhorn report" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclireport"><span class="">report</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclirisk-li">
+    <a href="/docs/reference/cli/risk/" title="blowhorn risk" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclirisk"><span class="">risk</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclischedule-li">
+    <a href="/docs/reference/cli/schedule/" title="blowhorn schedule" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclischedule"><span class="">schedule</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliservice-li">
+    <a href="/docs/reference/cli/service/" title="blowhorn service" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliservice"><span class="">service</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclisetup-li">
+    <a href="/docs/reference/cli/setup/" title="blowhorn setup" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclisetup"><span class="">setup</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclislack-li">
+    <a href="/docs/reference/cli/slack/" title="blowhorn slack" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclislack"><span class="">slack</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclisource-li">
+    <a href="/docs/reference/cli/source/" title="blowhorn source" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclisource"><span class="">source</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistar-li">
+    <a href="/docs/reference/cli/star/" title="blowhorn star" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistar"><span class="">star</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistop-li">
+    <a href="/docs/reference/cli/stop/" title="blowhorn stop" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistop"><span class="">stop</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistore-li">
+    <a href="/docs/reference/cli/store/" title="blowhorn store" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistore"><span class="">store</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliunfollow-li">
+    <a href="/docs/reference/cli/unfollow/" title="blowhorn unfollow" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliunfollow"><span class="">unfollow</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliuninstall-li">
+    <a href="/docs/reference/cli/uninstall/" title="blowhorn uninstall" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliuninstall"><span class="">uninstall</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliupgrade-li">
+    <a href="/docs/reference/cli/upgrade/" title="blowhorn upgrade" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliupgrade"><span class="">upgrade</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliwithdraw-li">
+    <a href="/docs/reference/cli/withdraw/" title="blowhorn withdraw" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliwithdraw"><span class="">withdraw</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencepost-li">
+    <a href="/docs/reference/post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencepost"><span class="">Posting: pending activities and platform behavior</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceprofiles-li">
+    <a href="/docs/reference/profiles/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceprofiles"><span class="">Profile reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsreferenceconfiguration-li">
+    <a href="/docs/reference/configuration/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docsreferenceconfiguration"><span class="td-sidebar-nav-active-item">Configuration reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencemessages-li">
+    <a href="/docs/reference/messages/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencemessages"><span class="">Messages and exit codes</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceextension-permissions-li">
+    <a href="/docs/reference/extension-permissions/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceextension-permissions"><span class="">Chrome extension permissions</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplans-li">
+    <a href="/docs/reference/plans/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplans"><span class="">Plans and limits</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencesupport-li">
+    <a href="/docs/reference/support/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencesupport"><span class="">Get help</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencechrome-li">
+    <a href="/docs/reference/chrome/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencechrome"><span class="">Chrome reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencemcp-server-li">
+    <a href="/docs/reference/mcp-server/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencemcp-server"><span class="">MCP server</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencepython-client-li">
+    <a href="/docs/reference/python-client/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencepython-client"><span class="">Python client library</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceapi-li">
+    <a href="/docs/reference/api/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceapi"><span class="">API reference</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsexplanation-li">
+    <div class="td-sidebar-row"><a href="/docs/explanation/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsexplanation"><span class="">Explanation</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsexplanation-ul"><span class="visually-hidden">Explanation</span></button></div>
+    <ul class="ul-2 foldable" id="m-docsexplanation-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationhow-it-works-li">
+    <a href="/docs/explanation/how-it-works/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationhow-it-works"><span class="">How Blowhorn works</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyour-data-li">
+    <a href="/docs/explanation/your-data/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyour-data"><span class="">Where your data lives</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationeligibility-li">
+    <a href="/docs/explanation/eligibility/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationeligibility"><span class="">Who can post as whom</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyour-own-chrome-li">
+    <a href="/docs/explanation/your-own-chrome/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyour-own-chrome"><span class="">Why Blowhorn uses your own browser</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationreliability-and-anti-bot-design-li">
+    <a href="/docs/explanation/reliability-and-anti-bot-design/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationreliability-and-anti-bot-design"><span class="">How Blowhorn paces itself</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationnever-twice-li">
+    <a href="/docs/explanation/never-twice/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationnever-twice"><span class="">How Blowhorn avoids repeat posts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationscheduling-li">
+    <a href="/docs/explanation/scheduling/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationscheduling"><span class="">How scheduling works</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationdistribution-li">
+    <a href="/docs/explanation/distribution/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationdistribution"><span class="">What runs when the app is closed</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationinvitation-safety-li">
+    <a href="/docs/explanation/invitation-safety/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationinvitation-safety"><span class="">Why flagged invitations are skipped</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationanalytics-li">
+    <a href="/docs/explanation/analytics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationanalytics"><span class="">What the analytics numbers mean</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationplans-li">
+    <a href="/docs/explanation/plans/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationplans"><span class="">Plans, offline use and lapses</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyoure-in-control-li">
+    <a href="/docs/explanation/youre-in-control/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyoure-in-control"><span class="">You&#39;re in control</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationmcp-and-safety-li">
+    <a href="/docs/explanation/mcp-and-safety/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationmcp-and-safety"><span class="">How the MCP server keeps you in control</span></a>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </nav>
+</div>
+      </aside>
+      <main id="main" class="docs-main">
+        <nav aria-label="breadcrumb" class="td-breadcrumbs">
+  <ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/docs/">Docs</a></li>
+  <li class="breadcrumb-item">
+    <a href="/docs/reference/">Reference</a></li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Configuration reference</li>
+  </ol>
+</nav><div class="prose docs-page">
+  <h1 class="h1">Configuration reference</h1>
+  <p class="body-lg docs-lead">Precedence, every <code>.blowhorn.yaml</code> option, environment variables, and output logging.</p>
+  <p>How Blowhorn resolves what a run uses, and where its output goes.
+<code>engine/blowhorn/config_schema.py</code> is the one list of options; <code>blowhorn config show</code> prints each with its stored, environment, effective, and
+source values. <code>blowhorn config set</code> edits the file without rewriting
+it: comments, order, and quoting survive.</p>
+<p>Precedence, highest first: the CLI flag, the environment variable, the
+<code>.blowhorn.yaml</code> default, then the built-in. The file lives beside the
+current directory by default (<code>./.blowhorn.yaml</code>); <code>--config</code> points
+at another one.</p>
+<p>Only the Blowhorn names are read: <code>./.blowhorn.yaml</code> and the <code>BLOWHORN_*</code>
+environment variables.</p>
+<h2 id="every-option-blowhornyaml-supports">Every option <code>.blowhorn.yaml</code> supports</h2>
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Default key</th>
+      <th scope="col">Environment</th>
+      <th scope="col">Built-in</th>
+      <th scope="col">Means</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>defaults.profile</code></td>
+      <td><code>BLOWHORN_PROFILE</code></td>
+      <td><code>all</code></td>
+      <td>The profile a run uses when <code>--profile</code> is not given</td>
+    </tr>
+    <tr>
+      <td><code>defaults.platform</code></td>
+      <td><code>BLOWHORN_PLATFORM</code></td>
+      <td><code>all</code></td>
+      <td>The platform a run targets when <code>--platform</code> is not given</td>
+    </tr>
+    <tr>
+      <td><code>defaults.exclude</code></td>
+      <td><code>BLOWHORN_EXCLUDE</code></td>
+      <td>none</td>
+      <td>Profiles left out of <code>--profile all</code></td>
+    </tr>
+    <tr>
+      <td><code>defaults.headless</code></td>
+      <td><code>BLOWHORN_HEADLESS</code></td>
+      <td>off</td>
+      <td>Unattended background window</td>
+    </tr>
+    <tr>
+      <td><code>defaults.headed</code></td>
+      <td><code>BLOWHORN_HEADED</code></td>
+      <td>off</td>
+      <td>Visible window in front</td>
+    </tr>
+    <tr>
+      <td><code>defaults.dry_run</code></td>
+      <td><code>BLOWHORN_DRY_RUN</code></td>
+      <td>off</td>
+      <td>Simulate every run</td>
+    </tr>
+    <tr>
+      <td><code>defaults.pace</code></td>
+      <td><code>BLOWHORN_PACE</code></td>
+      <td><code>normal</code></td>
+      <td><code>fast</code>, <code>normal</code>, <code>slow</code>, or a number; commands that never pause accept and ignore it</td>
+    </tr>
+    <tr>
+      <td><code>defaults.pace_by_platform</code></td>
+      <td><code>BLOWHORN_PACE_BY_PLATFORM</code></td>
+      <td>none</td>
+      <td>A pace per platform, in <code>defaults.pace</code>'s values: <code>x: slow, linkedin: 1.5</code>. A platform with no entry runs at <code>defaults.pace</code>; a <code>--pace</code> flag or <code>BLOWHORN_PACE</code> covers every platform. <code>config show --json</code> reports each platform's effective pace and which setting supplied it</td>
+    </tr>
+    <tr>
+      <td><code>defaults.no_mouse_move</code></td>
+      <td><code>BLOWHORN_NO_MOUSE_MOVE</code></td>
+      <td>off</td>
+      <td>Skip the pointer simulation before clicks</td>
+    </tr>
+    <tr>
+      <td><code>defaults.concurrency.per_platform</code></td>
+      <td><code>BLOWHORN_CONCURRENCY_PER_PLATFORM</code></td>
+      <td><code>platform</code></td>
+      <td><code>platform</code>: one automation per platform at a time across all profiles on this computer. <code>profile</code>: one automation per profile and platform at a time. When unset, your Risk Profile's value applies (cautious and standard: <code>platform</code>; brisk: <code>profile</code>)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.concurrency.max_runs</code></td>
+      <td><code>BLOWHORN_CONCURRENCY_MAX_RUNS</code></td>
+      <td>none</td>
+      <td>At most this many automations running at once on this computer, however they were started; a run over the limit is refused and its activities stay queued. When unset, your Risk Profile's value applies (cautious: at most 1; standard and brisk: no limit)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.risk_profile</code></td>
+      <td><code>BLOWHORN_RISK_PROFILE</code></td>
+      <td><code>standard</code></td>
+      <td><code>cautious</code>, <code>standard</code> or <code>brisk</code>: pace, pointer movement, caps, spacing, quiet hours, outreach and how much runs at once in one choice (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.risk_profile_by_platform</code></td>
+      <td>none</td>
+      <td>none</td>
+      <td>A preset per platform, for example <code>x: cautious</code></td>
+    </tr>
+    <tr>
+      <td><code>defaults.risk_profiles</code></td>
+      <td>none</td>
+      <td>none</td>
+      <td>A preset per profile: a name, or a map with <code>default</code> and platform keys</td>
+    </tr>
+    <tr>
+      <td><code>defaults.approval.mode</code></td>
+      <td><code>BLOWHORN_APPROVAL_MODE</code></td>
+      <td><code>off</code></td>
+      <td><code>off</code>, <code>agent</code> or <code>all</code>: who must approve before work publishes (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.caps</code></td>
+      <td>none</td>
+      <td>none</td>
+      <td>Your own daily caps per platform and action, under the built-in ceilings (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.quiet_hours</code></td>
+      <td><code>BLOWHORN_QUIET_HOURS</code></td>
+      <td>none</td>
+      <td>Hours when the scheduler claims nothing, written <code>HH:MM-HH:MM</code> like <code>22:00-07:00</code> (the window may wrap midnight). A due activity inside it is held, not failed, and runs when the window ends. A profile's own Quiet Hours setting wins for its activities</td>
+    </tr>
+    <tr>
+      <td><code>defaults.quiet_hours_tz</code></td>
+      <td><code>BLOWHORN_QUIET_HOURS_TZ</code></td>
+      <td>this computer's zone</td>
+      <td>The IANA time zone <code>defaults.quiet_hours</code> is read in, like <code>America/New_York</code>. A profile's own Quiet Hours Time Zone setting wins for its activities</td>
+    </tr>
+    <tr>
+      <td><code>defaults.typing_delay_min_ms</code>, <code>defaults.typing_delay_max_ms</code>, <code>defaults.typing_jitter_ms</code>, <code>defaults.typing_target_duration_s</code></td>
+      <td><code>BLOWHORN_TYPING_DELAY_MIN_MS</code>, <code>BLOWHORN_TYPING_DELAY_MAX_MS</code>, <code>BLOWHORN_TYPING_JITTER_MS</code>, <code>BLOWHORN_TYPING_TARGET_DURATION_S</code></td>
+      <td>35, 165, 9, 20</td>
+      <td>How fast keys are typed: the pause band between keys in milliseconds, the random wobble on each pause, and how long a whole entry aims to take in seconds. Shapes both drivers (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.typing_micro_pause_chance_pct</code>, <code>defaults.typing_micro_pause_min_ms</code>, <code>defaults.typing_micro_pause_max_ms</code>, <code>defaults.typing_long_pause_min_chars</code>, <code>defaults.typing_long_pause_max_chars</code>, <code>defaults.typing_long_pause_min_ms</code>, <code>defaults.typing_long_pause_max_ms</code></td>
+      <td><code>BLOWHORN_TYPING_MICRO_PAUSE_CHANCE_PCT</code>, <code>BLOWHORN_TYPING_MICRO_PAUSE_MIN_MS</code>, <code>BLOWHORN_TYPING_MICRO_PAUSE_MAX_MS</code>, <code>BLOWHORN_TYPING_LONG_PAUSE_MIN_CHARS</code>, <code>BLOWHORN_TYPING_LONG_PAUSE_MAX_CHARS</code>, <code>BLOWHORN_TYPING_LONG_PAUSE_MIN_MS</code>, <code>BLOWHORN_TYPING_LONG_PAUSE_MAX_MS</code></td>
+      <td>7, 50, 220, 45, 85, 350, 1250</td>
+      <td>Short hesitations between keys and longer pauses every so many keys. Playwright only: the extension driver sends one key per message and runs no pause plan (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.typing_allow_mistakes</code>, <code>defaults.typing_mistake_rate_pct</code>, <code>defaults.typing_max_mistakes_per_entry</code>, <code>defaults.typing_mistake_min_text_length</code>, <code>defaults.typing_mistake_delay_min_ms</code>, <code>defaults.typing_mistake_delay_max_ms</code>, <code>defaults.typing_mistake_pause_min_ms</code>, <code>defaults.typing_mistake_pause_max_ms</code></td>
+      <td><code>BLOWHORN_TYPING_ALLOW_MISTAKES</code>, <code>BLOWHORN_TYPING_MISTAKE_RATE_PCT</code>, <code>BLOWHORN_TYPING_MAX_MISTAKES_PER_ENTRY</code>, <code>BLOWHORN_TYPING_MISTAKE_MIN_TEXT_LENGTH</code>, <code>BLOWHORN_TYPING_MISTAKE_DELAY_MIN_MS</code>, <code>BLOWHORN_TYPING_MISTAKE_DELAY_MAX_MS</code>, <code>BLOWHORN_TYPING_MISTAKE_PAUSE_MIN_MS</code>, <code>BLOWHORN_TYPING_MISTAKE_PAUSE_MAX_MS</code></td>
+      <td>on, 3, 4, 20, 55, 170, 80, 350</td>
+      <td>Whether a typed entry may include a wrong key that is then corrected, how often, and the pauses around the correction. Playwright only, never on sign-in (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.pointer_click_hold_min_ms</code>, <code>defaults.pointer_click_hold_max_ms</code>, <code>defaults.pointer_key_dwell_min_ms</code>, <code>defaults.pointer_key_dwell_max_ms</code>, <code>defaults.pointer_hover_pause_min_ms</code>, <code>defaults.pointer_hover_pause_max_ms</code></td>
+      <td><code>BLOWHORN_POINTER_CLICK_HOLD_MIN_MS</code>, <code>BLOWHORN_POINTER_CLICK_HOLD_MAX_MS</code>, <code>BLOWHORN_POINTER_KEY_DWELL_MIN_MS</code>, <code>BLOWHORN_POINTER_KEY_DWELL_MAX_MS</code>, <code>BLOWHORN_POINTER_HOVER_PAUSE_MIN_MS</code>, <code>BLOWHORN_POINTER_HOVER_PAUSE_MAX_MS</code></td>
+      <td>40, 140, 25, 90, 50, 250</td>
+      <td>How long a click stays held, how long a key stays pressed, and the pause after the pointer arrives before a click, all in milliseconds (see below)</td>
+    </tr>
+    <tr>
+      <td><code>defaults.logs.directory</code></td>
+      <td><code>BLOWHORN_LOG_DIR</code></td>
+      <td><code>data/logs/</code> in the checkout</td>
+      <td>Where daily logs go</td>
+    </tr>
+    <tr>
+      <td><code>defaults.logs.retention_days</code></td>
+      <td><code>BLOWHORN_LOG_RETENTION_DAYS</code></td>
+      <td>30</td>
+      <td>Days of daily logs kept; 0 keeps all</td>
+    </tr>
+    <tr>
+      <td><code>defaults.diagnostics.enabled</code></td>
+      <td><code>BLOWHORN_DIAGNOSTICS_ENABLED</code></td>
+      <td>on</td>
+      <td>Queue and send anonymous failure reports (see <a href="/docs/explanation/your-data/#failure-reports">Failure reports</a>); off means nothing is queued or sent, and the desktop Settings row is the same choice</td>
+    </tr>
+    <tr>
+      <td><code>defaults.chrome.launch_mode</code></td>
+      <td><code>BLOWHORN_CHROME_LAUNCH</code></td>
+      <td><code>extension</code></td>
+      <td>How a run reaches Google Chrome</td>
+    </tr>
+    <tr>
+      <td><code>defaults.chrome.automation_data_dir</code></td>
+      <td><code>BLOWHORN_CHROME_AUTOMATION_DATA_DIR</code></td>
+      <td>Blowhorn's own directory</td>
+      <td>Where a launched Chrome keeps its session</td>
+    </tr>
+    <tr>
+      <td><code>defaults.chrome.data_dir</code></td>
+      <td><code>BLOWHORN_CHROME_DATA_DIR</code></td>
+      <td>Your real Chrome directory</td>
+      <td>Where the installed Chrome is read from</td>
+    </tr>
+    <tr>
+      <td><code>defaults.slack.auth_mode</code></td>
+      <td><code>BLOWHORN_SLACK_AUTH</code></td>
+      <td>your captured session first</td>
+      <td>Which Slack credential may send: session, user-token, bot-token, or a list tried in order</td>
+    </tr>
+    <tr>
+      <td>(flag only)</td>
+      <td><code>BLOWHORN_TEE_STDOUT</code></td>
+      <td>off</td>
+      <td>Flush the stdout copy per write for a supervising wrapper</td>
+    </tr>
+    <tr>
+      <td><code>defaults.store.organization</code></td>
+      <td><code>BLOWHORN_STORE_ORGANIZATION</code></td>
+      <td>none; Blowhorn uses the organization you signed in to</td>
+      <td>The organization Blowhorn uses when the sign-in did not choose one</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><code>headed</code> and <code>headless</code> are one choice with two spellings: the higher
+layer wins, so a <code>--headless</code> flag beats a <code>headed</code> default from the
+file, and <code>--headed</code> wins a tie. The settings screen reports each on
+its own; a flagless run resolves them together so exactly one
+survives.</p>
+<p>A version-1 file that still says <code>persistent</code> reads as <code>extension</code> on
+every run; only a validated <code>config set</code> of another key moves the file
+to version 2.</p>
+<p>Blowhorn reads and writes everything in your Blowhorn account. A
+<code>defaults.store.backend</code> or <code>defaults.store.config</code> key left in an older
+file, and <code>BLOWHORN_STORE_BACKEND</code> in the environment, are ignored
+(<code>config show --json</code> lists the two keys as unknown), and <code>config set</code>
+refuses a <code>store.&lt;name&gt;</code> key. Data an older version kept in a local store is
+not read and is not brought into your account.</p>
+<h2 id="risk-profile-presets">Risk Profile presets</h2><p>The app calls these the rules of engagement and shows each preset by its display name: <strong>Safety on</strong> is <code>cautious</code>, <strong>Weapons tight</strong> is <code>standard</code> and <strong>Weapons free</strong> is <code>brisk</code>. The stored value, the config file, <code>--risk-profile</code> and every <code>--json</code> payload keep <code>cautious</code>, <code>standard</code> and <code>brisk</code>.</p>
+
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Dial</th>
+      <th scope="col">cautious (Safety on)</th>
+      <th scope="col">standard (Weapons tight)</th>
+      <th scope="col">brisk (Weapons free)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pace (when <code>defaults.pace</code> is unset)</td>
+      <td>slow</td>
+      <td>normal</td>
+      <td>fast</td>
+    </tr>
+    <tr>
+      <td>Pointer movement (when <code>defaults.no_mouse_move</code> is unset)</td>
+      <td>on</td>
+      <td>on</td>
+      <td>on</td>
+    </tr>
+    <tr>
+      <td>Caps (share of each built-in ceiling)</td>
+      <td>25%</td>
+      <td>50%</td>
+      <td>100%</td>
+    </tr>
+    <tr>
+      <td>Spacing between public actions</td>
+      <td>15 min plus up to 15 min</td>
+      <td>none</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>Quiet hours (local)</td>
+      <td>22:00 to 07:00</td>
+      <td>none</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>Outreach (connect, invite, follow)</td>
+      <td>off</td>
+      <td>established platforms only</td>
+      <td>on</td>
+    </tr>
+    <tr>
+      <td>Pause after a CAPTCHA or checkpoint</td>
+      <td>72 h</td>
+      <td>24 h</td>
+      <td>12 h</td>
+    </tr>
+    <tr>
+      <td>Retries of a failed scheduled job</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Warmup (the value <code>risk show</code> reports for the preset; see <a href="#warmup">Warmup</a>)</td>
+      <td>14 days</td>
+      <td>7 days</td>
+      <td>3 days</td>
+    </tr>
+    <tr>
+      <td>Runs sharing a platform (when <code>defaults.concurrency.per_platform</code> is unset)</td>
+      <td>one profile at a time</td>
+      <td>one profile at a time</td>
+      <td>different profiles may share</td>
+    </tr>
+    <tr>
+      <td>Runs at once overall (enforced; see <a href="#concurrency">Concurrency</a>)</td>
+      <td>at most 1</td>
+      <td>no limit</td>
+      <td>no limit</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>No preset can raise a built-in ceiling: the caps are a share of one, never more, and the concurrency values only ever hold runs back at or below the shipped posture (one profile per platform, which <code>standard</code> keeps).</p>
+<p>Any dial you set yourself beats the preset for that dial: your own <code>defaults.pace</code>, <code>defaults.no_mouse_move</code> or <code>defaults.concurrency</code> value is the one that applies, and the rest of the preset still applies around it. A profile with a dial set outside the preset is a <strong>custom</strong> profile. <code>custom</code> is a description, not a fourth preset you can pick: <code>blowhorn risk show</code> names the dials set outside the profile, and <code>blowhorn config show</code> names the preset as a dial's source when the preset is the layer that supplied it.</p>
+<p>The concurrency rows are the values the presets carry, and they are enforced, not just reported: <code>blowhorn risk show</code> reports them, each with the layer that supplied it, and the run gates fall back to the chosen preset when no explicit value sets a key. An explicit environment or file value still beats the preset per key, and a refusal under a preset cap names the preset (for example, &quot;your Cautious profile&quot;). <code>blowhorn config show</code> names <code>risk_profile</code> as the source when the preset is the layer that supplied a key.</p>
+<p>Scheduled jobs on a new profile or a new computer run cautious until the warmup is done, whatever you chose -- the cautious concurrency values included. A run you start yourself is not held by the warmup, only noted; it still follows the caps, quiet hours and outreach setting of the preset you chose. When a run covers several profiles or platforms, a held one is skipped by name and the rest run. To run once anyway, add <code>--ignore-risk</code>, or choose <strong>Do it anyway</strong> next to a held item under Activity › History or in Posture's held back list. Logins are never retried under any preset. Choose a preset in the app on the <strong>Posture</strong> screen - the slider for everyone, and a grid for each platform, each profile, and one profile on one platform (the same mode also shows as a mini-slider in the menu-bar popover, which opens Posture) - or with <code>blowhorn risk set</code>; see <a href="#which-choice-wins">Which choice wins</a>. <code>blowhorn risk show</code> says which preset is in effect and where it comes from, and <code>blowhorn risk grid</code> lists every profile on every platform at once. For choosing between the presets in lived terms, see <a href="/docs/how-to/settings/choose-your-rules-of-engagement/">Choose your rules of engagement</a>.</p>
+<p>One activity can run under its own preset: set <strong>rules of engagement</strong> in the activity editor, or <code>risk_profile=cautious</code> in the activity's params, and that activity runs cautious (pace, caps share, quiet hours, challenge pause) while the same profile × platform runs standard elsewhere. The activity's detail shows the preset and where it came from (<code>Safety on · this activity</code>, or <code>Safety on · inherits: LinkedIn × work profile</code>); a run report names <code>schedule</code> as the source when the activity's own value held it. A run you start by hand can override everything for that one run with <code>--risk-profile cautious</code> (before the command word, between a group word and its subcommand, or after it); an unknown value is refused before anything runs. Activities without the field behave exactly as before, and the field is refused on commands the gate does not act on (analytics, report, withdraw, reconcile) rather than accepted and ignored. The upstream Schedule construct gains a top-level <code>riskProfile</code> field in a proposed meshery/schemas change (open, not yet released); until a release carries it, the value travels in the activity's params.</p>
+<h3 id="which-choice-wins">Which choice wins</h3><p>A Risk Profile can be chosen at several levels. For one profile on one platform, Blowhorn uses the most specific level that has a choice:</p>
+
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Level</th>
+      <th scope="col">Set it with</th>
+      <th scope="col">Kept in</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>One run</td>
+      <td><code>--risk-profile cautious</code> on a command you start</td>
+      <td>that run only</td>
+    </tr>
+    <tr>
+      <td>One activity</td>
+      <td><strong>rules of engagement</strong> in the activity editor, or <code>risk_profile=</code> in its params</td>
+      <td>the activity</td>
+    </tr>
+    <tr>
+      <td>One profile on one platform</td>
+      <td>a cell in the Posture grid, or <code>blowhorn risk set &lt;preset&gt; --profile company --platform linkedin</code></td>
+      <td>the profile's <code>Risk Profile By Platform</code> attribute, then <code>defaults.risk_profiles.&lt;profile&gt;.&lt;platform&gt;</code> on this computer</td>
+    </tr>
+    <tr>
+      <td>Each platform</td>
+      <td>the <strong>Each platform</strong> row in Posture, or <code>blowhorn risk set &lt;preset&gt; --platform linkedin</code></td>
+      <td>your organization, for every computer; on this computer only (<code>defaults.risk_profile_by_platform</code>) when your organization cannot keep it</td>
+    </tr>
+    <tr>
+      <td>Each profile</td>
+      <td>the <strong>Every platform</strong> column in Posture, or <code>blowhorn risk set &lt;preset&gt; --profile company</code></td>
+      <td>the profile's <code>Risk Profile</code> attribute, then <code>defaults.risk_profiles.&lt;profile&gt;</code> on this computer</td>
+    </tr>
+    <tr>
+      <td>Everyone</td>
+      <td>the slider in Posture, or <code>blowhorn risk set &lt;preset&gt;</code></td>
+      <td><code>BLOWHORN_RISK_PROFILE</code>, then your account, then <code>defaults.risk_profile</code></td>
+    </tr>
+    <tr>
+      <td>Built in</td>
+      <td>nothing</td>
+      <td>standard</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><strong>When a platform and a profile both have a choice, the more careful one wins</strong> - cautious before standard before brisk. &quot;LinkedIn cautious for everyone&quot; therefore reaches a profile set to brisk everywhere, and &quot;X brisk for everyone&quot; never loosens a profile set to cautious. A tie is reported as the profile's. To go faster for one profile on one platform, choose that cell.</p>
+<p>On top of every level, scheduled activity on a new profile or a new computer runs cautious for its first 14 days (<a href="#warmup">Warmup</a>).</p>
+<p>A platform's choice is shared: it is written to your organization, so every computer you run Blowhorn on reads the same one, and <code>blowhorn risk show</code> and <code>risk grid</code> say &quot;every computer&quot;. When your organization cannot keep it yet, <code>risk set --platform</code> writes it to <code>defaults.risk_profile_by_platform</code> in this computer's <code>.blowhorn.yaml</code> instead, says so (<code>scope: this_computer</code>, with the reason), and the Posture screen labels it &quot;this computer only&quot;. The organization's choice is read before this computer's file, so when the organization already has a choice for that platform, the command also says that choice still applies on every computer. The organization's choices are written back as a whole map, so a write that cannot be guarded against another admin's change (no <code>ETag</code> on the read) or that would drop a platform this version does not know is kept on this computer the same way; a platform this version does not know is left out when the choices are read. Choosing <code>default</code> for a platform clears both. When the shared choices cannot be read, the platform level reads cautious until they can, so a run holds toward caution rather than falling through to a looser choice.</p>
+<p>The platforms a Risk Profile covers are LinkedIn, X, Bluesky, Reddit, Hacker News, Slack and GitHub.</p>
+<h3 id="risk-profile-dials">Risk Profile dials</h3><p>Each dial below is one row of the presets table, with a stable anchor the desktop info buttons deep-link to. The desktop link map in <code>desktop/src/shared/docs-links.ts</code> (<code>RISK_PROFILE_DIAL_DOCS</code>) mirrors this table, so the slider and these docs agree on targets.</p>
+
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Dial</th>
+      <th scope="col">Anchor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pace</td>
+      <td><a href="#pace">#pace</a></td>
+    </tr>
+    <tr>
+      <td>Pointer movement</td>
+      <td><a href="#pointer-movement">#pointer-movement</a></td>
+    </tr>
+    <tr>
+      <td>Caps</td>
+      <td><a href="#caps">#caps</a></td>
+    </tr>
+    <tr>
+      <td>Spacing between public actions</td>
+      <td><a href="#spacing-between-public-actions">#spacing-between-public-actions</a></td>
+    </tr>
+    <tr>
+      <td>Quiet hours</td>
+      <td><a href="#quiet-hours">#quiet-hours</a></td>
+    </tr>
+    <tr>
+      <td>Outreach</td>
+      <td><a href="#outreach">#outreach</a></td>
+    </tr>
+    <tr>
+      <td>Pause after a challenge</td>
+      <td><a href="#pause-after-a-challenge">#pause-after-a-challenge</a></td>
+    </tr>
+    <tr>
+      <td>Retries of a failed scheduled job</td>
+      <td><a href="#retries-of-a-failed-scheduled-job">#retries-of-a-failed-scheduled-job</a></td>
+    </tr>
+    <tr>
+      <td>Warmup</td>
+      <td><a href="#warmup">#warmup</a></td>
+    </tr>
+    <tr>
+      <td>Concurrency</td>
+      <td><a href="#concurrency">#concurrency</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h3 id="pace">Pace</h3><p>The speed label a run uses when <code>defaults.pace</code> is unset: cautious <code>slow</code>, standard <code>normal</code>, brisk <code>fast</code>. Pace shapes typing cadence and the random pauses between actions (see <a href="/docs/explanation/reliability-and-anti-bot-design/">How Blowhorn paces itself</a>); it does not by itself set the minimum spacing between public actions, which is the <a href="#spacing-between-public-actions">Spacing</a> dial. A <code>--pace</code> flag, <code>BLOWHORN_PACE</code>, or <code>defaults.pace</code> beats the preset for this dial.</p>
+<h3 id="pointer-movement">Pointer movement</h3><p>Whether Blowhorn simulates pointer movement before clicks, when <code>defaults.no_mouse_move</code> is unset. All three presets leave it on (<code>no_mouse_move</code> off); setting <code>defaults.no_mouse_move</code> (or <code>BLOWHORN_NO_MOUSE_MOVE</code>) turns it off whatever the preset says. The preset never turns pointer movement off by itself.</p>
+<h3 id="caps">Caps</h3><p>The share of each platform's built-in ceiling the preset allows per day (and per hour, scaled the same way): cautious 25%, standard 50%, brisk 100%. No preset can raise a ceiling. A profile's own daily cap (<code>defaults.caps</code>, or its <code>Daily Caps</code> store attribute) can only lower the effective cap further, per action. For example, on LinkedIn the built-in ceiling is 10 posts a day, so cautious allows 2, standard 5 and brisk 10, before any user cap or warmup ramp. A cap that cannot be read holds every action for that platform or profile until it is fixed.</p>
+<h3 id="spacing-between-public-actions">Spacing between public actions</h3><p>The least time between two public actions on one platform for one profile, plus a random wait up to the jitter: cautious 15 minutes plus up to 15 minutes, standard and brisk none. The ready time is seeded by profile, platform and the last action's time, so every computer and a dry run agree on it. This dial is enforced by the gate: an action inside the spacing is held with its ready time.</p>
+<h3 id="quiet-hours">Quiet hours</h3><p>Local hours with no public actions: cautious 22:00 to 07:00, standard and brisk none. This is the preset's quiet hours, separate from <code>defaults.quiet_hours</code>, which is a window you name yourself for scheduled claims. A due scheduled activity inside quiet hours is held, not failed, and runs when the window ends.</p>
+<h3 id="outreach">Outreach</h3><p>Whether connect, invite and follow actions may run: cautious off, standard on established platforms only (off on platforms still being built: Facebook, Instagram, TikTok, YouTube), brisk on everywhere, including those platforms. When outreach is off, the gate refuses the action with the preset named, rather than queuing it silently.</p>
+<h3 id="pause-after-a-challenge">Pause after a challenge</h3><p>How long a profile on a platform is held after a CAPTCHA, checkpoint or restriction page: cautious 72 hours, standard 24 hours, brisk 12 hours, counted from the last such record in the ledger. The hold names the reason and the time it can run again. Blowhorn never solves a CAPTCHA or 2FA prompt; a challenge is left for you.</p>
+<h3 id="retries-of-a-failed-scheduled-job">Retries of a failed scheduled job</h3><p>How many times a failed scheduled job may be tried again: cautious 0, standard 0, brisk 1. A login is never retried under any preset, and a retry is never granted for an unknown outcome (a post may have gone out), a warming profile, or a trigger-now run. This dial is about scheduled jobs; within a run, a failed post is not retried, it moves on.</p>
+<h3 id="warmup">Warmup</h3><p>A new profile or a new Mac runs cautious for scheduled jobs until it has history, whatever preset was chosen, and its caps ramp over that period: from about a quarter of cautious's caps on day one to cautious's full caps by day 14. The per-preset figures in the table (14, 7, 3 days) are the values <code>risk show</code> reports for each preset; the gate that holds scheduled jobs uses cautious's 14-day window for every choice, so a brisk choice does not shorten a new profile's cautious period. A run you start yourself is not held by the warmup, only warned about, and it follows the chosen preset's caps, quiet hours and outreach. A profile idle longer than the 15-day ledger window warms up again.</p>
+<h3 id="concurrency">Concurrency</h3><p>How much may run at once, in two parts. Runs sharing a platform: cautious and standard <code>platform</code> (one profile at a time on a platform), brisk <code>profile</code> (different profiles may share a platform; one profile is still held to one run on it). Runs at once overall: cautious at most 1, standard and brisk no limit. Both parts are enforced at the run gates, with the layering environment, explicit file value, preset, built-in, per key; a refusal under a preset cap names the preset. The session lock and the scheduler pass slot follow the same values, so <code>risk show</code> and observed enforcement agree with no explicit concurrency value set.</p>
+<h2 id="typing-and-pointer-timing">Typing and pointer timing</h2><p>These dials are not preset values: no preset sets a typing delay or a click hold. They are the shipped behaviour a run types and clicks with, and setting one away from its built-in is a dial set outside the preset, so <code>risk show</code> counts it toward &quot;Custom, based on&quot; just like a pace or concurrency dial. The desktop editor's info buttons link here, one anchor per group.</p>
+
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Dial</th>
+      <th scope="col">Anchor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Typing delay</td>
+      <td><a href="#typing-delay">#typing-delay</a></td>
+    </tr>
+    <tr>
+      <td>Typing pauses</td>
+      <td><a href="#typing-pauses">#typing-pauses</a></td>
+    </tr>
+    <tr>
+      <td>Typing mistakes</td>
+      <td><a href="#typing-mistakes">#typing-mistakes</a></td>
+    </tr>
+    <tr>
+      <td>Pointer timing</td>
+      <td><a href="#pointer-timing">#pointer-timing</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h3 id="typing-delay">Typing delay</h3><p>The pause band between two keys (<code>defaults.typing_delay_min_ms</code> to <code>defaults.typing_delay_max_ms</code>, built-ins 35 to 165 milliseconds), the random wobble on each pause (<code>defaults.typing_jitter_ms</code>, 9 milliseconds), and how long a whole entry aims to take (<code>defaults.typing_target_duration_s</code>, 20 seconds) before pauses are added. This dial shapes both drivers: the Playwright plan draws its inter-key delay from the band, and the extension session draws its shaped delay from the same band, floored at the band's minimum. A minimum above its maximum is refused at run start, naming the key.</p>
+<h3 id="typing-pauses">Typing pauses</h3><p>Short hesitations between keys (<code>defaults.typing_micro_pause_chance_pct</code>, 7 percent, for <code>defaults.typing_micro_pause_min_ms</code> to <code>defaults.typing_micro_pause_max_ms</code>, 50 to 220 milliseconds) and longer pauses every so many keys (<code>defaults.typing_long_pause_min_chars</code> to <code>defaults.typing_long_pause_max_chars</code>, 45 to 85 keys, for <code>defaults.typing_long_pause_min_ms</code> to <code>defaults.typing_long_pause_max_ms</code>, 350 to 1250 milliseconds). Playwright only: the extension driver sends one key per message and runs no pause plan, so on that driver these dials change nothing, and the editor says so rather than letting them look live.</p>
+<h3 id="typing-mistakes">Typing mistakes</h3><p>Whether a typed entry may include a wrong key that is then corrected (<code>defaults.typing_allow_mistakes</code>, on), how often (<code>defaults.typing_mistake_rate_pct</code>, 3 percent), at most how many per entry (<code>defaults.typing_max_mistakes_per_entry</code>, 4), only in entries at least this long (<code>defaults.typing_mistake_min_text_length</code>, 20 keys), and the pauses around the correction (<code>defaults.typing_mistake_pause_min_ms</code> to <code>defaults.typing_mistake_pause_max_ms</code>, 80 to 350 milliseconds after the wrong key, then <code>defaults.typing_mistake_delay_min_ms</code> to <code>defaults.typing_mistake_delay_max_ms</code>, 55 to 170 milliseconds after the correction). Playwright only, for the same reason as pauses, and never on sign-in: a credential entry is typed exactly, whatever these dials say. Set the rate to 0, or mistakes off, to type with no corrections at all.</p>
+<h3 id="pointer-timing">Pointer timing</h3><p>How long a click stays held (<code>defaults.pointer_click_hold_min_ms</code> to <code>defaults.pointer_click_hold_max_ms</code>, 40 to 140 milliseconds), how long a key stays pressed when a driver sends press and release as two events (<code>defaults.pointer_key_dwell_min_ms</code> to <code>defaults.pointer_key_dwell_max_ms</code>, 25 to 90 milliseconds), and the pause after the pointer arrives before a click (<code>defaults.pointer_hover_pause_min_ms</code> to <code>defaults.pointer_hover_pause_max_ms</code>, 50 to 250 milliseconds). The hover pause is shared by both drivers; the hold and dwell apply where a driver sends the two events, and Playwright's own click and keyboard type keep their own gaps.</p>
+<h2 id="approval-mode">Approval mode</h2><p><code>defaults.approval.mode</code> decides whose writing is enough to publish.
+<code>off</code> - the built-in - is the behaviour Blowhorn has always had: whoever
+writes a content activity sets its <code>Approved?</code>, and actions that publish
+without an activity (<code>post --amplify</code>, <code>post --message</code>, <code>follow</code>, an
+invitation, a connection request, an acceptance, an ad-hoc <code>comment</code>, a
+confirmed <code>slack send</code>) publish as run. <code>agent</code> keeps that for a person, but holds
+an agent's work: a caller marked with <code>BLOWHORN_ACTOR=agent</code>, a scheduler
+run, or any run with no terminal attached has its activities stored
+unapproved whatever the payload asked, and its ad-hoc actions are refused
+with a sentence pointing at the queue. <code>all</code> holds every activity and
+every ad-hoc action, whoever wrote it. You at a terminal, or in the app,
+count as a person for writing activities; under <code>all</code> the app's own
+writes wait too, and approval is the separate act either way.</p>
+<p>A schedule job that would publish on its own - a <code>follow</code>, an invitation,
+a connection request, an acceptance, a <code>comment</code> with a target and a
+message, a <code>post</code> with <code>amplify</code> - is a standing instruction to publish
+unapproved, so
+creating one is refused for the same callers: an agent under <code>agent</code>,
+anyone under <code>all</code>. So is changing what an existing one would publish,
+who it publishes as, where, or when: its command, its params, its
+profile, its platform, or its timing (Run At, Next Run At, Recurrence).
+A job that works the queue is never refused, and a job already scheduled
+is not re-judged when the mode changes: it runs as its creator's
+standing instruction.</p>
+<p>Approval mode is a guard, not a sandbox. Who counts as an agent is read
+from signals, and the signals are environment variables, set by whoever
+launches the process - so a caller that can set its own environment can
+claim to be a person, and no ordering of those claims prevents that.
+The one case precedence does settle is the scheduler: a tick is
+unattended, so a scheduler run counts as an agent whatever
+<code>BLOWHORN_ACTOR</code> says. The <a href="/docs/reference/mcp-server/">MCP server</a> is the same: it
+sets <code>BLOWHORN_ACTOR=agent</code> on every command it runs and ignores any
+other value in its environment. <code>BLOWHORN_ACTOR=human</code> still lets a
+non-interactive human script count as the person, and is forgeable by
+exactly the caller it lets through; a proof no environment claim gives -
+the app proving itself over a channel only it holds, or a tick proven
+by its parent process - is future work, not this mode.</p>
+<p>The door is <code>blowhorn content approve &lt;activity&gt;</code>: it sets <code>Approved?</code>
+and records who approved and when in the activity's <code>Approved by</code> column
+(see <a href="/docs/reference/content-queue/">Content queue</a>). The app's Content screen is the
+same door: a waiting activity carries an approve control, and the app's
+calls run as you, so the control runs this verb and the record is the
+same. Approving is a person's act, so
+an agent-signalled caller is refused by <code>content approve</code> itself, in
+every mode - an agent cannot approve its own work. An unknown mode is
+refused by name before anything runs.</p>
+<h2 id="daily-caps">Daily caps</h2><p>Every platform and action already has a built-in daily ceiling, and a
+Risk Profile preset may take only a share of it. <code>defaults.caps</code> lets you
+set a lower daily cap of your own, per platform and per action:</p>
+<figure class="term" data-lang="yaml">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">YAML</span>
+    <span class="term-lang" aria-hidden="true">YAML</span>
+    <button type="button" class="term-copy" aria-label="Copy YAML to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">defaults</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">caps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">post_per_day</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">follow_per_day</span><span class="p">:</span><span class="w"> </span><span class="m">20</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>The key is the action in your words; it bounds the action Blowhorn counts:</p>
+
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">You write</th>
+      <th scope="col">It bounds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>post_per_day</code></td>
+      <td>posts</td>
+    </tr>
+    <tr>
+      <td><code>comment_per_day</code></td>
+      <td>comments</td>
+    </tr>
+    <tr>
+      <td><code>follow_per_day</code>, <code>connect_per_day</code>, <code>invite_per_day</code></td>
+      <td>outreach: follows, connects and invites together</td>
+    </tr>
+    <tr>
+      <td><code>repost_per_day</code></td>
+      <td>shares (reposts)</td>
+    </tr>
+    <tr>
+      <td><code>amplify_per_day</code>, <code>react_per_day</code></td>
+      <td>reactions</td>
+    </tr>
+    <tr>
+      <td><code>accept_per_day</code></td>
+      <td>accepts, on the platforms that have them</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>The gate's own names (<code>outreach_per_day</code>, <code>share_per_day</code>,
+<code>reaction_per_day</code>) work too. A platform with no such action refuses the
+key by name, as do a zero, a negative or a fractional count.</p>
+<p>A user cap can only lower: a value above the built-in ceiling is accepted
+and simply never binds, and a preset's share or a warmup can still take
+the effective cap lower. The count is the run ledger in your account,
+over the trailing 24 hours, so the cap holds on every computer sharing
+the account; a row it holds stays queued, reads <code>held</code> with the reason
+<code>daily cap (N &lt;action&gt; a day, your cap)</code>, and runs when the oldest counted
+action ages past a day. Caps are per day only; the built-in hourly
+ceilings are unchanged.</p>
+<p>Set one with <code>blowhorn config set defaults.caps.x.post_per_day 3</code> (an
+empty value clears it), or write the map in the file. For one profile
+only, the profile's <code>Daily Caps</code> store attribute takes the same caps in
+one line -- <code>x.post:3, x.follow:20</code> -- and beats the file per action.
+<code>blowhorn config show</code> reports every platform and action with its
+built-in ceiling, your value when set, and the effective (lower) number.</p>
+<p>A cap that cannot be read (a zero, a negative or fractional count, an unknown
+platform or action) never uncaps the account: scheduled jobs and hand runs
+for that platform, or for that profile when it is the <code>Daily Caps</code> attribute,
+are held with the entry named until it is fixed, and <code>config show</code> lists the
+caps as <code>invalid</code> with the reason.</p>
+<h2 id="output-logging">Output logging</h2><p>The daily log is a copy; the terminal streams are never dropped, piped
+or not. The directory resolves as <code>--log-dir</code>, then <code>BLOWHORN_LOG_DIR</code>,
+then <code>defaults.logs.directory</code>, then the checkout's <code>data/logs/</code>. That
+directory is the parent. Each signed-in account keeps its own logs under
+<code>accounts/&lt;user id&gt;</code> inside it (the account id, never a name or an email).
+Before you are signed in, Blowhorn writes under <code>machine/</code>. History and
+failure reports show only the account that is signed in. The first run
+after an upgrade moves logs it can attribute into that account and keeps
+the rest under <code>_unattributed/</code>. It does not delete them. A default
+that cannot be used fails silently; a directory you named reports why.
+Only files the retention pass recognizes by name are ever deleted:
+daily logs past their days (30 by default), and the three dateless
+capture files rolling past their size bound. Per-job logs, the ledger,
+and the scheduler heartbeat live beneath the same directory and are
+never pruned by it.</p>
+<p><code>--tee-stdout</code> is about liveness, not logging: it flushes the stdout
+copy per write, and with no usable log directory it line-buffers the
+real stdout instead. It is read before command parsing, so it is not a
+per-command flag.</p>
+<h2 id="related">Related</h2><ul>
+<li><a href="/docs/how-to/settings/defaults/">Change your defaults</a> - change the defaults.</li>
+<li><a href="/docs/how-to/settings/launch-mode/">Choose how Blowhorn reaches Chrome</a> - the launch-mode option in practice.</li>
+<li><a href="/docs/reference/use-the-desktop-app/">The Blowhorn app, screen by screen</a> - the Settings screen.</li>
+<li><a href="/docs/reference/messages/">Messages and exit codes</a> - what a bad value reports.</li>
+<li><a href="/docs/explanation/scheduling/">How scheduling works</a> - what the heartbeat and per-job logs are for.</li>
+<li><a href="/docs/explanation/youre-in-control/">You're in control</a> - which options are safety dials.</li>
+<li><a href="/docs/reference/cli/">CLI reference</a> - every command and flag.</li>
+</ul>
+
+  <div class="td-page-meta__lastmod">
+  Last modified November 6, 2026
+</div>
+</div><ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5">
+  <li><a href="/docs/reference/profiles/" aria-label="Previous - Profile reference" class="btn btn-primary"><span class="me-1">←</span>Previous</a></li>
+  <li><a href="/docs/reference/messages/" aria-label="Next - Messages and exit codes" class="btn btn-primary">Next<span class="ms-1">→</span></a></li>
+</ul>
+
+<div class="tells-docs-card docs-rail-card docs-rail-card-end">
+  <p class="label">Free tool</p>
+  <p class="tells-docs-card-title">Am I a Bot?</p>
+  <p class="tells-docs-card-text">See what sites can read about your Chrome profile.</p>
+  <p class="tells-docs-card-link"><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=docs">Run the check<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"></path></svg></a></p>
+</div>
+
+<div class="docs-support-card card-dispatch docs-rail-card docs-rail-card-end">
+  <p class="label">Support</p>
+  <p class="docs-support-card-title">Stuck on something?</p>
+  <p class="docs-support-card-text">Email us and a person on the team will help.</p>
+  <p class="docs-support-card-link"><a href="mailto:support@blowhorn.ai?subject=Docs%20question%3A%20Configuration%20reference">support@blowhorn.ai</a></p>
+</div>
+
+      </main>
+      <aside class="docs-toc" aria-label="On this page"><div class="td-toc" data-proofer-ignore>
+<div class="td-toc-title">
+      <span class="td-toc-title__text">On this page</span>
+      <a class="td-toc-title__link" title="Top of page" href="#"><span class="visually-hidden">Top of page</span></a>
+      <button type="button" class="td-toc-toggle" data-toc-toggle aria-expanded="true"><span class="td-toc-toggle__label visually-hidden">Hide table of contents</span></button>
+    </div>
+    <nav id="TableOfContents" aria-label="On this page">
+  <ul>
+    <li><a href="#every-option-blowhornyaml-supports">Every option <code>.blowhorn.yaml</code> supports</a></li>
+    <li><a href="#risk-profile-presets">Risk Profile presets</a>
+      <ul>
+        <li><a href="#which-choice-wins">Which choice wins</a></li>
+        <li><a href="#risk-profile-dials">Risk Profile dials</a></li>
+        <li><a href="#pace">Pace</a></li>
+        <li><a href="#pointer-movement">Pointer movement</a></li>
+        <li><a href="#caps">Caps</a></li>
+        <li><a href="#spacing-between-public-actions">Spacing between public actions</a></li>
+        <li><a href="#quiet-hours">Quiet hours</a></li>
+        <li><a href="#outreach">Outreach</a></li>
+        <li><a href="#pause-after-a-challenge">Pause after a challenge</a></li>
+        <li><a href="#retries-of-a-failed-scheduled-job">Retries of a failed scheduled job</a></li>
+        <li><a href="#warmup">Warmup</a></li>
+        <li><a href="#concurrency">Concurrency</a></li>
+      </ul>
+    </li>
+    <li><a href="#typing-and-pointer-timing">Typing and pointer timing</a>
+      <ul>
+        <li><a href="#typing-delay">Typing delay</a></li>
+        <li><a href="#typing-pauses">Typing pauses</a></li>
+        <li><a href="#typing-mistakes">Typing mistakes</a></li>
+        <li><a href="#pointer-timing">Pointer timing</a></li>
+      </ul>
+    </li>
+    <li><a href="#approval-mode">Approval mode</a></li>
+    <li><a href="#daily-caps">Daily caps</a></li>
+    <li><a href="#output-logging">Output logging</a></li>
+    <li><a href="#related">Related</a></li>
+  </ul>
+</nav>
+  </div>
+
+<div class="tells-docs-card docs-rail-card docs-rail-card-toc">
+  <p class="label">Free tool</p>
+  <p class="tells-docs-card-title">Am I a Bot?</p>
+  <p class="tells-docs-card-text">See what sites can read about your Chrome profile.</p>
+  <p class="tells-docs-card-link"><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=docs">Run the check<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"></path></svg></a></p>
+</div>
+
+<div class="docs-support-card card-dispatch docs-rail-card docs-rail-card-toc">
+  <p class="label">Support</p>
+  <p class="docs-support-card-title">Stuck on something?</p>
+  <p class="docs-support-card-text">Email us and a person on the team will help.</p>
+  <p class="docs-support-card-link"><a href="mailto:support@blowhorn.ai?subject=Docs%20question%3A%20Configuration%20reference">support@blowhorn.ai</a></p>
+</div>
+
+      </aside>
+    </div><footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-panel glass">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <a class="footer-logo" href="/" aria-label="Blowhorn home">
+                <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="200" height="50">
+                <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="200" height="50">
+              </a>
+              <p class="footer-tagline">Your voice, at full volume.</p>
+              <nav class="footer-social" aria-label="Blowhorn on social media">
+                <ul>
+                  <li><a href="https://x.com/blowhorn_ai" target="_blank" rel="noopener noreferrer" aria-label="X"><img src="/assets/platforms/x-logo-black.png" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.youtube.com/@blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/platforms/youtube-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.facebook.com/BlowhornAI" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="/assets/platforms/facebook-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://github.com/blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/platforms/github-invertocat-black.svg" alt="" width="20" height="20"></a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="footer-news">
+              <form class="newsletter" name="newsletter" method="post" action="https://api.blowhorn.ai/api/subscribe">
+              <label class="newsletter-label ui" for="newsletter-email">Subscribe to our newsletter</label>
+              <div class="newsletter-row">
+                <input type="email" id="newsletter-email" name="email" autocomplete="email" placeholder="Email address" required>
+                <button class="button button-primary" type="submit">Subscribe</button>
+              </div>
+              <input type="hidden" name="source_page" value="/docs/reference/configuration/">
+              <p class="signup-honeypot" aria-hidden="true">
+                <label for="newsletter-email-website">Website</label>
+                <input id="newsletter-email-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </p>
+            </form>
+
+            </div>
+          </div>
+          <nav class="footer-cols" aria-label="Footer">
+            <div class="footer-col">
+              <h2 class="footer-title">Product</h2>
+              <ul>
+                <li><a href="/download/">Download</a></li>
+                <li><a href="/pricing/">Pricing</a></li>
+                <li><a href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">Browser extension</a></li>
+                <li><a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a></li>
+                <li><a href="/#platforms">Platforms</a></li>
+                <li><a href="/integrations/actions/">Action matrix</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Resources</h2>
+              <ul>
+                <li><a href="/resources/">Resources</a></li>
+                <li><a href="/resources/videos/">Videos</a></li>
+                <li><a href="/resources/articles/">Articles</a></li>
+                <li><a href="/docs/">Docs</a></li>
+                <li><a href="/docs/reference/support/">Get help</a></li>
+                <li><a href="/field-manual/">Field Manual</a></li>
+                <li><a href="/major/">Meet Major</a></li>
+                <li><a href="/brand/">Brand</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Trust</h2>
+              <ul>
+                <li><a href="/legal/">Trust Center</a></li>
+                <li><a href="/legal/privacy/">Privacy</a></li>
+                <li><a href="/legal/terms/">Terms</a></li>
+                <li><a href="mailto:security@blowhorn.ai">Security</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">AI native</h2>
+              <ul>
+                <li><a href="/ai/">AI native</a></li>
+                <li><a href="/ai/blowhorn-axi/">blowhorn-axi</a></li>
+                <li><a href="/ai/mcp/">MCP server</a></li>
+                <li><a href="/agents/">Agent guides</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-tools">
+              <h2 class="footer-title">Free tools</h2>
+              <ul>
+                <li><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">Am I a Bot?</a></li>
+                <li><a href="https://tells.blowhorn.ai/checks/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">What each check means</a></li>
+                <li><a href="https://tells.blowhorn.ai/agents/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">For AI agents and scripts</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-wide">
+              <h2 class="footer-title">Compare</h2>
+              <ul>
+                <li><a href="/compare/">How we compare</a></li>
+                <li><a href="/compare/buffer/" aria-label="Blowhorn vs Buffer">Buffer</a></li>
+                <li><a href="/compare/hootsuite/" aria-label="Blowhorn vs Hootsuite">Hootsuite</a></li>
+                <li><a href="/compare/socialbee/" aria-label="Blowhorn vs SocialBee">SocialBee</a></li>
+                <li><a href="/compare/postiz/" aria-label="Blowhorn vs Postiz">Postiz</a></li>
+                <li><a href="/compare/taplio/" aria-label="Blowhorn vs Taplio">Taplio</a></li>
+                <li><a href="/compare/expandi/" aria-label="Blowhorn vs Expandi">Expandi</a></li>
+                <li><a href="/compare/phantombuster/" aria-label="Blowhorn vs PhantomBuster">PhantomBuster</a></li>
+                <li><a href="/compare/mokumokuren/" aria-label="Blowhorn vs mokumokuren">mokumokuren</a></li>
+                <li><a href="/compare/native-scheduling/" aria-label="Blowhorn vs native scheduling">Native scheduling</a></li>
+                <li><a href="/versus/">All comparisons</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom caption">
+          <span>&copy; 2026 Layer5, Inc.</span>
+          <a class="status-link" href="https://layer5.statuspage.io" target="_blank" rel="noreferrer">Status <span class="pulse-icon" aria-hidden="true"></span></a>
+          <button type="button" class="footer-consent" data-consent-open aria-controls="consent">Cookie preferences</button>
+          <span class="footer-tm">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky, GitHub, YouTube, Instagram, TikTok and Facebook are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
+        </div>
+      </div>
+    </footer>
+    <section id="consent" class="consent glass" aria-labelledby="consent-title" hidden>
+      <h2 id="consent-title" class="consent-title">Cookies</h2>
+      <p class="consent-text">Yes, we use cookies. Yes, you can eat them, if you can find them. Do you want us to <a href="/legal/privacy/#google-analytics">remember you</a> or pretend we've never met?</p>
+      <div class="consent-actions">
+        <button type="button" class="button button-primary consent-button" data-consent="granted">Accept</button>
+        <button type="button" class="button button-secondary consent-button" data-consent="denied">Decline</button>
+      </div>
+      <button type="button" class="consent-close" data-consent="denied" aria-label="Close and decline">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </section>
+
+
+<script src="/js/docs.min.d24fabcf227598ab61a5aa1e4171a8298794e0bbdce94fde8e66bde0b366a3f3.js" integrity="sha256-0k&#43;rzyJ1mKthpaoeQXGoKYeU4Lvc6U/ejma94LNmo/M=" crossorigin="anonymous" defer></script>
+
+
+    <script type="application/json" id="docs-events">{"$schema":"../schemas/docs_events.schema.json","attribution_params":["first_source","first_medium","first_campaign","first_content","first_term","first_referrer_host","landing_guide","landing_page"],"clients":{"chatgpt":"ChatGPT","claude-code":"Claude Code","claude-desktop":"Claude Desktop","cline":"Cline","cursor":"Cursor","gemini-cli":"Gemini CLI","goose":"Goose","openai-codex-cli":"OpenAI Codex CLI","vs-code":"VS Code with GitHub Copilot","vs-code-with-github-copilot":"VS Code with GitHub Copilot","windsurf-devin-desktop":"Windsurf (Devin Desktop)","zed":"Zed"},"consent_event":"blowhorn:consent","consent_key":"blowhorn-consent","default_client":"general","events":{"docs_guide_view":{"description":"A tracked guide was viewed after consent: once per page load.","params":["page_path","guide","client"]},"docs_outbound_click":{"description":"A link to npm, an MCP registry or a Blowhorn download was followed.","params":["page_path","client","link_kind","link_url"]},"docs_snippet_copy":{"description":"The copy button on a code card was pressed. Never carries the copied text.","params":["page_path","client","snippet_kind","snippet_title"]}},"internal_hosts":["blowhorn.ai","www.blowhorn.ai"],"outbound":[{"hosts":["npmjs.com","www.npmjs.com","registry.npmjs.org"],"kind":"npm"},{"hosts":["registry.modelcontextprotocol.io"],"kind":"registry"},{"hosts":["github.com"],"kind":"registry","paths":["^/mcp(/|$)"]},{"hosts":["github.com"],"kind":"download","paths":["^/blowhorn-ai/[^/]+/releases(/|$)"]},{"hosts":["blowhorn.ai","www.blowhorn.ai"],"kind":"download","paths":["^/download/"]}],"pages":["/docs/how-to/set-up/connect-mcp-client/","/docs/reference/mcp-server/","/docs/reference/python-client/","/docs/tutorials/first-mcp-connection/","/docs/explanation/mcp-and-safety/","/ai/mcp/"],"snippet_kinds":{"bash":"shell","console":"shell","json":"json","sh":"shell","shell":"shell","text":"text","toml":"toml","yaml":"yaml","yml":"yaml","zsh":"shell"},"storage_key":"blowhorn-docs-attribution","utm_params":["utm_source","utm_medium","utm_campaign","utm_content","utm_term"]}</script>
+    <script src="/js/docs-attribution.min.1be585bb90d12fd1bc9a08fea053d087e031b32eced81aeba9f8f18390a7c3ad.js" integrity="sha256-G&#43;WFu5DRL9G8mgj&#43;oFPQh&#43;Axsy7O2Brrqfjxg5Cnw60=" crossorigin="anonymous" defer></script>
+
+  </body>
+</html>

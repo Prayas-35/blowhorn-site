@@ -1,0 +1,677 @@
+<!DOCTYPE html><html lang="en" data-theme="reveille">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><script>
+      (function () {
+        var allowed = ["signal","reveille"], param = "theme", q = null, i;
+        try { q = new URLSearchParams(window.location.search).get(param); } catch (e) {}
+        if (!q) return;
+        for (i = 0; i < allowed.length; i++) {
+          if (allowed[i] === q) {
+            document.documentElement.setAttribute('data-theme', q);
+            return;
+          }
+        }
+      })();
+    </script>
+
+    <script>
+      (function () {
+        try {
+          if (window.localStorage.getItem("bh-tells-bar-v1")) document.documentElement.setAttribute('data-tells-bar', 'off');
+        } catch (e) {   }
+      })();
+    </script>
+
+    <title>Blowhorn vs Buffer: honest comparison</title>
+    <meta name="description" content="Blowhorn isn&#39;t a bot. It&#39;s you. Buffer is the friendliest way to keep a steady, approved calendar on many networks, with every computer switched off. Blowhorn is for the moment you need many real voices on the networks developers use.">
+    <link rel="canonical" href="https://blowhorn.ai/compare/buffer/">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/assets/brand/logo/blowhorn-favicon-32.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/brand/logo/blowhorn-apple-touch-icon-180.png">
+<link rel="stylesheet" href="/css/site.min.4a0f5dc736649425d0a54f89356a77372218febfedf5e530d6f95fd9dde14c89.css">
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      gtag('js', new Date());
+      gtag('config', 'G-2ZLYGVE3HN');
+    </script>
+    <script src="/js/consent.min.87a540c5c86603eab7872bd71d23e8f0460cec66cc2ab450f6ab59bd6a2839fe.js" data-ga-id="G-2ZLYGVE3HN" defer></script>
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","acceptedAnswer":{"@type":"Answer","text":"For a broad, always-on calendar across consumer networks, yes. For amplifying one message from many real profiles on LinkedIn, X, Reddit, Hacker News, GitHub, Bluesky and Slack, we think Blowhorn is the better fit."},"name":"Is Buffer better than Blowhorn?"},{"@type":"Question","acceptedAnswer":{"@type":"Answer","text":"Yes. Plenty of teams keep a calendar tool for the brand feed and use Blowhorn to rally the people behind a launch."},"name":"Can I use both?"},{"@type":"Question","acceptedAnswer":{"@type":"Answer","text":"No. As long as one computer set up for the profile is awake, the schedule runs. With every computer switched off, nothing goes out. That is the honest trade for posting as you, from your own browser."},"name":"Does Blowhorn post while every computer is switched off?"}]}</script>
+  </head>
+  <body>
+    <a class="skip-link ui" href="#main">Skip to content</a>
+    <aside class="tells-bar" aria-label="Announcement" data-tells-bar data-key="bh-tells-bar-v1">
+      <div class="wrap tells-bar-inner">
+        <div class="tells-bar-cluster">
+          <p class="tells-bar-text">
+            <span class="tells-bar-text-full">Find out what websites can tell about your browser. Spoiler: plenty.</span>
+            <span class="tells-bar-text-short">Fingerprints?</span>
+          </p>
+          <a class="tells-bar-cta" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=bar">
+            <span class="tells-bar-cta-label">Am I a Bot?</span>
+            <span class="tells-bar-pill">Free</span>
+          </a>
+        </div>
+        <button type="button" class="tells-bar-close" aria-label="Dismiss" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
+    </aside>
+    <script src="/js/tells-bar.min.35471ceb2a867b0a8500cdeabc0e8f1fa9f0707e82ddb81569f0769014f94c63.js" defer></script>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Blowhorn home">
+          <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="176" height="44">
+          <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="176" height="44">
+        </a>
+        <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="site-menu" hidden>
+          <span class="mm-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mm-toggle-text">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-menu" aria-label="Primary">
+          <ul class="mm-list">
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-product">Product<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-cards" id="mm-product">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Product</p>
+                  <p class="mm-intro-text">One product. Every way in.</p>
+                  <p class="mm-intro-sub">Not a shelf of products to buy one by one. One subscription, and every interface below is included: same queue, same profiles, same limits.</p>
+                  <p class="mm-intro-more"><a href="/pricing/">See the one plan</a></p>
+                </div>
+                <div class="mm-cards-wrap">
+                  <ul class="mm-cards">
+                    <li><a class="mm-card card-field" href="/download/">
+                      <span class="iface-art iface-art-desktop" aria-hidden="true"><span class="ia-panel ia-app">
+    <span class="ia-app-rail">
+      <span class="ia-lights"><i></i><i></i><i></i></span>
+      <span class="ia-app-brand"><picture><source srcset="/assets/brand/logo/blowhorn-icon-on-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/brand/logo/blowhorn-icon.svg" alt="" width="11" height="11"></picture><picture><source srcset="/assets/brand/logo/blowhorn-wordmark-white.svg" media="(prefers-color-scheme: dark)"><img class="ia-app-word" src="/assets/brand/logo/blowhorn-wordmark.svg" alt="" width="34" height="7"></picture></span>
+      <span class="ia-app-new"><b>+</b>New activity</span>
+      <span class="ia-app-nav">
+        <span class="ia-app-item">Home</span>
+        <span class="ia-app-item on">Activity<em>3 ready</em></span>
+        <span class="ia-app-item">Profiles<em>4</em></span>
+        <span class="ia-app-item">Performance</span>
+        <span class="ia-app-item">Safety</span>
+      </span>
+      <span class="ia-app-status"><i></i>On watch</span>
+    </span>
+    <span class="ia-app-main">
+      <span class="ia-app-bar"><span class="ia-seg"><b class="on">Upcoming</b><b>Routines</b><b>History</b></span></span>
+      <span class="ia-app-head"><span></span><span>Status</span><span>Preview</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4l14 16M19 4L5 20"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Release notes</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 10.5C10.4 7.2 7.2 4 4.8 4 3.4 4 3 5 3 6.2c0 1.2.5 4.6 1.1 5.6.8 1.4 2.6 1.9 4.6 1.6-2.4.5-3.6 2-2.4 3.6 1.8 2.3 4.1 1 5.7-3 1.6 4 3.9 5.3 5.7 3 1.2-1.6 0-3.1-2.4-3.6 2 .3 3.8-.2 4.6-1.6.6-1 1.1-4.4 1.1-5.6C21 5 20.6 4 19.2 4 16.8 4 13.6 7.2 12 10.5z"/></svg>
+<span class="ia-state wait"><i></i>2:00 PM</span><span class="ia-prev">Team recap</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Desktop app</span>
+                      <span class="mm-card-desc">The full console on your computer: queue, profiles, approvals</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-stamp" href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">
+                      <span class="mm-card-art">
+                        <span class="iface-art iface-art-extension" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-tab-title">Feed | LinkedIn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">linkedin.com/feed</span></span><img class="ia-pin" src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="11" height="11"><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-card"><span class="ia-who"><i class="ia-face"></i><span class="ia-line w45"></span></span><span class="ia-line w75"></span><span class="ia-line w60"></span></span>
+      <span class="ia-row sweep"><span class="ia-line w50"></span><span class="ia-pill ok">Sent as you</span></span>
+    </span>
+  </span></span>
+
+                        <img class="mm-card-chrome" src="/assets/platforms/google-chrome-logo.svg" alt="" width="28" height="28">
+                      </span>
+                      <span class="mm-card-title">Browser extension</span>
+                      <span class="mm-card-desc">Blowhorn inside your own browser, where the work happens</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-plain" href="https://cloud.blowhorn.ai">
+                      <span class="iface-art iface-art-web" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="9" height="9"><span class="ia-tab-title">Blowhorn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">cloud.blowhorn.ai</span></span><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-page-head"><span class="ia-page-title">Activity</span><span class="ia-live"><i></i>Live</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="14" rx="7.5" ry="5.5"/><path d="M12 8.5l1.2-4.5 3.3.9M9.5 16.5c1.5 1.2 3.5 1.2 5 0"/><circle cx="17.5" cy="5" r="1.2"/></svg>
+<span class="ia-state wait"><i></i>Needs you</span><span class="ia-prev">AMA thread</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Web app</span>
+                      <span class="mm-card-desc">Your queue from any browser, at cloud.blowhorn.ai</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-dispatch" href="/ai/blowhorn-axi/">
+                      <span class="iface-art iface-art-cli" aria-hidden="true"><span class="ia-panel ia-term">
+    <span class="ia-bar"><span class="ia-lights"><i></i><i></i><i></i></span><span class="ia-caption">zsh · blowhorn</span></span>
+    <span class="ia-code"><span class="ia-cline"><b>$</b> blowhorn post launch.md --dry-run</span><span class="ia-cline ok">✓ rehearsed · 3 profiles, nothing sent</span><span class="ia-cline"><b>$</b> blowhorn post launch.md --go <span class="ia-cursor"></span></span></span>
+  </span></span>
+
+                      <span class="mm-card-title">Command line</span>
+                      <span class="mm-card-desc">Every action as a command: for you, scripts and agents</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-field" href="/ai/mcp/">
+                      <span class="iface-art iface-art-mcp" aria-hidden="true"><span class="ia-panel ia-diagram">
+    <span class="ia-flow">
+      <span class="ia-chip"><span class="ia-chip-name">Claude</span><span class="ia-chip-sub">assistant</span></span>
+      <span class="ia-link"><i class="ia-pulse"></i></span>
+      <span class="ia-chip ia-chip-hub"><span class="ia-chip-name">MCP</span><span class="ia-chip-sub">tools/list</span></span>
+      <span class="ia-link"><i class="ia-pulse d2"></i></span>
+      <span class="ia-chip"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="14" height="14"><span class="ia-chip-sub">Blowhorn</span></span>
+    </span>
+    <span class="ia-mono ia-diagram-note">post · amplify · schedule · approval rules on</span>
+  </span></span>
+
+                      <span class="mm-card-title">MCP server</span>
+                      <span class="mm-card-desc">Plug Blowhorn into Claude and other AI assistants</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card mm-card-plan card-stamp" href="/pricing/">
+                      <span class="mm-card-plan-mark" aria-hidden="true">1</span>
+                      <span class="mm-card-title">One subscription</span>
+                      <span class="mm-card-desc">Every way in, one subscription</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                  </ul>
+                  <p class="mm-cards-foot">
+                    <a href="/#platforms">Platforms</a>
+                    <a href="/integrations/actions/">Action matrix</a>
+                    <a href="/#how">How you run it</a>
+                    <a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a>
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-solutions">Solutions<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-wide" id="mm-solutions">
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/for/">By role</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/for/devrel/"><span class="mm-link-title">DevRel</span></a></li><li><a class="mm-link" href="/for/marketing/"><span class="mm-link-title">Marketing managers</span></a></li><li><a class="mm-link" href="/for/founders/"><span class="mm-link-title">Founders</span></a></li><li><a class="mm-link" href="/for/open-source/"><span class="mm-link-title">Open source maintainers</span></a></li><li><a class="mm-link" href="/for/community/"><span class="mm-link-title">Community managers</span></a></li><li><a class="mm-link" href="/for/agencies/"><span class="mm-link-title">Agencies and consultants</span></a></li><li><a class="mm-link" href="/for/social-media/"><span class="mm-link-title">Social media managers</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/use-cases/">By use case</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/use-cases/launch-day/"><span class="mm-link-title">Launch day</span></a></li><li><a class="mm-link" href="/use-cases/open-source-release/"><span class="mm-link-title">Open source release</span></a></li><li><a class="mm-link" href="/use-cases/conference/"><span class="mm-link-title">Conference</span></a></li><li><a class="mm-link" href="/use-cases/linkedin-outreach/"><span class="mm-link-title">Careful LinkedIn outreach</span></a></li><li><a class="mm-link" href="/use-cases/team-amplification/"><span class="mm-link-title">Team amplification</span></a></li><li><a class="mm-link" href="/use-cases/agent-publishing/"><span class="mm-link-title">Agent publishing</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/solutions/">By category</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/solutions/developer-distribution/"><span class="mm-link-title">Developer distribution</span></a></li><li><a class="mm-link" href="/solutions/employee-advocacy/"><span class="mm-link-title">Employee advocacy</span></a></li><li><a class="mm-link" href="/solutions/distributed-teams/"><span class="mm-link-title">Distributed teams</span></a></li><li><a class="mm-link" href="/solutions/social-scheduling/"><span class="mm-link-title">Social scheduling</span></a></li><li><a class="mm-link" href="/solutions/linkedin-automation/"><span class="mm-link-title">LinkedIn automation</span></a></li><li><a class="mm-link" href="/solutions/multi-profile/"><span class="mm-link-title">Multi-profile</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/ai/">AI native</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/ai/"><span class="mm-link-title">AI native</span><span class="mm-link-desc">Built so agents can run it safely</span></a></li><li><a class="mm-link" href="/ai/blowhorn-axi/"><span class="mm-link-title">blowhorn-axi</span><span class="mm-link-desc">The command line made for agents</span></a></li><li><a class="mm-link" href="/ai/mcp/"><span class="mm-link-title">MCP server</span><span class="mm-link-desc">Plug Blowhorn into any MCP client</span></a></li><li><a class="mm-link" href="/agents/"><span class="mm-link-title">Agentic AI marketing</span><span class="mm-link-desc">Let your AI agent run the launch</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/agents/">Works with</a></p>
+                  <ul class="mm-links mm-compact"><li><a class="mm-link" href="/agents/claude-code/"><span class="mm-link-title">Claude Code</span></a></li><li><a class="mm-link" href="/agents/opencode/"><span class="mm-link-title">OpenCode</span></a></li><li><a class="mm-link" href="/agents/pi/"><span class="mm-link-title">Pi</span></a></li><li><a class="mm-link" href="/agents/codex/"><span class="mm-link-title">Codex</span></a></li><li><a class="mm-link" href="/agents/grok/"><span class="mm-link-title">Grok</span></a></li><li><a class="mm-link" href="/agents/deepseek/"><span class="mm-link-title">DeepSeek</span></a></li><li><a class="mm-link" href="/agents/cli/"><span class="mm-link-title">CLI</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-compare">Compare<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-compare">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/compare/">How Blowhorn compares</a></p>
+                  <p class="mm-intro-text">Side by side with schedulers, LinkedIn tools, advocacy suites and AI agents. Where they win too.</p>
+                  <p class="mm-intro-more"><a href="/versus/">All comparisons</a></p>
+                </div>
+                <ul class="mm-links mm-cols-3 mm-compact"><li><a class="mm-link" href="/compare/buffer/"><span class="mm-link-title">Buffer</span></a></li><li><a class="mm-link" href="/compare/hootsuite/"><span class="mm-link-title">Hootsuite</span></a></li><li><a class="mm-link" href="/compare/socialbee/"><span class="mm-link-title">SocialBee</span></a></li><li><a class="mm-link" href="/compare/postiz/"><span class="mm-link-title">Postiz</span></a></li><li><a class="mm-link" href="/compare/taplio/"><span class="mm-link-title">Taplio</span></a></li><li><a class="mm-link" href="/compare/expandi/"><span class="mm-link-title">Expandi</span></a></li><li><a class="mm-link" href="/compare/phantombuster/"><span class="mm-link-title">PhantomBuster</span></a></li><li><a class="mm-link" href="/compare/mokumokuren/"><span class="mm-link-title">mokumokuren</span></a></li><li><a class="mm-link" href="/compare/native-scheduling/"><span class="mm-link-title">Native scheduling</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-resources">Resources<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-resources">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/resources/">Resources</a></p>
+                  <p class="mm-intro-text">Guides, answers and the story behind the horn.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/docs/"><span class="mm-link-title">Docs</span><span class="mm-link-desc">Set up, how-to guides and reference</span></a></li><li><a class="mm-link" href="/resources/videos/"><span class="mm-link-title">Videos</span><span class="mm-link-desc">Short films and walkthroughs</span></a></li><li><a class="mm-link" href="/resources/articles/"><span class="mm-link-title">Articles</span><span class="mm-link-desc">Product intelligence and tips</span></a></li><li><a class="mm-link" href="/field-manual/"><span class="mm-link-title">Field Manual</span><span class="mm-link-desc">What each feed rewards and punishes</span></a></li><li><a class="mm-link" href="/docs/reference/support/"><span class="mm-link-title">Get help</span><span class="mm-link-desc">Support and troubleshooting</span></a></li><li><a class="mm-link" href="/major/"><span class="mm-link-title">Meet Major</span><span class="mm-link-desc">Our mascot and his troops</span></a></li><li><a class="mm-link" href="/brand/"><span class="mm-link-title">Brand</span><span class="mm-link-desc">Logo, colors and the brand kit</span></a></li><li><a class="mm-link" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=nav"><span class="mm-link-title">Am I a Bot?</span><span class="mm-link-desc">Free check: what sites can see about your browser</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-trust">Trust<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-trust">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Trust</p>
+                  <p class="mm-intro-text">Every action runs on your own computer. Here is how we handle the rest.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/legal/"><span class="mm-link-title">Trust Center</span><span class="mm-link-desc">Your data, sessions and accounts</span></a></li><li><a class="mm-link" href="/#trust"><span class="mm-link-title">Yours to keep</span><span class="mm-link-desc">Why your accounts stay yours</span></a></li><li><a class="mm-link" href="/legal/privacy/"><span class="mm-link-title">Privacy</span><span class="mm-link-desc">What we collect and why</span></a></li><li><a class="mm-link" href="/legal/terms/"><span class="mm-link-title">Terms</span><span class="mm-link-desc">The rules for using Blowhorn</span></a></li><li><a class="mm-link" href="mailto:security@blowhorn.ai"><span class="mm-link-title">Security</span><span class="mm-link-desc">Report a security issue</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item"><a class="mm-top" href="/pricing/">Pricing</a></li>
+            <li class="mm-item mm-item-download"><a class="button button-primary mm-download" href="/download/">Download</a></li>
+          </ul>
+        </nav>
+        <a class="button button-primary site-cta" href="/download/">Download</a>
+      </div>
+    </header>
+    <script src="/js/nav.min.a132d70d42c7069eaa5a663137d6e20b5f76669ec259f035688202fc35474362.js" defer></script>
+<main id="main" class="page agent-page versus-page">
+      <div class="wrap">
+        <header class="agent-hero glass">
+          <div class="agent-hero-copy">
+            <p class="label"><a href="/compare/">Compare</a> &middot; Cloud schedulers</p>
+            <h1 id="versus-title" class="display">Blowhorn vs Buffer</h1>
+            <p class="body-lg versus-verdict card-paper">Blowhorn isn&#39;t a bot. It&#39;s you. Buffer is the friendliest way to keep a steady, approved calendar on many networks, with every computer switched off. Blowhorn is for the moment you need many real voices, replying as themselves, on the networks developers actually read.</p>
+          </div>
+          <div class="agent-hero-art" aria-hidden="true">
+            <span class="agent-mark agent-mark-xl">Bu</span>
+            <span class="agent-hero-plus">vs</span>
+            <img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="96" height="96">
+          </div>
+        </header>
+
+        <section class="agent-section" aria-labelledby="fit-title">
+          <div class="section-head">
+            <h2 id="fit-title" class="h2">Which one fits you</h2>
+            <p class="muted">If Buffer is the better fit, go use it. We mean that.</p>
+          </div>
+          <div class="versus-split versus-fit">
+            <div class="card card-plain versus-col">
+              <h3 class="h3">Choose Buffer if</h3>
+              <ul class="versus-list"><li>You want a calm calendar across many consumer networks, with approvals for your team</li><li>Posts must go out with every computer switched off</li><li>You want a free plan to start, and per-channel pricing that grows one channel at a time</li></ul>
+              <p class="ui"><a href="https://buffer.com/" rel="noopener">Go to Buffer</a></p>
+            </div>
+            <div class="card card-paper versus-col versus-us">
+              <h3 class="h3">Choose Blowhorn if</h3>
+              <ul class="versus-list"><li>Your audience lives on LinkedIn, X, Reddit, Hacker News, GitHub, Bluesky and Slack</li><li>One post should be amplified by your founders, your team and your supporters, as themselves, not just published once</li><li>You want posting to happen from your own browser, on your own computers, at a human pace, under rules you set</li><li>You run one person, a local practice, a whole enterprise, or several client brands from one shared queue</li></ul>
+              <p class="ui"><a href="/download/">Get Blowhorn</a></p>
+            </div>
+          </div>
+        </section><section class="agent-section" aria-labelledby="art-title">
+          <figure class="versus-art glass">
+            <img src="/assets/brand/cast/icons/recruit-chick.webp" alt="Recruit Chick, a yellow chick in a green helmet firing hearts from a slingshot, with blue thumbs-up and comment icons flying" loading="lazy"><figcaption class="muted">Recruit Chick fires the first-hour replies and reposts from your other profiles, because the first hour decides whether anybody sees a post at all.</figcaption>
+          </figure>
+        </section>
+        <section class="agent-section" aria-labelledby="wins-title">
+          <div class="versus-ledger glass">
+            <div class="versus-ledger-col versus-ledger-win">
+              <h2 id="wins-title" class="h3">Where Blowhorn wins</h2>
+              <ul class="versus-marks"><li><span class="versus-mark" aria-hidden="true"></span>No per-channel math: three profiles on four networks is twelve Buffer channels</li><li><span class="versus-mark" aria-hidden="true"></span>Several of your profiles can amplify the same post, as themselves</li><li><span class="versus-mark" aria-hidden="true"></span>Hacker News, Reddit, GitHub and Slack in the same queue, plus careful LinkedIn outreach</li></ul>
+            </div>
+            <div class="versus-ledger-col versus-ledger-gap">
+              <h2 class="h3">Where Blowhorn doesn't win</h2>
+              <ul class="versus-marks"><li><span class="versus-mark" aria-hidden="true"></span>Buffer posts with every computer switched off. Blowhorn needs at least one of your computers awake</li><li><span class="versus-mark" aria-hidden="true"></span>Buffer covers Instagram, TikTok and Pinterest today. Blowhorn does not yet</li><li><span class="versus-mark" aria-hidden="true"></span>Buffer&#39;s calendar and approval tools are more polished</li></ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="agent-section" aria-labelledby="table-title">
+          <div class="section-head">
+            <h2 id="table-title" class="h2">Side by side</h2>
+            <p class="muted">Buffer pricing as of Nov 2026: Free (10 posts a channel); Essentials $5 a channel, Team $10 a channel a month, billed annually (<a href="https://buffer.com/pricing" rel="noopener">source</a>). Blowhorn: free plan available, see <a href="/pricing/">pricing</a>.</p>
+          </div>
+          <div class="compare-scroll versus-table-wrap">
+            <table class="compare-table versus-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="compare-feature-col"><span class="visually-hidden">Feature</span></th>
+                  <th scope="col">Buffer</th>
+                  <th scope="col" class="compare-us"><img src="/assets/brand/logo/blowhorn-icon.svg" alt="" width="20" height="20"> Blowhorn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row" class="compare-feature">Where it acts</th><td>Buffer&#39;s cloud, through each network&#39;s official APIs</td><td class="compare-us">Your computers: your own signed-in browser for LinkedIn, X, Reddit and Hacker News; the platform&#39;s API for GitHub, Bluesky and Slack</td></tr>
+                <tr><th scope="row" class="compare-feature">Networks</th><td>Many, incl. Instagram, TikTok, Threads, Pinterest, Mastodon, Facebook, YouTube, LinkedIn, X and Bluesky</td><td class="compare-us">LinkedIn, X, Reddit, Hacker News, GitHub, Bluesky and Slack. More networks: Coming soon</td></tr>
+                <tr><th scope="row" class="compare-feature">Amplify one post across many people</th><td>No cross-account amplify</td><td class="compare-us">Sound wave: one scheduled message, amplified by every profile in your account</td></tr>
+                <tr><th scope="row" class="compare-feature">Hacker News, Reddit, GitHub, Slack</th><td>No</td><td class="compare-us">Yes</td></tr>
+                <tr><th scope="row" class="compare-feature">Works with every computer switched off</th><td>Yes</td><td class="compare-us">No. As long as one of your computers is awake, the schedule runs</td></tr>
+                <tr><th scope="row" class="compare-feature">AI agents</th><td>Hosted MCP server on every plan, public API, plus AI Assistant on every plan</td><td class="compare-us">MCP server, AI skills and a full CLI with --json and --dry-run on writes. AI drafts, you decide</td></tr>
+                <tr><th scope="row" class="compare-feature">Bought engagement</th><td>None</td><td class="compare-us">None. Blowhorn sells no followers, likes or reposts</td></tr>
+                <tr><th scope="row" class="compare-feature">Price</th><td>Per channel</td><td class="compare-us">Free plan available, see pricing</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section-head">
+            <h3 class="h3">Networks Blowhorn posts on today</h3>
+          </div>
+          <ul class="versus-logos"><li><span class="logo-tile"><img src="/assets/platforms/linkedin-in-bug.png" alt="LinkedIn" width="28" height="28" loading="lazy"></span><span class="ui">LinkedIn</span></li><li><span class="logo-tile"><img src="/assets/platforms/x-logo-black.png" alt="X" width="28" height="28" loading="lazy"></span><span class="ui">X</span></li><li><span class="logo-tile"><img src="/assets/platforms/reddit-logo.png" alt="Reddit" width="28" height="28" loading="lazy"></span><span class="ui">Reddit</span></li><li><span class="logo-tile"><img src="/assets/platforms/hacker-news-y18.svg" alt="Hacker News" width="28" height="28" loading="lazy"></span><span class="ui">Hacker News</span></li><li><span class="logo-tile"><img src="/assets/platforms/github-invertocat-black.svg" alt="GitHub" width="28" height="28" loading="lazy"></span><span class="ui">GitHub</span></li><li><span class="logo-tile"><img src="/assets/platforms/bluesky-butterfly-blue.svg" alt="Bluesky" width="28" height="28" loading="lazy"></span><span class="ui">Bluesky</span></li><li><span class="logo-tile"><img src="/assets/platforms/slack-mark.svg" alt="Slack" width="28" height="28" loading="lazy"></span><span class="ui">Slack</span></li>
+          </ul>
+        </section>
+
+        <section class="agent-section versus-belief" aria-labelledby="belief-title">
+          <h2 id="belief-title" class="h2">Strong signal, not bought numbers</h2>
+          <p>Blowhorn doesn&#39;t sell followers, likes or repost packages, and it never will. A like from someone paid to click is weak signal: it moves a number and nothing else. Strong signal is a reply, a question, a repost with a real take from someone who knows your work, a thread that turns into a discussion. Blowhorn exists to get your message in front of the people who would answer it, through the profiles of real people who chose to back you.</p>
+          <p>Buffer is honest software and it sells no engagement either, so this one is about reach, not ethics. A calendar publishes your post once, from one account. Feeds move on replies and real conversation in the first hour, from people who know you. Platforms are cracking down on anything that looks like a bot, and doing it all by hand does not scale. That gap is the job Blowhorn was built for: your own voice, at a human pace, amplified by real people.</p>
+        </section><section class="agent-section versus-code" aria-labelledby="code-title">
+          <div class="section-head"><p class="muted">Preview before anything goes out. AI drafts, you decide.</p>
+          </div>
+          <figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>blowhorn post --platform linkedin --profile personal --dry-run
+</span></span><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>blowhorn post --platform linkedin --profile personal</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+        </section>
+
+        <aside class="major-says card-paper" aria-label="The Major says">
+  <img class="major-says-art" src="/assets/brand/mascot/locked-6/major-6-head.webp" alt="" width="56" height="56" loading="lazy">
+  <div class="major-says-copy">
+    <p class="label"><a href="/major/">The Major says</a></p>
+    <p class="major-says-line h3">"A calendar tells the world you posted. Recruits in the replies tell the world it mattered."</p>
+  </div>
+</aside>
+
+
+        <section class="agent-section tells-callout glass" aria-labelledby="compare-tells-title">
+          <figure class="tells-callout-art" aria-hidden="true">
+            <img src="/assets/brand/cast/sleeper-cell-bot-radar-640.webp" srcset="/assets/brand/cast/sleeper-cell-bot-radar-640.webp 640w, /assets/brand/cast/sleeper-cell-bot-radar.webp 1280w" sizes="(min-width: 720px) 20rem, 90vw" alt="" width="1280" height="720" loading="lazy">
+          </figure>
+          <div class="tells-callout-copy">
+            <h2 id="compare-tells-title" class="h2">Does your current tool look human?</h2>
+            <p class="muted">Websites check. Run the free Am I a Bot? test in the browser you use it in and see what they see.</p>
+            <p class="tells-actions">
+              <a class="button button-primary" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=compare">Run the free check</a>
+            </p>
+          </div>
+        </section>
+
+
+        <section class="agent-section" aria-labelledby="faq-title">
+          <div class="section-head">
+            <h2 id="faq-title" class="h2">Frequently Asked Questions</h2>
+          </div>
+          <div class="agent-faq versus-faq">
+            <details class="card card-field"><summary class="ui">Is Buffer better than Blowhorn?</summary><p>For a broad, always-on calendar across consumer networks, yes. For amplifying one message from many real profiles on LinkedIn, X, Reddit, Hacker News, GitHub, Bluesky and Slack, we think Blowhorn is the better fit.</p></details>
+            <details class="card card-plain"><summary class="ui">Can I use both?</summary><p>Yes. Plenty of teams keep a calendar tool for the brand feed and use Blowhorn to rally the people behind a launch.</p></details>
+            <details class="card card-field"><summary class="ui">Does Blowhorn post while every computer is switched off?</summary><p>No. As long as one computer set up for the profile is awake, the schedule runs. With every computer switched off, nothing goes out. That is the honest trade for posting as you, from your own browser.</p></details>
+          </div>
+        </section>
+
+        <section class="agent-section agent-cta glass" aria-labelledby="cta-title">
+          <h2 id="cta-title" class="h2">One message out, many ears in</h2>
+          <p class="muted">If that sounds like what you've been missing, give Blowhorn a try. It's free during early access.</p>
+          <p class="actions"><a class="button button-primary" href="/download/">Download Blowhorn</a></p>
+        </section>
+
+        <section class="agent-section" aria-labelledby="more-title">
+          <div class="section-head"><h2 id="more-title" class="h2">More comparisons</h2></div>
+          <ul class="agent-grid">
+  <li>
+    <a class="agent-tile card-field" href="/compare/hootsuite/">
+      <span class="agent-mark" aria-hidden="true">Hs</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Hootsuite</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-plain" href="/compare/sprout-social/">
+      <span class="agent-mark" aria-hidden="true">Sp</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Sprout Social</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-stamp" href="/compare/later/">
+      <span class="agent-mark" aria-hidden="true">La</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Later</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-dispatch" href="/compare/publer/">
+      <span class="agent-mark" aria-hidden="true">Pb</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Publer</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-plain" href="/compare/socialbee/">
+      <span class="agent-mark" aria-hidden="true">SB</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs SocialBee</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-field" href="/compare/metricool/">
+      <span class="agent-mark" aria-hidden="true">Mc</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Metricool</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-dispatch" href="/compare/typefully/">
+      <span class="agent-mark" aria-hidden="true">Tf</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Typefully</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-stamp" href="/compare/postiz/">
+      <span class="agent-mark" aria-hidden="true">Pz</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Postiz</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-field" href="/compare/contentstudio/">
+      <span class="agent-mark" aria-hidden="true">CS</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs ContentStudio</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a class="agent-tile card-plain" href="/compare/sendible/">
+      <span class="agent-mark" aria-hidden="true">Se</span>
+      <span class="agent-tile-copy">
+        <span class="h3">vs Sendible</span>
+        <span class="caption muted">Cloud schedulers</span>
+      </span>
+    </a>
+  </li>
+</ul>
+
+          <p class="ui versus-all"><a href="/compare/#versus-title">Every comparison</a></p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-panel glass">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <a class="footer-logo" href="/" aria-label="Blowhorn home">
+                <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="200" height="50">
+                <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="200" height="50">
+              </a>
+              <p class="footer-tagline">Your voice, at full volume.</p>
+              <nav class="footer-social" aria-label="Blowhorn on social media">
+                <ul>
+                  <li><a href="https://x.com/blowhorn_ai" target="_blank" rel="noopener noreferrer" aria-label="X"><img src="/assets/platforms/x-logo-black.png" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.youtube.com/@blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/platforms/youtube-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.facebook.com/BlowhornAI" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="/assets/platforms/facebook-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://github.com/blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/platforms/github-invertocat-black.svg" alt="" width="20" height="20"></a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="footer-news">
+              <form class="newsletter" name="newsletter" method="post" action="https://api.blowhorn.ai/api/subscribe">
+              <label class="newsletter-label ui" for="newsletter-email">Subscribe to our newsletter</label>
+              <div class="newsletter-row">
+                <input type="email" id="newsletter-email" name="email" autocomplete="email" placeholder="Email address" required>
+                <button class="button button-primary" type="submit">Subscribe</button>
+              </div>
+              <input type="hidden" name="source_page" value="/compare/buffer/">
+              <p class="signup-honeypot" aria-hidden="true">
+                <label for="newsletter-email-website">Website</label>
+                <input id="newsletter-email-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </p>
+            </form>
+
+            </div>
+          </div>
+          <nav class="footer-cols" aria-label="Footer">
+            <div class="footer-col">
+              <h2 class="footer-title">Product</h2>
+              <ul>
+                <li><a href="/download/">Download</a></li>
+                <li><a href="/pricing/">Pricing</a></li>
+                <li><a href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">Browser extension</a></li>
+                <li><a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a></li>
+                <li><a href="/#platforms">Platforms</a></li>
+                <li><a href="/integrations/actions/">Action matrix</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Resources</h2>
+              <ul>
+                <li><a href="/resources/">Resources</a></li>
+                <li><a href="/resources/videos/">Videos</a></li>
+                <li><a href="/resources/articles/">Articles</a></li>
+                <li><a href="/docs/">Docs</a></li>
+                <li><a href="/docs/reference/support/">Get help</a></li>
+                <li><a href="/field-manual/">Field Manual</a></li>
+                <li><a href="/major/">Meet Major</a></li>
+                <li><a href="/brand/">Brand</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Trust</h2>
+              <ul>
+                <li><a href="/legal/">Trust Center</a></li>
+                <li><a href="/legal/privacy/">Privacy</a></li>
+                <li><a href="/legal/terms/">Terms</a></li>
+                <li><a href="mailto:security@blowhorn.ai">Security</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">AI native</h2>
+              <ul>
+                <li><a href="/ai/">AI native</a></li>
+                <li><a href="/ai/blowhorn-axi/">blowhorn-axi</a></li>
+                <li><a href="/ai/mcp/">MCP server</a></li>
+                <li><a href="/agents/">Agent guides</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-tools">
+              <h2 class="footer-title">Free tools</h2>
+              <ul>
+                <li><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">Am I a Bot?</a></li>
+                <li><a href="https://tells.blowhorn.ai/checks/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">What each check means</a></li>
+                <li><a href="https://tells.blowhorn.ai/agents/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">For AI agents and scripts</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-wide">
+              <h2 class="footer-title">Compare</h2>
+              <ul>
+                <li><a href="/compare/">How we compare</a></li>
+                <li><a href="/compare/buffer/" aria-label="Blowhorn vs Buffer">Buffer</a></li>
+                <li><a href="/compare/hootsuite/" aria-label="Blowhorn vs Hootsuite">Hootsuite</a></li>
+                <li><a href="/compare/socialbee/" aria-label="Blowhorn vs SocialBee">SocialBee</a></li>
+                <li><a href="/compare/postiz/" aria-label="Blowhorn vs Postiz">Postiz</a></li>
+                <li><a href="/compare/taplio/" aria-label="Blowhorn vs Taplio">Taplio</a></li>
+                <li><a href="/compare/expandi/" aria-label="Blowhorn vs Expandi">Expandi</a></li>
+                <li><a href="/compare/phantombuster/" aria-label="Blowhorn vs PhantomBuster">PhantomBuster</a></li>
+                <li><a href="/compare/mokumokuren/" aria-label="Blowhorn vs mokumokuren">mokumokuren</a></li>
+                <li><a href="/compare/native-scheduling/" aria-label="Blowhorn vs native scheduling">Native scheduling</a></li>
+                <li><a href="/versus/">All comparisons</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom caption">
+          <span>&copy; 2026 Layer5, Inc.</span>
+          <a class="status-link" href="https://layer5.statuspage.io" target="_blank" rel="noreferrer">Status <span class="pulse-icon" aria-hidden="true"></span></a>
+          <button type="button" class="footer-consent" data-consent-open aria-controls="consent">Cookie preferences</button>
+          <span class="footer-tm">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky, GitHub, YouTube, Instagram, TikTok and Facebook are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
+        </div>
+      </div>
+    </footer>
+    <section id="consent" class="consent glass" aria-labelledby="consent-title" hidden>
+      <h2 id="consent-title" class="consent-title">Cookies</h2>
+      <p class="consent-text">Yes, we use cookies. Yes, you can eat them, if you can find them. Do you want us to <a href="/legal/privacy/#google-analytics">remember you</a> or pretend we've never met?</p>
+      <div class="consent-actions">
+        <button type="button" class="button button-primary consent-button" data-consent="granted">Accept</button>
+        <button type="button" class="button button-secondary consent-button" data-consent="denied">Decline</button>
+      </div>
+      <button type="button" class="consent-close" data-consent="denied" aria-label="Close and decline">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </section>
+
+
+    <script src="/js/code-card.min.681cde1d563b320da97fa3f2c094be9469b193e726a2734eb3eb264d3a5e33e4.js" defer></script>
+    <script type="application/json" id="docs-events">{"$schema":"../schemas/docs_events.schema.json","attribution_params":["first_source","first_medium","first_campaign","first_content","first_term","first_referrer_host","landing_guide","landing_page"],"clients":{"chatgpt":"ChatGPT","claude-code":"Claude Code","claude-desktop":"Claude Desktop","cline":"Cline","cursor":"Cursor","gemini-cli":"Gemini CLI","goose":"Goose","openai-codex-cli":"OpenAI Codex CLI","vs-code":"VS Code with GitHub Copilot","vs-code-with-github-copilot":"VS Code with GitHub Copilot","windsurf-devin-desktop":"Windsurf (Devin Desktop)","zed":"Zed"},"consent_event":"blowhorn:consent","consent_key":"blowhorn-consent","default_client":"general","events":{"docs_guide_view":{"description":"A tracked guide was viewed after consent: once per page load.","params":["page_path","guide","client"]},"docs_outbound_click":{"description":"A link to npm, an MCP registry or a Blowhorn download was followed.","params":["page_path","client","link_kind","link_url"]},"docs_snippet_copy":{"description":"The copy button on a code card was pressed. Never carries the copied text.","params":["page_path","client","snippet_kind","snippet_title"]}},"internal_hosts":["blowhorn.ai","www.blowhorn.ai"],"outbound":[{"hosts":["npmjs.com","www.npmjs.com","registry.npmjs.org"],"kind":"npm"},{"hosts":["registry.modelcontextprotocol.io"],"kind":"registry"},{"hosts":["github.com"],"kind":"registry","paths":["^/mcp(/|$)"]},{"hosts":["github.com"],"kind":"download","paths":["^/blowhorn-ai/[^/]+/releases(/|$)"]},{"hosts":["blowhorn.ai","www.blowhorn.ai"],"kind":"download","paths":["^/download/"]}],"pages":["/docs/how-to/set-up/connect-mcp-client/","/docs/reference/mcp-server/","/docs/reference/python-client/","/docs/tutorials/first-mcp-connection/","/docs/explanation/mcp-and-safety/","/ai/mcp/"],"snippet_kinds":{"bash":"shell","console":"shell","json":"json","sh":"shell","shell":"shell","text":"text","toml":"toml","yaml":"yaml","yml":"yaml","zsh":"shell"},"storage_key":"blowhorn-docs-attribution","utm_params":["utm_source","utm_medium","utm_campaign","utm_content","utm_term"]}</script>
+    <script src="/js/docs-attribution.min.1be585bb90d12fd1bc9a08fea053d087e031b32eced81aeba9f8f18390a7c3ad.js" integrity="sha256-G&#43;WFu5DRL9G8mgj&#43;oFPQh&#43;Axsy7O2Brrqfjxg5Cnw60=" crossorigin="anonymous" defer></script>
+  </body>
+</html>

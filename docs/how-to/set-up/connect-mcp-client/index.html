@@ -1,0 +1,2044 @@
+<!DOCTYPE html><html lang="en" data-theme="reveille">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><script>
+      (function () {
+        var allowed = ["signal","reveille"], param = "theme", q = null, i;
+        try { q = new URLSearchParams(window.location.search).get(param); } catch (e) {}
+        if (!q) return;
+        for (i = 0; i < allowed.length; i++) {
+          if (allowed[i] === q) {
+            document.documentElement.setAttribute('data-theme', q);
+            return;
+          }
+        }
+      })();
+    </script>
+
+    <script>
+      (function () {
+        try {
+          if (window.localStorage.getItem("bh-tells-bar-v1")) document.documentElement.setAttribute('data-tells-bar', 'off');
+        } catch (e) {   }
+      })();
+    </script>
+<title>Connect an AI assistant over MCP: Blowhorn</title>
+    <meta name="description" content="Point Claude, ChatGPT, Codex, Cursor, VS Code, Windsurf, Gemini CLI, Zed, Cline, Goose, Muse, or Grok at the Blowhorn MCP server and let an assistant drive Blowhorn from your computer.">
+    <link rel="canonical" href="https://blowhorn.ai/docs/how-to/set-up/connect-mcp-client/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Blowhorn">
+    <meta property="og:title" content="Connect an AI assistant over MCP: Blowhorn">
+    <meta property="og:description" content="Point Claude, ChatGPT, Codex, Cursor, VS Code, Windsurf, Gemini CLI, Zed, Cline, Goose, Muse, or Grok at the Blowhorn MCP server and let an assistant drive Blowhorn from your computer.">
+    <meta property="og:url" content="https://blowhorn.ai/docs/how-to/set-up/connect-mcp-client/">
+    <meta property="og:image" content="https://blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="900">
+    <meta property="og:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Connect an AI assistant over MCP: Blowhorn">
+    <meta name="twitter:description" content="Point Claude, ChatGPT, Codex, Cursor, VS Code, Windsurf, Gemini CLI, Zed, Cline, Goose, Muse, or Grok at the Blowhorn MCP server and let an assistant drive Blowhorn from your computer.">
+    <meta name="twitter:image" content="https://blowhorn.ai/assets/brand/marketing/blowhorn-social-banner-16x9.png">
+    <meta name="twitter:image:alt" content="Major Blowhorn, a rooster drill sergeant, crows through a megaphone beside the Blowhorn wordmark and the tagline One message. Many ears.">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/assets/brand/logo/blowhorn-favicon-32.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/brand/logo/blowhorn-apple-touch-icon-180.png"><link rel="preload" href="/scss/main.min.e160ee0f1470a9e785221c16912777c236fedbb0c8ef27e3b9b728e96d70e6c7.css" as="style" integrity="sha256-4WDuDxRwqeeFIhwWkSd3wjb&#43;27DI7yfjubco6W1w5sc=" crossorigin="anonymous">
+<link href="/scss/main.min.e160ee0f1470a9e785221c16912777c236fedbb0c8ef27e3b9b728e96d70e6c7.css" rel="stylesheet" integrity="sha256-4WDuDxRwqeeFIhwWkSd3wjb&#43;27DI7yfjubco6W1w5sc=" crossorigin="anonymous">
+
+<link rel="stylesheet" href="/css/site.min.4a0f5dc736649425d0a54f89356a77372218febfedf5e530d6f95fd9dde14c89.css">
+
+    <script src="/js/vendor/jquery.min.fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a.js"></script>
+    <script src="/js/vendor/lunr.min.d802a4db88ab7be6be90d8c44a31a0f1697db28c254179baa75e704d51723068.js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      gtag('js', new Date());
+      gtag('config', 'G-2ZLYGVE3HN');
+    </script>
+    <script src="/js/consent.min.87a540c5c86603eab7872bd71d23e8f0460cec66cc2ab450f6ab59bd6a2839fe.js" data-ga-id="G-2ZLYGVE3HN" defer></script>
+
+  </head>
+  <body class="docs">
+    <a class="skip-link ui" href="#main">Skip to content</a><svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <symbol id="glyph-menubar" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+        <path d="M3 9h18"></path>
+        <path d="M7 6.5h.01M10 6.5h.01"></path>
+        <path d="M8 14h8M8 17h5"></path>
+      </symbol>
+      <symbol id="glyph-terminal" viewBox="0 0 24 24">
+        <path d="M5 7l5 5-5 5"></path>
+        <path d="M12 17h7"></path>
+      </symbol>
+      <symbol id="glyph-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 2"></path>
+      </symbol>
+      <symbol id="glyph-extension" viewBox="0 0 24 24">
+        <path d="M10 4a2 2 0 1 1 4 0v1h3a1 1 0 0 1 1 1v3h-1a2 2 0 1 0 0 4h1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 1 0-4 0v1H5a1 1 0 0 1-1-1v-4h1a2 2 0 1 0 0-4H4V6a1 1 0 0 1 1-1h5z"></path>
+      </symbol>
+      <symbol id="glyph-download" viewBox="0 0 24 24">
+        <path d="M12 4v11"></path>
+        <path d="M7 11l5 5 5-5"></path>
+        <path d="M4 19h16"></path>
+      </symbol>
+    </svg>
+
+    <aside class="tells-bar" aria-label="Announcement" data-tells-bar data-key="bh-tells-bar-v1">
+      <div class="wrap tells-bar-inner">
+        <div class="tells-bar-cluster">
+          <p class="tells-bar-text">
+            <span class="tells-bar-text-full">Find out what websites can tell about your browser. Spoiler: plenty.</span>
+            <span class="tells-bar-text-short">Fingerprints?</span>
+          </p>
+          <a class="tells-bar-cta" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=bar">
+            <span class="tells-bar-cta-label">Am I a Bot?</span>
+            <span class="tells-bar-pill">Free</span>
+          </a>
+        </div>
+        <button type="button" class="tells-bar-close" aria-label="Dismiss" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
+    </aside>
+    <script src="/js/tells-bar.min.35471ceb2a867b0a8500cdeabc0e8f1fa9f0707e82ddb81569f0769014f94c63.js" defer></script>
+<header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Blowhorn home">
+          <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="176" height="44">
+          <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="176" height="44">
+        </a>
+        <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="site-menu" hidden>
+          <span class="mm-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mm-toggle-text">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-menu" aria-label="Primary">
+          <ul class="mm-list">
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-product">Product<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-cards" id="mm-product">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Product</p>
+                  <p class="mm-intro-text">One product. Every way in.</p>
+                  <p class="mm-intro-sub">Not a shelf of products to buy one by one. One subscription, and every interface below is included: same queue, same profiles, same limits.</p>
+                  <p class="mm-intro-more"><a href="/pricing/">See the one plan</a></p>
+                </div>
+                <div class="mm-cards-wrap">
+                  <ul class="mm-cards">
+                    <li><a class="mm-card card-field" href="/download/">
+                      <span class="iface-art iface-art-desktop" aria-hidden="true"><span class="ia-panel ia-app">
+    <span class="ia-app-rail">
+      <span class="ia-lights"><i></i><i></i><i></i></span>
+      <span class="ia-app-brand"><picture><source srcset="/assets/brand/logo/blowhorn-icon-on-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/brand/logo/blowhorn-icon.svg" alt="" width="11" height="11"></picture><picture><source srcset="/assets/brand/logo/blowhorn-wordmark-white.svg" media="(prefers-color-scheme: dark)"><img class="ia-app-word" src="/assets/brand/logo/blowhorn-wordmark.svg" alt="" width="34" height="7"></picture></span>
+      <span class="ia-app-new"><b>+</b>New activity</span>
+      <span class="ia-app-nav">
+        <span class="ia-app-item">Home</span>
+        <span class="ia-app-item on">Activity<em>3 ready</em></span>
+        <span class="ia-app-item">Profiles<em>4</em></span>
+        <span class="ia-app-item">Performance</span>
+        <span class="ia-app-item">Safety</span>
+      </span>
+      <span class="ia-app-status"><i></i>On watch</span>
+    </span>
+    <span class="ia-app-main">
+      <span class="ia-app-bar"><span class="ia-seg"><b class="on">Upcoming</b><b>Routines</b><b>History</b></span></span>
+      <span class="ia-app-head"><span></span><span>Status</span><span>Preview</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4l14 16M19 4L5 20"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Release notes</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 10.5C10.4 7.2 7.2 4 4.8 4 3.4 4 3 5 3 6.2c0 1.2.5 4.6 1.1 5.6.8 1.4 2.6 1.9 4.6 1.6-2.4.5-3.6 2-2.4 3.6 1.8 2.3 4.1 1 5.7-3 1.6 4 3.9 5.3 5.7 3 1.2-1.6 0-3.1-2.4-3.6 2 .3 3.8-.2 4.6-1.6.6-1 1.1-4.4 1.1-5.6C21 5 20.6 4 19.2 4 16.8 4 13.6 7.2 12 10.5z"/></svg>
+<span class="ia-state wait"><i></i>2:00 PM</span><span class="ia-prev">Team recap</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Desktop app</span>
+                      <span class="mm-card-desc">The full console on your computer: queue, profiles, approvals</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-stamp" href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">
+                      <span class="mm-card-art">
+                        <span class="iface-art iface-art-extension" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-tab-title">Feed | LinkedIn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">linkedin.com/feed</span></span><img class="ia-pin" src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="11" height="11"><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-card"><span class="ia-who"><i class="ia-face"></i><span class="ia-line w45"></span></span><span class="ia-line w75"></span><span class="ia-line w60"></span></span>
+      <span class="ia-row sweep"><span class="ia-line w50"></span><span class="ia-pill ok">Sent as you</span></span>
+    </span>
+  </span></span>
+
+                        <img class="mm-card-chrome" src="/assets/platforms/google-chrome-logo.svg" alt="" width="28" height="28">
+                      </span>
+                      <span class="mm-card-title">Browser extension</span>
+                      <span class="mm-card-desc">Blowhorn inside your own browser, where the work happens</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-plain" href="https://cloud.blowhorn.ai">
+                      <span class="iface-art iface-art-web" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="9" height="9"><span class="ia-tab-title">Blowhorn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">cloud.blowhorn.ai</span></span><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-page-head"><span class="ia-page-title">Activity</span><span class="ia-live"><i></i>Live</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="14" rx="7.5" ry="5.5"/><path d="M12 8.5l1.2-4.5 3.3.9M9.5 16.5c1.5 1.2 3.5 1.2 5 0"/><circle cx="17.5" cy="5" r="1.2"/></svg>
+<span class="ia-state wait"><i></i>Needs you</span><span class="ia-prev">AMA thread</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                      <span class="mm-card-title">Web app</span>
+                      <span class="mm-card-desc">Your queue from any browser, at cloud.blowhorn.ai</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-dispatch" href="/ai/blowhorn-axi/">
+                      <span class="iface-art iface-art-cli" aria-hidden="true"><span class="ia-panel ia-term">
+    <span class="ia-bar"><span class="ia-lights"><i></i><i></i><i></i></span><span class="ia-caption">zsh · blowhorn</span></span>
+    <span class="ia-code"><span class="ia-cline"><b>$</b> blowhorn post launch.md --dry-run</span><span class="ia-cline ok">✓ rehearsed · 3 profiles, nothing sent</span><span class="ia-cline"><b>$</b> blowhorn post launch.md --go <span class="ia-cursor"></span></span></span>
+  </span></span>
+
+                      <span class="mm-card-title">Command line</span>
+                      <span class="mm-card-desc">Every action as a command: for you, scripts and agents</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card card-field" href="/ai/mcp/">
+                      <span class="iface-art iface-art-mcp" aria-hidden="true"><span class="ia-panel ia-diagram">
+    <span class="ia-flow">
+      <span class="ia-chip"><span class="ia-chip-name">Claude</span><span class="ia-chip-sub">assistant</span></span>
+      <span class="ia-link"><i class="ia-pulse"></i></span>
+      <span class="ia-chip ia-chip-hub"><span class="ia-chip-name">MCP</span><span class="ia-chip-sub">tools/list</span></span>
+      <span class="ia-link"><i class="ia-pulse d2"></i></span>
+      <span class="ia-chip"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="14" height="14"><span class="ia-chip-sub">Blowhorn</span></span>
+    </span>
+    <span class="ia-mono ia-diagram-note">post · amplify · schedule · approval rules on</span>
+  </span></span>
+
+                      <span class="mm-card-title">MCP server</span>
+                      <span class="mm-card-desc">Plug Blowhorn into Claude and other AI assistants</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                    <li><a class="mm-card mm-card-plan card-stamp" href="/pricing/">
+                      <span class="mm-card-plan-mark" aria-hidden="true">1</span>
+                      <span class="mm-card-title">One subscription</span>
+                      <span class="mm-card-desc">Every way in, one subscription</span>
+                      <span class="mm-card-arrow" aria-hidden="true"></span>
+                    </a></li>
+                  </ul>
+                  <p class="mm-cards-foot">
+                    <a href="/#platforms">Platforms</a>
+                    <a href="/integrations/actions/">Action matrix</a>
+                    <a href="/#how">How you run it</a>
+                    <a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a>
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-solutions">Solutions<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-wide" id="mm-solutions">
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/for/">By role</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/for/devrel/"><span class="mm-link-title">DevRel</span></a></li><li><a class="mm-link" href="/for/marketing/"><span class="mm-link-title">Marketing managers</span></a></li><li><a class="mm-link" href="/for/founders/"><span class="mm-link-title">Founders</span></a></li><li><a class="mm-link" href="/for/open-source/"><span class="mm-link-title">Open source maintainers</span></a></li><li><a class="mm-link" href="/for/community/"><span class="mm-link-title">Community managers</span></a></li><li><a class="mm-link" href="/for/agencies/"><span class="mm-link-title">Agencies and consultants</span></a></li><li><a class="mm-link" href="/for/social-media/"><span class="mm-link-title">Social media managers</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/use-cases/">By use case</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/use-cases/launch-day/"><span class="mm-link-title">Launch day</span></a></li><li><a class="mm-link" href="/use-cases/open-source-release/"><span class="mm-link-title">Open source release</span></a></li><li><a class="mm-link" href="/use-cases/conference/"><span class="mm-link-title">Conference</span></a></li><li><a class="mm-link" href="/use-cases/linkedin-outreach/"><span class="mm-link-title">Careful LinkedIn outreach</span></a></li><li><a class="mm-link" href="/use-cases/team-amplification/"><span class="mm-link-title">Team amplification</span></a></li><li><a class="mm-link" href="/use-cases/agent-publishing/"><span class="mm-link-title">Agent publishing</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/solutions/">By category</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/solutions/developer-distribution/"><span class="mm-link-title">Developer distribution</span></a></li><li><a class="mm-link" href="/solutions/employee-advocacy/"><span class="mm-link-title">Employee advocacy</span></a></li><li><a class="mm-link" href="/solutions/distributed-teams/"><span class="mm-link-title">Distributed teams</span></a></li><li><a class="mm-link" href="/solutions/social-scheduling/"><span class="mm-link-title">Social scheduling</span></a></li><li><a class="mm-link" href="/solutions/linkedin-automation/"><span class="mm-link-title">LinkedIn automation</span></a></li><li><a class="mm-link" href="/solutions/multi-profile/"><span class="mm-link-title">Multi-profile</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/ai/">AI native</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/ai/"><span class="mm-link-title">AI native</span><span class="mm-link-desc">Built so agents can run it safely</span></a></li><li><a class="mm-link" href="/ai/blowhorn-axi/"><span class="mm-link-title">blowhorn-axi</span><span class="mm-link-desc">The command line made for agents</span></a></li><li><a class="mm-link" href="/ai/mcp/"><span class="mm-link-title">MCP server</span><span class="mm-link-desc">Plug Blowhorn into any MCP client</span></a></li><li><a class="mm-link" href="/agents/"><span class="mm-link-title">Agentic AI marketing</span><span class="mm-link-desc">Let your AI agent run the launch</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/agents/">Works with</a></p>
+                  <ul class="mm-links mm-compact"><li><a class="mm-link" href="/agents/claude-code/"><span class="mm-link-title">Claude Code</span></a></li><li><a class="mm-link" href="/agents/opencode/"><span class="mm-link-title">OpenCode</span></a></li><li><a class="mm-link" href="/agents/pi/"><span class="mm-link-title">Pi</span></a></li><li><a class="mm-link" href="/agents/codex/"><span class="mm-link-title">Codex</span></a></li><li><a class="mm-link" href="/agents/grok/"><span class="mm-link-title">Grok</span></a></li><li><a class="mm-link" href="/agents/deepseek/"><span class="mm-link-title">DeepSeek</span></a></li><li><a class="mm-link" href="/agents/cli/"><span class="mm-link-title">CLI</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-compare">Compare<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-compare">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/compare/">How Blowhorn compares</a></p>
+                  <p class="mm-intro-text">Side by side with schedulers, LinkedIn tools, advocacy suites and AI agents. Where they win too.</p>
+                  <p class="mm-intro-more"><a href="/versus/">All comparisons</a></p>
+                </div>
+                <ul class="mm-links mm-cols-3 mm-compact"><li><a class="mm-link" href="/compare/buffer/"><span class="mm-link-title">Buffer</span></a></li><li><a class="mm-link" href="/compare/hootsuite/"><span class="mm-link-title">Hootsuite</span></a></li><li><a class="mm-link" href="/compare/socialbee/"><span class="mm-link-title">SocialBee</span></a></li><li><a class="mm-link" href="/compare/postiz/"><span class="mm-link-title">Postiz</span></a></li><li><a class="mm-link" href="/compare/taplio/"><span class="mm-link-title">Taplio</span></a></li><li><a class="mm-link" href="/compare/expandi/"><span class="mm-link-title">Expandi</span></a></li><li><a class="mm-link" href="/compare/phantombuster/"><span class="mm-link-title">PhantomBuster</span></a></li><li><a class="mm-link" href="/compare/mokumokuren/"><span class="mm-link-title">mokumokuren</span></a></li><li><a class="mm-link" href="/compare/native-scheduling/"><span class="mm-link-title">Native scheduling</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-resources">Resources<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-resources">
+                <div class="mm-intro">
+                  <p class="mm-intro-title"><a href="/resources/">Resources</a></p>
+                  <p class="mm-intro-text">Guides, answers and the story behind the horn.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/docs/"><span class="mm-link-title">Docs</span><span class="mm-link-desc">Set up, how-to guides and reference</span></a></li><li><a class="mm-link" href="/resources/videos/"><span class="mm-link-title">Videos</span><span class="mm-link-desc">Short films and walkthroughs</span></a></li><li><a class="mm-link" href="/resources/articles/"><span class="mm-link-title">Articles</span><span class="mm-link-desc">Product intelligence and tips</span></a></li><li><a class="mm-link" href="/field-manual/"><span class="mm-link-title">Field Manual</span><span class="mm-link-desc">What each feed rewards and punishes</span></a></li><li><a class="mm-link" href="/docs/reference/support/"><span class="mm-link-title">Get help</span><span class="mm-link-desc">Support and troubleshooting</span></a></li><li><a class="mm-link" href="/major/"><span class="mm-link-title">Meet Major</span><span class="mm-link-desc">Our mascot and his troops</span></a></li><li><a class="mm-link" href="/brand/"><span class="mm-link-title">Brand</span><span class="mm-link-desc">Logo, colors and the brand kit</span></a></li><li><a class="mm-link" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=nav"><span class="mm-link-title">Am I a Bot?</span><span class="mm-link-desc">Free check: what sites can see about your browser</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-trust">Trust<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel" id="mm-trust">
+                <div class="mm-intro">
+                  <p class="mm-intro-title">Trust</p>
+                  <p class="mm-intro-text">Every action runs on your own computer. Here is how we handle the rest.</p>
+                </div>
+                <ul class="mm-links mm-cols-2"><li><a class="mm-link" href="/legal/"><span class="mm-link-title">Trust Center</span><span class="mm-link-desc">Your data, sessions and accounts</span></a></li><li><a class="mm-link" href="/#trust"><span class="mm-link-title">Yours to keep</span><span class="mm-link-desc">Why your accounts stay yours</span></a></li><li><a class="mm-link" href="/legal/privacy/"><span class="mm-link-title">Privacy</span><span class="mm-link-desc">What we collect and why</span></a></li><li><a class="mm-link" href="/legal/terms/"><span class="mm-link-title">Terms</span><span class="mm-link-desc">The rules for using Blowhorn</span></a></li><li><a class="mm-link" href="mailto:security@blowhorn.ai"><span class="mm-link-title">Security</span><span class="mm-link-desc">Report a security issue</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item"><a class="mm-top" href="/pricing/">Pricing</a></li>
+            <li class="mm-item mm-item-download"><a class="button button-primary mm-download" href="/download/">Download</a></li>
+          </ul>
+        </nav>
+        <a class="button button-primary site-cta" href="/download/">Download</a>
+      </div>
+    </header>
+    <script src="/js/nav.min.a132d70d42c7069eaa5a663137d6e20b5f76669ec259f035688202fc35474362.js" defer></script>
+
+    <div class="wrap docs-wrap">
+      <aside class="docs-sidebar" aria-label="Docs sections">
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  <form class="td-sidebar__search d-flex align-items-center">
+    <div class="td-search td-search--offline">
+      <div class="td-search__icon"></div>
+      <input type="search" name="q" class="td-search__input form-control" placeholder="Search this site…" aria-label="Search this site…" autocomplete="off" data-offline-search-index-json-src="/offline-search-index.b06d3f88e2b9c70e18e61307bd39ad76.json" data-offline-search-base-href="/" data-offline-search-max-results="10">
+      <button type="submit" class="visually-hidden">Search this site…</button>
+    </div>
+    <button class="btn btn-link td-sidebar__toggle" type="button" data-bs-toggle="collapse" data-bs-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  <nav class="td-sidebar-nav collapse" id="td-section-nav"
+      aria-label="Docs">
+    <ul class="td-sidebar-nav__section pe-md-3 ul-0">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docs-li">
+    <a href="/docs/" title="Blowhorn docs" class="align-left ps-0 td-sidebar-link td-sidebar-link__section tree-root" id="m-docs"><span class="">Docs</span></a>
+    <ul class="ul-1" id="m-docs-ul">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docstutorials-li">
+    <div class="td-sidebar-row"><a href="/docs/tutorials/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docstutorials"><span class="">Get started</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docstutorials-ul"><span class="visually-hidden">Get started</span></button></div>
+    <ul class="ul-2 foldable" id="m-docstutorials-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docstutorialsfirst-mcp-connection-li">
+    <a href="/docs/tutorials/first-mcp-connection/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docstutorialsfirst-mcp-connection"><span class="">Connect an assistant and send your first post</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docshow-to-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-to"><span class="">How-to guides</span></a><button type="button" class="td-sidebar-fold" aria-expanded="true" aria-controls="m-docshow-to-ul"><span class="visually-hidden">How-to guides</span></button></div>
+    <ul class="ul-2 foldable" id="m-docshow-to-ul">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docshow-toset-up-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/set-up/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-toset-up"><span class="">Set up</span></a><button type="button" class="td-sidebar-fold" aria-expanded="true" aria-controls="m-docshow-toset-up-ul"><span class="visually-hidden">Set up</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-toset-up-ul">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upinstall-the-app-li">
+    <a href="/docs/how-to/set-up/install-the-app/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upinstall-the-app"><span class="">Install the app</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upfirst-muster-setup-li">
+    <a href="/docs/how-to/set-up/first-muster-setup/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upfirst-muster-setup"><span class="">Set up Blowhorn at first muster</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upcreate-an-account-li">
+    <a href="/docs/how-to/set-up/create-an-account/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upcreate-an-account"><span class="">Create a Blowhorn account</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upfinish-setup-li">
+    <a href="/docs/how-to/set-up/finish-setup/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upfinish-setup"><span class="">Finish setup on this computer</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upcheck-onboarding-li">
+    <a href="/docs/how-to/set-up/check-onboarding/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upcheck-onboarding"><span class="">Check that onboarding still finishes</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upinstall-the-chrome-extension-li">
+    <a href="/docs/how-to/set-up/install-the-chrome-extension/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upinstall-the-chrome-extension"><span class="">Install the Chrome extension</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upmap-chrome-profiles-li">
+    <a href="/docs/how-to/set-up/map-chrome-profiles/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upmap-chrome-profiles"><span class="">Map Blowhorn profiles to Chrome profiles</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toset-upplatform-accounts-li">
+    <a href="/docs/how-to/set-up/platform-accounts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upplatform-accounts"><span class="">Sign a profile in to each platform</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docshow-toset-upconnect-mcp-client-li">
+    <a href="/docs/how-to/set-up/connect-mcp-client/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docshow-toset-upconnect-mcp-client"><span class="td-sidebar-nav-active-item">Connect an AI assistant over MCP</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-topublish-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/publish/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-topublish"><span class="">Publish</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-topublish-ul"><span class="visually-hidden">Publish</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-topublish-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-content-li">
+    <a href="/docs/how-to/publish/post-content/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-content"><span class="">Post content</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishmanage-the-content-worksheet-li">
+    <a href="/docs/how-to/publish/manage-the-content-worksheet/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishmanage-the-content-worksheet"><span class="">Manage the content queue</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishamplify-a-post-li">
+    <a href="/docs/how-to/publish/amplify-a-post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishamplify-a-post"><span class="">Amplify an existing post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishamplify-on-github-li">
+    <a href="/docs/how-to/publish/amplify-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishamplify-on-github"><span class="">Amplify an issue or pull request on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-to-reddit-and-bluesky-li">
+    <a href="/docs/how-to/publish/post-to-reddit-and-bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-to-reddit-and-bluesky"><span class="">Post to Reddit and Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishpost-to-hacker-news-li">
+    <a href="/docs/how-to/publish/post-to-hacker-news/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishpost-to-hacker-news"><span class="">Post to Hacker News</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishreply-to-a-post-li">
+    <a href="/docs/how-to/publish/reply-to-a-post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishreply-to-a-post"><span class="">Reply to a post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-topublishsend-a-slack-message-li">
+    <a href="/docs/how-to/publish/send-a-slack-message/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-topublishsend-a-slack-message"><span class="">Send a Slack message</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-togrow-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/grow/" title="Grow your audience" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-togrow"><span class="">Grow</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-togrow-ul"><span class="visually-hidden">Grow</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-togrow-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfollow-on-github-li">
+    <a href="/docs/how-to/grow/follow-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfollow-on-github"><span class="">Follow accounts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowstar-on-github-li">
+    <a href="/docs/how-to/grow/star-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowstar-on-github"><span class="">Star repositories on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfind-on-bluesky-li">
+    <a href="/docs/how-to/grow/find-on-bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfind-on-bluesky"><span class="">Find conversations on Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowbuild-a-github-audience-li">
+    <a href="/docs/how-to/grow/build-a-github-audience/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowbuild-a-github-audience"><span class="">Build a GitHub audience</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowfind-on-github-li">
+    <a href="/docs/how-to/grow/find-on-github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowfind-on-github"><span class="">Find issues and pull requests on GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowaccept-invitations-li">
+    <a href="/docs/how-to/grow/accept-invitations/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowaccept-invitations"><span class="">Accept incoming invitations</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowsquatter-sweep-li">
+    <a href="/docs/how-to/grow/squatter-sweep/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowsquatter-sweep"><span class="">Sweep stalled GitHub assignments</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-togrowwithdraw-invitations-li">
+    <a href="/docs/how-to/grow/withdraw-invitations/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-togrowwithdraw-invitations"><span class="">Withdraw stale invitations</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-toschedule-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/schedule/" title="Schedule and automate" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-toschedule"><span class="">Schedule</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-toschedule-ul"><span class="visually-hidden">Schedule</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-toschedule-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toscheduleschedule-a-job-li">
+    <a href="/docs/how-to/schedule/schedule-a-job/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toscheduleschedule-a-job"><span class="">Schedule a job</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulepause-li">
+    <a href="/docs/how-to/schedule/pause/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulepause"><span class="">Pause and resume posting</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulewhy-not-run-li">
+    <a href="/docs/how-to/schedule/why-not-run/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulewhy-not-run"><span class="">Find out why a job did not run</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-toschedulebackground-service-li">
+    <a href="/docs/how-to/schedule/background-service/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-toschedulebackground-service"><span class="">Keep posting when the app is closed</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tomeasure-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/measure/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tomeasure"><span class="">Measure</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tomeasure-ul"><span class="visually-hidden">Measure</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tomeasure-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomeasureanalytics-li">
+    <a href="/docs/how-to/measure/analytics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomeasureanalytics"><span class="">Collect and read your analytics</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomeasurereview-runs-li">
+    <a href="/docs/how-to/measure/review-runs/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomeasurereview-runs"><span class="">Review what ran</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tosettings-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/settings/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tosettings"><span class="">Settings</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tosettings-ul"><span class="visually-hidden">Settings</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tosettings-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingschoose-your-rules-of-engagement-li">
+    <a href="/docs/how-to/settings/choose-your-rules-of-engagement/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingschoose-your-rules-of-engagement"><span class="">Choose your rules of engagement</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsdefaults-li">
+    <a href="/docs/how-to/settings/defaults/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsdefaults"><span class="">Change your defaults</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsappearance-li">
+    <a href="/docs/how-to/settings/appearance/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsappearance"><span class="">Change how the app looks</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingslaunch-mode-li">
+    <a href="/docs/how-to/settings/launch-mode/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingslaunch-mode"><span class="">Choose how Blowhorn reaches Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingswhere-blowhorn-works-li">
+    <a href="/docs/how-to/settings/where-blowhorn-works/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingswhere-blowhorn-works"><span class="">Choose where Blowhorn works in Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsshare-usage-data-li">
+    <a href="/docs/how-to/settings/share-usage-data/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsshare-usage-data"><span class="">Turn anonymous usage data on or off</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tosettingsshare-activity-li">
+    <a href="/docs/how-to/settings/share-activity/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tosettingsshare-activity"><span class="">Share your activity publicly or keep it in your org</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-totroubleshoot-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/troubleshoot/" title="Troubleshooting" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-totroubleshoot"><span class="">Troubleshoot</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-totroubleshoot-ul"><span class="visually-hidden">Troubleshoot</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-totroubleshoot-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshoottroubleshooting-li">
+    <a href="/docs/how-to/troubleshoot/troubleshooting/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshoottroubleshooting"><span class="">Troubleshooting</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootclicked-not-confirmed-li">
+    <a href="/docs/how-to/troubleshoot/clicked-not-confirmed/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootclicked-not-confirmed"><span class="">Settle something Blowhorn could not confirm</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootsign-in-problems-li">
+    <a href="/docs/how-to/troubleshoot/sign-in-problems/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootsign-in-problems"><span class="">Fix a sign-in that stopped working</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootx-posting-li">
+    <a href="/docs/how-to/troubleshoot/x-posting/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootx-posting"><span class="">Post to X when it will not confirm</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootextension-connection-li">
+    <a href="/docs/how-to/troubleshoot/extension-connection/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootextension-connection"><span class="">Fix the Chrome extension connection</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootstore-unavailable-li">
+    <a href="/docs/how-to/troubleshoot/store-unavailable/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootstore-unavailable"><span class="">Fix cannot reach your account</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootengine-wont-start-li">
+    <a href="/docs/how-to/troubleshoot/engine-wont-start/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootengine-wont-start"><span class="">Fix Blowhorn when its engine won&#39;t start</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootdiagnostics-li">
+    <a href="/docs/how-to/troubleshoot/diagnostics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootdiagnostics"><span class="">Run a diagnostics check with Tells</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootbounces-in-dock-li">
+    <a href="/docs/how-to/troubleshoot/bounces-in-dock/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootbounces-in-dock"><span class="">The Blowhorn desktop app bounces in my dock and won&#39;t start. Why?</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-totroubleshootdamaged-cant-be-opened-li">
+    <a href="/docs/how-to/troubleshoot/damaged-cant-be-opened/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-totroubleshootdamaged-cant-be-opened"><span class="">Fix &#34;Blowhorn is damaged and can&#39;t be opened&#34;</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docshow-tomanage-li">
+    <div class="td-sidebar-row"><a href="/docs/how-to/manage/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docshow-tomanage"><span class="">Manage</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docshow-tomanage-ul"><span class="visually-hidden">Manage</span></button></div>
+    <ul class="ul-3 foldable" id="m-docshow-tomanage-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanagewatch-and-take-over-a-run-li">
+    <a href="/docs/how-to/manage/watch-and-take-over-a-run/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanagewatch-and-take-over-a-run"><span class="">Watch, pause or take over a run in Chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanageupdate-blowhorn-li">
+    <a href="/docs/how-to/manage/update-blowhorn/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanageupdate-blowhorn"><span class="">Update Blowhorn</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docshow-tomanageuninstall-li">
+    <a href="/docs/how-to/manage/uninstall/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docshow-tomanageuninstall"><span class="">Uninstall Blowhorn</span></a>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsreference-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreference"><span class="">Reference</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsreference-ul"><span class="visually-hidden">Reference</span></button></div>
+    <ul class="ul-2 foldable" id="m-docsreference-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencerequirements-li">
+    <a href="/docs/reference/requirements/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencerequirements"><span class="">System requirements</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceuse-the-desktop-app-li">
+    <a href="/docs/reference/use-the-desktop-app/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceuse-the-desktop-app"><span class="">The Blowhorn app, screen by screen</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsreferenceplatforms-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/platforms/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceplatforms"><span class="">Platforms</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsreferenceplatforms-ul"><span class="visually-hidden">Platforms</span></button></div>
+    <ul class="ul-3 foldable" id="m-docsreferenceplatforms-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsactions-li">
+    <a href="/docs/reference/platforms/actions/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceplatformsactions"><span class="">All actions</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformslinkedin-li">
+    <a href="/docs/reference/platforms/linkedin/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformslinkedin"><span class="">LinkedIn</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsx-li">
+    <a href="/docs/reference/platforms/x/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsx"><span class="">X (Twitter)</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsreddit-li">
+    <a href="/docs/reference/platforms/reddit/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsreddit"><span class="">Reddit</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformshacker-news-li">
+    <a href="/docs/reference/platforms/hacker-news/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformshacker-news"><span class="">Hacker News</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsslack-li">
+    <a href="/docs/reference/platforms/slack/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsslack"><span class="">Slack</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsbluesky-li">
+    <a href="/docs/reference/platforms/bluesky/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsbluesky"><span class="">Bluesky</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsgithub-li">
+    <a href="/docs/reference/platforms/github/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsgithub"><span class="">GitHub</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsyoutube-li">
+    <a href="/docs/reference/platforms/youtube/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsyoutube"><span class="">YouTube</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsinstagram-li">
+    <a href="/docs/reference/platforms/instagram/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsinstagram"><span class="">Instagram</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformstiktok-li">
+    <a href="/docs/reference/platforms/tiktok/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformstiktok"><span class="">TikTok</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplatformsfacebook-li">
+    <a href="/docs/reference/platforms/facebook/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplatformsfacebook"><span class="">Facebook</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecontent-queue-li">
+    <a href="/docs/reference/content-queue/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecontent-queue"><span class="">Content queue columns and activity states</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencejobs-li">
+    <a href="/docs/reference/jobs/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencejobs"><span class="">Job options and schedules</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsreferencecli-li">
+    <div class="td-sidebar-row"><a href="/docs/reference/cli/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferencecli"><span class="">CLI reference</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsreferencecli-ul"><span class="visually-hidden">CLI reference</span></button></div>
+    <ul class="ul-3 foldable" id="m-docsreferencecli-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliblowhorn-axi-li">
+    <a href="/docs/reference/cli/blowhorn-axi/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliblowhorn-axi"><span class="">blowhorn-axi</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclishared-flags-li">
+    <a href="/docs/reference/cli/shared-flags/" title="blowhorn shared flags" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclishared-flags"><span class="">Shared flags</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliaccept-li">
+    <a href="/docs/reference/cli/accept/" title="blowhorn accept" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliaccept"><span class="">accept</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclianalytics-li">
+    <a href="/docs/reference/cli/analytics/" title="blowhorn analytics" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclianalytics"><span class="">analytics</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliauth-li">
+    <a href="/docs/reference/cli/auth/" title="blowhorn auth" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliauth"><span class="">auth</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclichrome-li">
+    <a href="/docs/reference/cli/chrome/" title="blowhorn chrome" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclichrome"><span class="">chrome</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliclassify-url-li">
+    <a href="/docs/reference/cli/classify-url/" title="blowhorn classify-url" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliclassify-url"><span class="">classify-url</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclicomment-li">
+    <a href="/docs/reference/cli/comment/" title="blowhorn comment" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclicomment"><span class="">comment</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliconfig-li">
+    <a href="/docs/reference/cli/config/" title="blowhorn config" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliconfig"><span class="">config</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclicontent-li">
+    <a href="/docs/reference/cli/content/" title="blowhorn content" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclicontent"><span class="">content</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclidesktop-li">
+    <a href="/docs/reference/cli/desktop/" title="blowhorn desktop" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclidesktop"><span class="">desktop</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclifind-li">
+    <a href="/docs/reference/cli/find/" title="blowhorn find" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclifind"><span class="">find</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclifollow-li">
+    <a href="/docs/reference/cli/follow/" title="blowhorn follow" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclifollow"><span class="">follow</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecligithub-li">
+    <a href="/docs/reference/cli/github/" title="blowhorn github" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecligithub"><span class="">github</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliorg-li">
+    <a href="/docs/reference/cli/org/" title="blowhorn org" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliorg"><span class="">org</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliplatforms-li">
+    <a href="/docs/reference/cli/platforms/" title="blowhorn platforms" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliplatforms"><span class="">platforms</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclipost-li">
+    <a href="/docs/reference/cli/post/" title="blowhorn post" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclipost"><span class="">post</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliprofile-li">
+    <a href="/docs/reference/cli/profile/" title="blowhorn profile" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliprofile"><span class="">profile</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclireport-li">
+    <a href="/docs/reference/cli/report/" title="blowhorn report" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclireport"><span class="">report</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclirisk-li">
+    <a href="/docs/reference/cli/risk/" title="blowhorn risk" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclirisk"><span class="">risk</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclischedule-li">
+    <a href="/docs/reference/cli/schedule/" title="blowhorn schedule" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclischedule"><span class="">schedule</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliservice-li">
+    <a href="/docs/reference/cli/service/" title="blowhorn service" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliservice"><span class="">service</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclisetup-li">
+    <a href="/docs/reference/cli/setup/" title="blowhorn setup" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclisetup"><span class="">setup</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclislack-li">
+    <a href="/docs/reference/cli/slack/" title="blowhorn slack" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclislack"><span class="">slack</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclisource-li">
+    <a href="/docs/reference/cli/source/" title="blowhorn source" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclisource"><span class="">source</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistar-li">
+    <a href="/docs/reference/cli/star/" title="blowhorn star" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistar"><span class="">star</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistop-li">
+    <a href="/docs/reference/cli/stop/" title="blowhorn stop" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistop"><span class="">stop</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceclistore-li">
+    <a href="/docs/reference/cli/store/" title="blowhorn store" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceclistore"><span class="">store</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliunfollow-li">
+    <a href="/docs/reference/cli/unfollow/" title="blowhorn unfollow" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliunfollow"><span class="">unfollow</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliuninstall-li">
+    <a href="/docs/reference/cli/uninstall/" title="blowhorn uninstall" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliuninstall"><span class="">uninstall</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliupgrade-li">
+    <a href="/docs/reference/cli/upgrade/" title="blowhorn upgrade" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliupgrade"><span class="">upgrade</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencecliwithdraw-li">
+    <a href="/docs/reference/cli/withdraw/" title="blowhorn withdraw" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencecliwithdraw"><span class="">withdraw</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencepost-li">
+    <a href="/docs/reference/post/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencepost"><span class="">Posting: pending activities and platform behavior</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceprofiles-li">
+    <a href="/docs/reference/profiles/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceprofiles"><span class="">Profile reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceconfiguration-li">
+    <a href="/docs/reference/configuration/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceconfiguration"><span class="">Configuration reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencemessages-li">
+    <a href="/docs/reference/messages/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencemessages"><span class="">Messages and exit codes</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceextension-permissions-li">
+    <a href="/docs/reference/extension-permissions/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceextension-permissions"><span class="">Chrome extension permissions</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceplans-li">
+    <a href="/docs/reference/plans/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferenceplans"><span class="">Plans and limits</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencesupport-li">
+    <a href="/docs/reference/support/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencesupport"><span class="">Get help</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencechrome-li">
+    <a href="/docs/reference/chrome/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencechrome"><span class="">Chrome reference</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencemcp-server-li">
+    <a href="/docs/reference/mcp-server/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencemcp-server"><span class="">MCP server</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferencepython-client-li">
+    <a href="/docs/reference/python-client/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsreferencepython-client"><span class="">Python client library</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsreferenceapi-li">
+    <a href="/docs/reference/api/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsreferenceapi"><span class="">API reference</span></a>
+  </li>
+    </ul>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsexplanation-li">
+    <div class="td-sidebar-row"><a href="/docs/explanation/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsexplanation"><span class="">Explanation</span></a><button type="button" class="td-sidebar-fold" aria-expanded="false" aria-controls="m-docsexplanation-ul"><span class="visually-hidden">Explanation</span></button></div>
+    <ul class="ul-2 foldable" id="m-docsexplanation-ul" hidden>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationhow-it-works-li">
+    <a href="/docs/explanation/how-it-works/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationhow-it-works"><span class="">How Blowhorn works</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyour-data-li">
+    <a href="/docs/explanation/your-data/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyour-data"><span class="">Where your data lives</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationeligibility-li">
+    <a href="/docs/explanation/eligibility/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationeligibility"><span class="">Who can post as whom</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyour-own-chrome-li">
+    <a href="/docs/explanation/your-own-chrome/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyour-own-chrome"><span class="">Why Blowhorn uses your own browser</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationreliability-and-anti-bot-design-li">
+    <a href="/docs/explanation/reliability-and-anti-bot-design/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationreliability-and-anti-bot-design"><span class="">How Blowhorn paces itself</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationnever-twice-li">
+    <a href="/docs/explanation/never-twice/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationnever-twice"><span class="">How Blowhorn avoids repeat posts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationscheduling-li">
+    <a href="/docs/explanation/scheduling/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationscheduling"><span class="">How scheduling works</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationdistribution-li">
+    <a href="/docs/explanation/distribution/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationdistribution"><span class="">What runs when the app is closed</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationinvitation-safety-li">
+    <a href="/docs/explanation/invitation-safety/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationinvitation-safety"><span class="">Why flagged invitations are skipped</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationanalytics-li">
+    <a href="/docs/explanation/analytics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationanalytics"><span class="">What the analytics numbers mean</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationplans-li">
+    <a href="/docs/explanation/plans/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationplans"><span class="">Plans, offline use and lapses</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationyoure-in-control-li">
+    <a href="/docs/explanation/youre-in-control/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationyoure-in-control"><span class="">You&#39;re in control</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsexplanationmcp-and-safety-li">
+    <a href="/docs/explanation/mcp-and-safety/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsexplanationmcp-and-safety"><span class="">How the MCP server keeps you in control</span></a>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+    </ul>
+  </nav>
+</div>
+      </aside>
+      <main id="main" class="docs-main">
+        <nav aria-label="breadcrumb" class="td-breadcrumbs">
+  <ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/docs/">Docs</a></li>
+  <li class="breadcrumb-item">
+    <a href="/docs/how-to/">How-to guides</a></li>
+  <li class="breadcrumb-item">
+    <a href="/docs/how-to/set-up/">Set up</a></li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Connect an AI assistant over MCP</li>
+  </ol>
+</nav><div class="prose docs-page">
+  <h1 class="h1">Connect an AI assistant over MCP</h1>
+  <p class="body-lg docs-lead">Point Claude, ChatGPT, Codex, Cursor, VS Code, Windsurf, Gemini CLI, Zed, Cline, Goose, Muse, or Grok at the Blowhorn MCP server and let an assistant drive Blowhorn from your computer.</p>
+  <p>Connect an MCP client to the Blowhorn MCP server and an assistant can
+use the Blowhorn commands, all but a few
+<a href="#hidden-tools">hidden by default</a>: it reads your queue and analytics, drafts
+and queues posts, amplifies what went out, and manages profiles. The
+server runs on your own computer, and the assistant only ever acts
+through the commands you already run. What the server is, how it
+groups its tools, and how it keeps writes safe are in the
+<a href="/docs/reference/mcp-server/">MCP server reference</a>. New to this?
+Follow <a href="/docs/tutorials/first-mcp-connection/">Connect an assistant and send your first
+post</a> first.</p>
+<p>Before you connect anything, finish Blowhorn's own setup: <a href="/docs/how-to/set-up/install-the-app/">install
+the app</a>, <a href="/docs/how-to/set-up/platform-accounts/">sign a profile in to each
+platform</a>, and <a href="/docs/how-to/set-up/map-chrome-profiles/">map each profile to its Google
+Chrome profile</a>. The server takes its
+credentials the way the CLI takes them, from your existing Blowhorn
+config and environment, so there is no second sign-in and nothing new
+to paste into a client config. Put no secrets in a client config. If a
+profile is not signed in, its runs fail the way a CLI run would.</p>
+<p>The Blowhorn app runs on macOS, and a checkout also runs on Linux.
+The paths below are the macOS ones. On Linux, your home directory is
+<code>/home/&lt;you&gt;</code> instead of <code>/Users/&lt;you&gt;</code>.</p>
+<h2 id="choose-how-to-start-the-server">Choose how to start the server</h2><p>Every client starts the same server. Use the first route that fits.</p>
+<h3 id="use-the-blowhorn-mcp-command">Use the blowhorn-mcp command</h3><p>This is the route to use. It needs Blowhorn 1.61.0 or later.</p>
+<ol>
+<li>Open the Blowhorn app once. It writes the <code>blowhorn-mcp</code> command to
+<code>~/.local/bin</code>.</li>
+<li>Check that <code>~/.local/bin/blowhorn</code> contains the line
+<code>Managed by Blowhorn installer</code>.</li>
+<li>Use <code>/Users/&lt;you&gt;/.local/bin/blowhorn-mcp</code> as the client's command,
+with no arguments and no <code>env</code>.</li>
+</ol>
+<p>As a JSON entry, it looks like this:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Write the full path in a client's file. A client started from the
+Dock or Finder does not have <code>~/.local/bin</code> on its PATH. A client you
+set up from a terminal command can take <code>$HOME/.local/bin/blowhorn-mcp</code>,
+because your shell fills in the path.</p>
+<p>The command finds the app again if you move it, and sets
+<code>PYTHONPATH</code> and <code>BLOWHORN_MCP_CLI</code> itself. If step 2 found no marker
+line, another <code>blowhorn</code> sits at that path. Then add <code>BLOWHORN_MCP_CLI</code>
+to the entry's environment, naming the <code>blowhorn</code> executable to use.
+<code>blowhorn-mcp</code> keeps a value the client sets. In JSON that is
+<code>&quot;env&quot;: {&quot;BLOWHORN_MCP_CLI&quot;: &quot;/path/to/blowhorn&quot;}</code>, in TOML a
+<code>[mcp_servers.blowhorn.env]</code> table, in Goose's YAML the <code>envs</code> map, and
+on a client's command line its <code>--env</code> or <code>-e</code> option.</p>
+<p>A checkout install (<code>./tools/install.sh</code>) writes the same
+<code>~/.local/bin/blowhorn-mcp</code> command, so the same entry works there.</p>
+<p>Check the command on its own before you point a client at it:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>~/.local/bin/blowhorn-mcp --version
+</span></span><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>~/.local/bin/blowhorn-mcp --list-tools</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>The first prints the Blowhorn version. The second prints the tool
+list as JSON. Neither starts serving.</p>
+<h3 id="start-it-with-npx">Start it with npx</h3><p>The <a href="https://www.npmjs.com/package/blowhorn-mcp"><code>blowhorn-mcp</code></a> npm
+package is published, and listed in the official MCP Registry as
+<code>io.github.blowhorn-ai/blowhorn</code>. With Node.js 20 or later, swap the
+command in any entry on this page for <code>npx</code> with the arguments
+<code>-y blowhorn-mcp</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;npx&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;-y&#34;</span><span class="p">,</span> <span class="s2">&#34;blowhorn-mcp&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>On a client's command line, the same swap is <code>-- npx -y blowhorn-mcp</code>.
+It still needs the Blowhorn app installed and opened once.</p>
+<p>To pin the launcher, add its version: <code>npx -y blowhorn-mcp@1.0.0</code>. The
+latest is 1.0.0. To check that the package you run is the one listed,
+run these two commands, which print the npm version and the registry entry:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>npm view blowhorn-mcp version
+</span></span><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>curl -s <span class="s2">&#34;https://registry.modelcontextprotocol.io/v0.1/servers?search=blowhorn&#34;</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>The registry entry <code>io.github.blowhorn-ai/blowhorn</code> is the listing; its
+<code>&quot;isLatest&quot;: true</code> marks the current version. Both commands need network
+access and Node.js 20 or later for <code>npx</code>.</p>
+<h3 id="fallback-the-apps-own-python">Fallback: the app's own Python</h3><p>Use this only if your app is older than 1.61.0 and has no
+<code>blowhorn-mcp</code> command. It assumes the app is in <code>/Applications</code>; if
+you moved it, <code>~/Applications</code> for one, change both paths to match.</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Applications/Blowhorn.app/Contents/Resources/engine/bin/python&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;-P&#34;</span><span class="p">,</span> <span class="s2">&#34;-m&#34;</span><span class="p">,</span> <span class="s2">&#34;blowhorn.mcp_server&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;PYTHONPATH&#34;</span><span class="p">:</span> <span class="s2">&#34;/Applications/Blowhorn.app/Contents/Resources/engine/engine&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;BLOWHORN_MCP_CLI&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Both <code>env</code> values are needed. Without <code>PYTHONPATH</code> the server does not
+start. Without <code>BLOWHORN_MCP_CLI</code>, a client started from the Dock or
+Finder lists the tools, but every call fails with
+<code>blowhorn executable not found: blowhorn</code>. The <code>-P</code> keeps the client's
+working directory off Python's import path, so a file there can never
+stand in for one of the server's own modules.</p>
+<h3 id="fallback-a-checkout">Fallback: a checkout</h3><p>Use this from a Blowhorn checkout that has no <code>blowhorn-mcp</code> command.
+Fill in the checkout's real path for <code>/path/to/blowhorn</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/path/to/blowhorn/venv/bin/python&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;-P&#34;</span><span class="p">,</span> <span class="s2">&#34;-m&#34;</span><span class="p">,</span> <span class="s2">&#34;blowhorn.mcp_server&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;PYTHONPATH&#34;</span><span class="p">:</span> <span class="s2">&#34;/path/to/blowhorn/engine&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>The server runs the <code>blowhorn</code> executable on your PATH. If you have
+not run <code>make cli-install</code>, add <code>BLOWHORN_MCP_CLI</code> to <code>env</code>, naming the
+executable. From the checkout root, <code>make mcp-generate</code> checks that the
+tool list and its output schemas cover every command that is not hidden, and <code>make mcp-test</code> runs the server's
+tests.</p>
+<p>To use either fallback in a client, keep the client's file and
+top-level key from its section below. Swap in this <code>command</code>, <code>args</code>
+and <code>env</code>.</p>
+<h2 id="connect-your-client">Connect your client</h2><p>Each section below uses the <code>blowhorn-mcp</code> command. Fill in your own
+home directory for <code>&lt;you&gt;</code>.</p>
+<h3 id="claude-desktop">Claude Desktop</h3><ol>
+<li>
+<p>In Claude Desktop, open Settings &gt; Developer &gt; Edit Config. It opens
+<code>~/Library/Application Support/Claude/claude_desktop_config.json</code>.</p>
+</li>
+<li>
+<p>Add the entry under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+</li>
+<li>
+<p>Quit Claude Desktop fully, then reopen it. It reads the file only at
+startup.</p>
+</li>
+</ol>
+<p>To check it, ask Claude which Blowhorn tools it has. If none show up,
+read the logs in <code>~/Library/Logs/Claude/mcp*.log</code>.
+<a href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">Vendor docs</a>.</p>
+<h3 id="claude-code">Claude Code</h3><p>Add the server for every project:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>claude mcp add --scope user blowhorn -- <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Without <code>--scope user</code>, the server is added for the current project
+only. To share it with a project, put the entry in <code>.mcp.json</code> at the
+project root instead:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Check it with <code>claude mcp list</code>, or <code>/mcp</code> inside a session.
+<a href="https://code.claude.com/docs/en/mcp">Vendor docs</a>.</p>
+<h3 id="chatgpt">ChatGPT</h3><p>The ChatGPT desktop app can run this server. ChatGPT on the web
+cannot: it connects only to remote servers over HTTPS, and this server
+runs on your computer. The web needs the hosted Blowhorn MCP server,
+which is coming.</p>
+<p>In the ChatGPT desktop app:</p>
+<ol>
+<li>Open Settings &gt; MCP servers &gt; Add server.</li>
+<li>Choose STDIO.</li>
+<li>Enter the command <code>/Users/&lt;you&gt;/.local/bin/blowhorn-mcp</code>.</li>
+<li>Restart ChatGPT.</li>
+</ol>
+<p>The desktop app shares its MCP config with the Codex CLI, in
+<code>~/.codex/config.toml</code>. A server you add in one shows up in the other.
+To check it, ask ChatGPT which Blowhorn tools it has.
+<a href="https://developers.openai.com/codex/mcp">Vendor docs</a>.</p>
+<h3 id="openai-codex-cli">OpenAI Codex CLI</h3><p>Add the server from a terminal:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>codex mcp add blowhorn -- <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Or add it to <code>~/.codex/config.toml</code>, or to a trusted project's
+<code>.codex/config.toml</code>:</p>
+<figure class="term" data-lang="toml">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">TOML</span>
+    <span class="term-lang" aria-hidden="true">TOML</span>
+    <button type="button" class="term-copy" aria-label="Copy TOML to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">mcp_servers</span><span class="p">.</span><span class="nx">blowhorn</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">command</span> <span class="p">=</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">args</span> <span class="p">=</span> <span class="p">[]</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Check it with <code>codex mcp list</code>, or <code>/mcp</code> inside a session. The ChatGPT
+desktop app reads the same file.
+<a href="https://developers.openai.com/codex/mcp">Vendor docs</a>.</p>
+<h3 id="cursor">Cursor</h3><p>Create <code>~/.cursor/mcp.json</code> for every project, or <code>.cursor/mcp.json</code>
+in one project, with the entry under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;stdio&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>The <code>type</code> line is optional. If the server does not connect, open the
+Output panel and choose MCP Logs.
+<a href="https://cursor.com/docs/context/mcp">Vendor docs</a>.</p>
+<h3 id="vs-code-with-github-copilot">VS Code with GitHub Copilot</h3><p>The quickest route is the Command Palette:</p>
+<ol>
+<li>Run MCP: Add Server.</li>
+<li>Choose Command (stdio).</li>
+<li>Enter the command <code>/Users/&lt;you&gt;/.local/bin/blowhorn-mcp</code>.</li>
+<li>Enter the server ID <code>blowhorn</code>.</li>
+</ol>
+<p>To write the file yourself, use the portable format. Put the entry in
+<code>~/.copilot/mcp-config.json</code> for every workspace, or <code>.mcp.json</code> at a
+workspace root, under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>VS Code's own format also works: <code>.vscode/mcp.json</code> in a workspace, or
+the <code>mcp.json</code> in your user profile. That file's top-level key is
+<code>servers</code>, and the entry needs a <code>type</code> of <code>stdio</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;servers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;stdio&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Do not mix the two keys. A file under <code>.vscode/</code> takes <code>servers</code>; the
+portable files take <code>mcpServers</code>.
+<a href="https://code.visualstudio.com/docs/copilot/customization/mcp-servers">Vendor docs</a>.</p>
+<h3 id="windsurf-devin-desktop">Windsurf (Devin Desktop)</h3><p>Windsurf is now Devin Desktop. Add the server for your user from a
+terminal:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>devin mcp add -s user blowhorn -- <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Or put the entry in <code>~/.config/devin/mcp_config.json</code>, or
+<code>.devin/mcp_config.json</code> in a project, under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Older Windsurf builds read <code>~/.codeium/windsurf/mcp_config.json</code>, with
+the same <code>mcpServers</code> shape. Devin Desktop imports that file.
+<a href="https://docs.devin.ai/desktop/devin-local/customizations">Vendor docs</a>.</p>
+<h3 id="gemini-cli">Gemini CLI</h3><p>Add the server for your user:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>gemini mcp add -s user blowhorn <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Without <code>-s user</code>, it is added to the current project only. Or put the
+entry in <code>~/.gemini/settings.json</code>, or <code>.gemini/settings.json</code> in a
+project, under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Gemini CLI starts a local server only in a trusted folder. Run
+<code>gemini trust</code> in the folder you work from. Keep the name <code>blowhorn</code>:
+server names may not contain underscores. Check it with <code>/mcp</code> inside a
+session.
+<a href="https://geminicli.com/docs/tools/mcp-server/">Vendor docs</a>.</p>
+<h3 id="zed">Zed</h3><p>In Zed, open Settings &gt; AI &gt; MCP Servers &gt; Add Server, then choose Add
+Local Server. Or run <code>zed: open settings file</code> and add the entry under
+<code>context_servers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;context_servers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>A green dot next to the server, with &quot;Server is active&quot;, means it
+connected. Zed asks before each tool call by default. Keep that
+setting.
+<a href="https://zed.dev/docs/ai/mcp">Vendor docs</a>.</p>
+<h3 id="cline">Cline</h3><p>In the editor:</p>
+<ol>
+<li>
+<p>Click the MCP Servers icon.</p>
+</li>
+<li>
+<p>Open the Configure tab.</p>
+</li>
+<li>
+<p>Click Configure MCP Servers.</p>
+</li>
+<li>
+<p>Add the entry under <code>mcpServers</code>:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;disabled&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;autoApprove&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+</li>
+</ol>
+<p>Leave <code>autoApprove</code> empty, so Cline asks you before each tool call.</p>
+<p>For the Cline CLI, add the server from a terminal. It writes
+<code>~/.cline/data/settings/cline_mcp_settings.json</code>:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>cline mcp add blowhorn --yes -- <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p><a href="https://docs.cline.bot/mcp/configuring-mcp-servers">Vendor docs</a>.</p>
+<h3 id="goose">Goose</h3><p>Run <code>goose configure</code>, choose Add Extension, then Command-line
+Extension, and enter the command. Or add it under <code>extensions</code> in
+Goose's YAML config file, in the <code>~/.config/goose/</code> folder:</p>
+<figure class="term" data-lang="yaml">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">YAML</span>
+    <span class="term-lang" aria-hidden="true">YAML</span>
+    <button type="button" class="term-copy" aria-label="Copy YAML to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">extensions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">blowhorn</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">stdio</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">blowhorn</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l">/Users/&lt;you&gt;/.local/bin/blowhorn-mcp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">envs</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="m">300</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Goose calls the command <code>cmd</code>, not <code>command</code>. To try the server in one
+session without saving it:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>goose session --with-extension <span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">/.local/bin/blowhorn-mcp&#34;</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p><a href="https://github.com/block/goose/blob/main/documentation/docs/guides/config-files.md">Vendor docs</a>.</p>
+<h3 id="muse">Muse</h3><p>A Muse bot can run on your Mac, alongside Blowhorn and
+Google Chrome. That is the setup that gives it every tool: the
+profiles it acts for and the Chrome it acts through are on the
+same computer as the bot, which is all this server ever asks.</p>
+<p>Add the server to the bot the way you add any MCP server: the
+<code>blowhorn-mcp</code> command (or <code>npx -y blowhorn-mcp</code>) as a stdio
+server, with no arguments. In a config file that is the same entry
+every client on this page uses:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>You can also just tell the bot to add it: &quot;Add the Blowhorn MCP
+server, command <code>~/.local/bin/blowhorn-mcp</code>&quot;, and restart the bot
+so it picks the server up. Check it by asking the bot which
+Blowhorn tools it has.</p>
+<p>Then prompt the bot in plain words. It reads first, and every
+write comes back as a dry run before anything goes out, so ask
+for the outcome and read the rehearsal:</p>
+<blockquote>
+<p>List my Blowhorn profiles and tell me which ones are signed in.</p>
+</blockquote>
+<blockquote>
+<p>Show me what is in my queue for today.</p>
+</blockquote>
+<blockquote>
+<p>Dry-run accepting my pending LinkedIn connection requests, and
+show me who it would accept. Then wait for my go.</p>
+</blockquote>
+<p>Say go, and the bot runs the same call confirmed. Under approval
+mode an agent cannot approve its own queued work, so confirmed
+work can still wait for you in the app (see <a href="#dry-run-first">Dry run first</a>).</p>
+<p>A Muse bot that is not running on your Mac can still read
+through the interim hosted gateway. Connect it as a custom MCP
+connector with the server URL <code>https://mcp.blowhorn.ai/mcp</code> and an
+API token for your Blowhorn account (<a href="#get-a-blowhorn-api-token">Get a Blowhorn API
+token</a>), sent as a Bearer token. The
+gateway proxies Cloud's <code>/mcp</code> (read tools today). RFC 9728 discovery
+is live on mcp.blowhorn.ai, but end-to-end OAuth sign-in waits on Cloud
+enabling dynamic client registration, so a client that cannot send a
+token still cannot finish sign-in yet.</p>
+<h3 id="grok">Grok</h3><p>Grok Build, xAI's agent that runs in a terminal, can run the local
+server on the same computer as Blowhorn:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>grok mcp add blowhorn -- <span class="nv">$HOME</span>/.local/bin/blowhorn-mcp</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Or add it to <code>~/.grok/config.toml</code>:</p>
+<figure class="term" data-lang="toml">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">TOML</span>
+    <span class="term-lang" aria-hidden="true">TOML</span>
+    <button type="button" class="term-copy" aria-label="Copy TOML to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">mcp_servers</span><span class="p">.</span><span class="nx">blowhorn</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">command</span> <span class="p">=</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">args</span> <span class="p">=</span> <span class="p">[]</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Grok Build also reads <code>~/.claude.json</code>, <code>.cursor/mcp.json</code> and
+project <code>.mcp.json</code> files, so an entry you already added for another
+client may already be picked up. Check it with <code>grok mcp list</code>, or
+<code>/mcps</code> inside a session. Grok names a server's tools
+<code>&lt;server&gt;__&lt;tool&gt;</code>, so the <code>post</code> tool appears as <code>blowhorn__post</code>.
+<a href="https://docs.x.ai/build/features/mcp-servers">Vendor docs</a>.</p>
+<p>Grok Build can also read through the interim hosted gateway:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>grok mcp add --transport http blowhorn-cloud https://mcp.blowhorn.ai/mcp --header <span class="s2">&#34;Authorization: Bearer &lt;token&gt;&#34;</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>Put an API token for your Blowhorn account in place of <code>&lt;token&gt;</code>
+(see <a href="#get-a-blowhorn-api-token">Get a Blowhorn API token</a>).
+The gateway is read-only, with the four tools <code>listContentItems</code>,
+<code>getContentItem</code>, <code>getEvents</code> and <code>getConnections</code>.</p>
+<p>Grok on the web cannot finish connect yet. Its custom connectors
+(grok.com/connectors, New Connector, then Custom) take a public
+HTTPS MCP server with an OAuth sign-in. The interim gateway now
+serves RFC 9728 discovery and challenges, but Cloud still has
+dynamic client registration disabled, so the sign-in flow stops at
+registration. Use a Bearer Cloud API token instead, or wait for the
+DCR enable release. The local server is a process on your own
+computer, and Grok on the web cannot start one.
+<a href="https://docs.x.ai/grok/connectors">Vendor docs</a>. Grok Bot can
+connect today with a Bearer token: see <a href="#grok-bot">Grok Bot</a>.</p>
+<h3 id="grok-bot">Grok Bot</h3><p>Blowhorn is not in Grok Bot's connector catalog yet. Until it is,
+add Blowhorn to your bot as a custom connection to the interim
+hosted gateway. Grok Bot runs on its own computer in the cloud, so
+it cannot start the local server on your Mac, but it can reach a
+public HTTPS server and send a bearer token with every request.</p>
+<p>The gateway is read-only. It has four tools, <code>listContentItems</code>,
+<code>getContentItem</code>, <code>getEvents</code> and <code>getConnections</code>, so your bot can
+read your queue, a post, your activity and your connections. It
+cannot post, schedule or change anything. For those, use a client
+on the Mac where Blowhorn runs, such as <a href="#claude-code">Claude Code</a>
+or <a href="#grok">Grok Build</a>.</p>
+<p>You need an API token for your Blowhorn account. The Blowhorn app
+has no screen for one; create it on your Blowhorn account's web
+page, as
+<a href="#get-a-blowhorn-api-token">Get a Blowhorn API token</a> shows.</p>
+<ol>
+<li>
+<p>In a chat with your bot, ask it to add the server. Say &quot;custom&quot;,
+so the bot does not look for a catalog connector instead:</p>
+<blockquote>
+<p>Add a custom MCP server named blowhorn at
+<a href="https://mcp.blowhorn.ai/mcp">https://mcp.blowhorn.ai/mcp</a>. It needs the header
+Authorization: Bearer followed by my Blowhorn API token.</p>
+</blockquote>
+</li>
+<li>
+<p>The bot shows the name and the URL and asks you to confirm.
+Check that the URL is exactly <code>https://mcp.blowhorn.ai/mcp</code>, then
+confirm.</p>
+</li>
+<li>
+<p>When the bot asks for the token, give it. The bot stores it as
+the <code>Authorization</code> header on the server entry, never in the URL.
+Prefer a Bearer Cloud API token today: end-to-end OAuth sign-in
+still waits on Cloud enabling dynamic client registration, so no
+complete sign-in card finishes yet. The token passes through your
+chat with the bot, so use one you can revoke, and revoke it when
+you stop using the connection (see
+<a href="#revoke-a-leaked-token">Revoke a leaked token</a>).</p>
+</li>
+<li>
+<p>Check it in your next message. Ask:</p>
+<blockquote>
+<p>Which Blowhorn tools do you have? Then list my Blowhorn
+connections.</p>
+</blockquote>
+<p>The bot should name the four tools above and answer from
+<code>getConnections</code>. Nothing it can call changes anything.</p>
+</li>
+</ol>
+<p>If the bot reports <code>401 Unauthorized</code> when it connects, the header
+is missing or malformed: the gateway wants exactly
+<code>Authorization: Bearer &lt;token&gt;</code>. If it connects but a tool call
+fails with a <code>401</code> from your Blowhorn account, the token has expired
+or been revoked: get a new token and ask the bot to update the
+header on the <code>blowhorn</code> server. If you opened the URL in a
+browser to check it and saw a JSON error, that is expected: see
+<a href="#opening-the-gateway-url-in-a-browser">Opening the gateway URL in a browser</a>.</p>
+<h2 id="authentication">Authentication</h2><p>The local server has no OAuth step and no token to create. The
+stdio transport does not use OAuth: that belongs to a remote server,
+not to a process on your own computer. A client that offers you an
+OAuth login for this server is pointed at the wrong thing. The local
+server takes its credentials from your Blowhorn config and
+environment, exactly as the CLI does.</p>
+<p>With the app, each tool runs the app's <code>blowhorn</code> command. It reads
+the app's own settings in
+<code>~/Library/Application Support/Blowhorn/home/.blowhorn.yaml</code>, not a
+<code>./.blowhorn.yaml</code> in the client's working directory.</p>
+<p>The server serves stdio only. Asking it for HTTP refuses at startup:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span>~/.local/bin/blowhorn-mcp --transport http</span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>A hosted Blowhorn MCP server, with its own sign-in, is coming.
+Until it lands, the interim hosted gateway in the Muse, Grok and
+Grok Bot sections above serves a few read-only tools to clients that can
+send a token. The rest of this page covers the local server.</p>
+<h3 id="local-server-or-hosted-gateway">Local server or hosted gateway</h3>
+<div class="table-scroll" tabindex="0" role="group" aria-label="Table">
+<table>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Local server (<code>blowhorn-mcp</code>)</th>
+      <th scope="col">Interim hosted gateway</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Where it runs</td>
+      <td>On your Mac, started by your client over stdio</td>
+      <td><code>https://mcp.blowhorn.ai/mcp</code>, over HTTPS</td>
+    </tr>
+    <tr>
+      <td>Sign-in</td>
+      <td>None: it uses the sign-in the Blowhorn app already saved</td>
+      <td>A Blowhorn API token, sent as <code>Authorization: Bearer &lt;token&gt;</code></td>
+    </tr>
+    <tr>
+      <td>Tools</td>
+      <td>Every Blowhorn command except the hidden ones</td>
+      <td>Four read-only tools: <code>listContentItems</code>, <code>getContentItem</code>, <code>getEvents</code> and <code>getConnections</code></td>
+    </tr>
+    <tr>
+      <td>Writes</td>
+      <td>Dry run first, <code>confirm</code> true to act</td>
+      <td>None yet: it cannot post, schedule or change anything</td>
+    </tr>
+    <tr>
+      <td>Use it from</td>
+      <td>A client on the same Mac as Blowhorn, such as Claude Desktop, Claude Code or Cursor</td>
+      <td>A client that cannot start a process on your Mac, such as Grok Bot or a Muse bot in the cloud</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h3 id="get-a-blowhorn-api-token">Get a Blowhorn API token</h3><p>The hosted gateway needs an API token for your Blowhorn account; the
+local server does not. The Blowhorn desktop app has no screen for
+creating one. Create it on your Blowhorn account's web page:</p>
+<ol>
+<li>Open <a href="https://cloud.blowhorn.ai/security/tokens">cloud.blowhorn.ai/security/tokens</a>
+and sign in with your Blowhorn account. This is the <strong>Tokens</strong> tab
+under <strong>Security</strong>.</li>
+<li>Click <strong>Create</strong>.</li>
+<li>Enter a <strong>Token Name</strong> that says where the token is used, such as
+<code>grok-bot-mcp</code>, and a <strong>Token Purpose</strong>, then click <strong>Create</strong>. The
+new token appears in the list.</li>
+<li>In that token's row, click the <strong>Download</strong> icon. The download saves
+a file named <code>token_&lt;id&gt;.json</code>.</li>
+<li>Open the file. The value of its <code>&quot;token&quot;</code> field is the API token.
+Give a client that value, and nothing else, where it asks for the
+Bearer token; the client sends it as <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+</ol>
+<p>Make one token per client, so you can revoke one without breaking the
+others, and delete the downloaded file once the token is in the
+client. To stop using a token, delete it from the same page with the
+<strong>Delete</strong> icon in its row, or see
+<a href="#revoke-a-leaked-token">Revoke a leaked token</a>.</p>
+<h3 id="opening-the-gateway-url-in-a-browser">Opening the gateway URL in a browser</h3><p><code>https://mcp.blowhorn.ai/mcp</code> is an endpoint for MCP clients, not a web
+page. A client sends each request as a JSON-RPC <code>POST</code>, with the token
+in the <code>Authorization</code> header. A browser sends a plain <code>GET</code> without a
+token, so it gets a short JSON error instead of a page, such as:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span><span class="nt">&#34;error&#34;</span><span class="p">:</span><span class="s2">&#34;unauthorized&#34;</span><span class="p">,</span><span class="nt">&#34;error_description&#34;</span><span class="p">:</span><span class="s2">&#34;Bearer token required. Discover the authorization server via the resource_metadata URL in WWW-Authenticate.&#34;</span><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>or:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span><span class="nt">&#34;jsonrpc&#34;</span><span class="p">:</span><span class="s2">&#34;2.0&#34;</span><span class="p">,</span><span class="nt">&#34;error&#34;</span><span class="p">:{</span><span class="nt">&#34;code&#34;</span><span class="p">:</span><span class="mi">-32000</span><span class="p">,</span><span class="nt">&#34;message&#34;</span><span class="p">:</span><span class="s2">&#34;Method not allowed: this stateless gateway answers POST only.&#34;</span><span class="p">},</span><span class="nt">&#34;id&#34;</span><span class="p">:</span><span class="kc">null</span><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>That is the gateway working as designed, not a fault. It keeps no
+session between requests, so it answers MCP messages sent as <code>POST</code>
+only. To check from a browser that the gateway is up, open
+<a href="https://mcp.blowhorn.ai/healthz">mcp.blowhorn.ai/healthz</a> instead,
+which answers <code>{&quot;ok&quot;:true,...}</code>. To check your token, connect a
+client and ask it which Blowhorn tools it has.</p>
+<h3 id="revoke-a-leaked-token">Revoke a leaked token</h3><p>The local server uses the token that sign-in saved on this computer.
+If that token, or any other API token for your Blowhorn account, leaks, revoke it
+at once. Having the token is enough; no sign-in is needed:</p>
+<figure class="term term-prompt" data-lang="bash">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">terminal</span>
+    <span class="term-lang" aria-hidden="true">Shell</span>
+    <button type="button" class="term-copy" aria-label="Copy terminal to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span><span class="nb">read</span> -rs TOKEN   <span class="c1"># paste the token, then press Enter</span>
+</span></span><span class="line"><span class="cl"><span class="term-ps" aria-hidden="true">$ </span><span class="nb">printf</span> <span class="s1">&#39;{&#34;token&#34;: &#34;%s&#34;}&#39;</span> <span class="s2">&#34;</span><span class="nv">$TOKEN</span><span class="s2">&#34;</span> <span class="p">|</span> curl -sS -X POST https://cloud.blowhorn.ai/revoke <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -H <span class="s1">&#39;Content-Type: application/json&#39;</span> --data-binary @- -w <span class="s1">&#39;HTTP %{http_code}\n&#39;</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>A 200 response means the token no longer works, if it existed. A 200
+does not confirm the token existed. A 503 response means nothing was
+revoked, so run the call again.</p>
+<p>While you are still signed in with a token you trust, you can delete
+the token by ID instead. List your tokens with
+<code>GET https://cloud.blowhorn.ai/api/identity/tokens</code>, then send
+<code>DELETE https://cloud.blowhorn.ai/api/identity/tokens?tokenId=&lt;id&gt;</code>
+with <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+<p>Then sign in again with <code>blowhorn auth login</code> to get a fresh token.</p>
+<h2 id="example-prompts-and-workflows">Example prompts and workflows</h2><p>The assistant picks the tools; you approve the writes. These prompts
+are written so the dry run comes first and nothing goes out on the
+first pass.</p>
+<h3 id="draft-and-queue-a-post">Draft and queue a post</h3><blockquote>
+<p>Draft a LinkedIn post for profile personal announcing the v2.4 release,
+queue it for Tuesday 09:00, and show me the dry run before you
+confirm anything.</p>
+</blockquote>
+<p>The assistant drafts with the content tools and queues the row. A
+changing tool runs with <code>--dry-run</code> unless the call confirms it, so
+the first pass shows what would be queued and queues nothing. Say
+go, and the assistant re-runs it confirmed.</p>
+<h3 id="check-analytics">Check analytics</h3><blockquote>
+<p>How did last week's posts do on LinkedIn, and which profile drove
+the most engagement?</p>
+</blockquote>
+<p>Read-only tools run as asked. The assistant reads the analytics
+tools and reports back; nothing is written, so there is nothing to
+confirm.</p>
+<h3 id="amplify-a-post">Amplify a post</h3><blockquote>
+<p>This post went live at this URL. Dry-run an amplify from every
+profile on this computer, then wait for my go.</p>
+</blockquote>
+<p>The amplify runs as a rehearsal first, naming what each profile
+would do. Confirm it and the real run follows. The same shape works
+for a GitHub issue or pull request: the assistant amplifies from
+each profile's own credential, and re-running adds no reaction twice.</p>
+<h3 id="manage-profiles">Manage profiles</h3><blockquote>
+<p>Which profiles are signed in and ready, and which ones need
+attention?</p>
+</blockquote>
+<p>The assistant reads the profile tools and reports each profile's
+state. Changing a profile, switching the current one, or setting a
+risk limit is a write: dry run first, confirm to act, same as every
+other write. <code>profile status</code> and <code>chrome discover</code> count as writes
+too, because each records the sign-ins it reads as the profile's
+accounts in your Blowhorn account.</p>
+<p><a id="safety"></a></p>
+<h2 id="dry-run-first">Dry run first</h2><p>Writes need confirmation, and dry run is the default. A tool that
+only reads runs as asked. A tool that changes anything runs with
+<code>--dry-run</code> unless the call passes <code>confirm</code> as true. A call that
+passes both <code>confirm</code> and <code>dry_run</code> is refused as contradictory, and
+a changing command with no dry-run path refuses without <code>confirm</code>
+rather than running for real.</p>
+<p>Every MCP call runs as an agent. The server sets
+<code>BLOWHORN_ACTOR=agent</code> for every command it runs, whatever its own
+environment says: <code>BLOWHORN_ACTOR=human</code> in a client's <code>env</code> is
+ignored, and the server says so in one line on stderr when it starts.
+Under approval mode <code>agent</code> or <code>all</code>, the queue rules in
+<a href="/docs/explanation/youre-in-control/">You are in control</a> therefore
+apply to MCP calls exactly as they apply to any other agent caller.
+<code>content_approve</code> is one of the tools, but <code>content approve</code> refuses
+an agent caller in every mode, so an agent can never approve its own
+content through this server. That only holds work back under <code>agent</code>
+or <code>all</code>: under <code>off</code>, the agent's own writes keep the <code>Approved?</code>
+value it sets, and a confirmed ad-hoc action publishes.</p>
+<p>Each changing tool also tells the client whether it is destructive.
+An additive tool (<code>destructiveHint</code> false), such as <code>post</code>, <code>comment</code>,
+<code>follow</code> or <code>slack_send</code>, only adds new things; Blowhorn's own
+bookkeeping on the record it acted on, such as marking a content item
+as posted, does not count as a change. A destructive
+tool (<code>destructiveHint</code> true), such as <code>content_upsert</code>,
+<code>schedule_delete</code> or <code>unfollow</code>, may change or remove something that
+already exists. Your client may ask you before a destructive call;
+either kind is still a dry run until <code>confirm</code> is true. The full list
+is in the
+<a href="/docs/reference/mcp-server/#destructive-and-additive-tools">MCP server reference</a>.</p>
+<p>Note the limit of this transport: there is no desktop-app
+approval step here. On this server, <code>confirm</code> true is the approval.
+If you want a person to approve each write in the app, use the queue
+and the approval mode, not a confirmed MCP call.</p>
+<p>Keep your client's own approval prompt on, too. Zed, Cline and most
+other clients ask before each tool call unless you turn that off.</p>
+<p>Tool results never carry secrets. A value under a secret-named key is
+replaced with <code>&quot;[redacted]&quot;</code> before the result reaches the client,
+unless it cannot carry a secret: a boolean, null, a value on its
+schema's fixed list, or a field its schema marks <code>x-mcp-not-secret</code>.
+Secret-shaped fragments in text output are replaced the same way. A
+client on protocol version <code>2025-06-18</code> or later also gets each JSON
+tool's <code>outputSchema</code> and a checked <code>structuredContent</code> in its
+results; see <a href="/docs/reference/mcp-server/#structured-output">Structured output</a>. A failed run
+reports its exit code and its (redacted) error, never the arguments
+it ran.</p>
+<p>How these rules fit together is in
+<a href="/docs/explanation/mcp-and-safety/">How the MCP server keeps you in control</a>.</p>
+<h3 id="hidden-tools">Hidden tools</h3><p>Seven tools are hidden by default, because each removes or replaces
+your Blowhorn install, removes a background service or LaunchAgent, or
+signs you out: <code>uninstall</code>, <code>service_uninstall</code>, <code>service_adopt</code>,
+<code>auth_logout</code>, <code>desktop_build</code>, <code>desktop_install</code> and
+<code>chrome_attach_chrome_uninstall_agent</code>. Your assistant cannot see or
+call them. To serve one, name it in the server's arguments with
+<code>--allow-hidden-tool</code>
+(repeat it for more), or list names, comma-separated, in
+<code>BLOWHORN_MCP_ALLOW_HIDDEN_TOOLS</code> in the client's <code>env</code>. For example,
+to let an assistant uninstall the background service:</p>
+<figure class="term" data-lang="json">
+  <figcaption class="term-bar">
+    <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title">JSON</span>
+    <span class="term-lang" aria-hidden="true">JSON</span>
+    <button type="button" class="term-copy" aria-label="Copy JSON to clipboard" hidden>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+      <span class="term-copy-text">Copy</span>
+    </button>
+  </figcaption>
+  <div class="term-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mcpServers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;blowhorn&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/Users/&lt;you&gt;/.local/bin/blowhorn-mcp&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;--allow-hidden-tool&#34;</span><span class="p">,</span> <span class="s2">&#34;service_uninstall&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+  <span class="term-status visually-hidden" role="status" aria-live="polite"></span>
+</figure>
+<p>There is no &quot;all&quot;: name each tool. A name that is not a hidden tool
+stops the server at startup with a line on stderr naming the hidden
+tools, so a typo shows up at once. An opted-in tool is still a dry
+run until <code>confirm</code> is true. Restart the client after changing its
+config.</p>
+<h2 id="troubleshooting">Troubleshooting</h2><ul>
+<li><strong>The client shows no Blowhorn server.</strong> Run
+<code>~/.local/bin/blowhorn-mcp --version</code> in a terminal. If the file is
+missing, open the Blowhorn app once, or update it to 1.61.0 or later.
+If it says the app is in the Trash or was not found, put the app back
+or reinstall it. Check that the client's entry uses the full path,
+not <code>~</code>. Then restart the client: most clients only pick up a new
+server on restart, and Claude Desktop only reads its config at
+startup.</li>
+<li><strong>A tool call fails with <code>blowhorn executable not found</code>.</strong> Open the
+app once, so it rewrites <code>~/.local/bin/blowhorn</code>. If that file lacks
+the line <code>Managed by Blowhorn installer</code>, set <code>BLOWHORN_MCP_CLI</code> in the
+entry's environment to the <code>blowhorn</code> executable you want. With a
+fallback entry, set <code>BLOWHORN_MCP_CLI</code> to
+<code>/Users/&lt;you&gt;/.local/bin/blowhorn</code>.</li>
+<li><strong>A fallback entry shows <code>No module named 'blowhorn'</code>.</strong> Its
+<code>PYTHONPATH</code> is missing or wrong. With the app it must be
+<code>/Applications/Blowhorn.app/Contents/Resources/engine/engine</code>; from a
+checkout, the checkout's <code>engine</code> directory. Better, switch to the
+<code>blowhorn-mcp</code> command.</li>
+<li><strong>The server starts but lists no tools, or the tools look stale.</strong>
+The tool list follows the app's version. Update the app, then
+restart the client. From a checkout, run <code>make mcp-generate</code> and
+restart the server after any change to the CLI.</li>
+<li><strong>A write only produced a dry run.</strong> That is the default, not a
+failure. The assistant must re-run the call with <code>confirm</code> true
+for the real run. If you did not mean to confirm, the dry run is
+the whole result: nothing was written.</li>
+<li><strong>A call is refused as contradictory.</strong> It passed both <code>confirm</code>
+and <code>dry_run</code>. Drop one: <code>confirm</code> true for the real run, or
+<code>dry_run</code> for the rehearsal.</li>
+<li><strong>A changing call is refused without running.</strong> It has no dry-run
+path, so it refuses rather than running for real without
+<code>confirm</code>. Confirm it, or leave it refused.</li>
+<li><strong>The server exits when asked for HTTP.</strong> That is deliberate: this
+server is local stdio only, and <code>--transport http</code> refuses with
+the reason. Use <code>--transport stdio</code>, the default.</li>
+<li><strong>ChatGPT on the web cannot find the server.</strong> It connects only to
+remote servers. Use the ChatGPT desktop app.</li>
+</ul>
+<h2 id="related">Related</h2><ul>
+<li><a href="/docs/reference/mcp-server/">MCP server reference</a> - what the
+server is, the tour of its tools, and the safety rules in full</li>
+<li><a href="/docs/explanation/mcp-and-safety/">How the MCP server keeps you in control</a> -
+how the server, the CLI and approvals fit together</li>
+<li><a href="/docs/reference/cli/">Command reference</a> - every command the
+tools wrap, generated from the app itself</li>
+<li><a href="/docs/explanation/youre-in-control/">You are in control</a> -
+approval modes, pauses, and every safety control in one place</li>
+<li><a href="/docs/reference/cli/blowhorn-axi/">blowhorn-axi</a> - the agent
+CLI: the same commands through a command line instead of MCP</li>
+</ul>
+
+  <div class="td-page-meta__lastmod">
+  Last modified November 11, 2026
+</div>
+</div><ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5">
+  <li><a href="/docs/how-to/set-up/platform-accounts/" aria-label="Previous - Sign a profile in to each platform" class="btn btn-primary"><span class="me-1">←</span>Previous</a></li>
+  <li><a aria-disabled="true" class="btn btn-primary disabled">Next<span class="ms-1">→</span></a></li>
+</ul>
+
+<div class="tells-docs-card docs-rail-card docs-rail-card-end">
+  <p class="label">Free tool</p>
+  <p class="tells-docs-card-title">Am I a Bot?</p>
+  <p class="tells-docs-card-text">See what sites can read about your Chrome profile.</p>
+  <p class="tells-docs-card-link"><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=docs">Run the check<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"></path></svg></a></p>
+</div>
+
+<div class="docs-support-card card-dispatch docs-rail-card docs-rail-card-end">
+  <p class="label">Support</p>
+  <p class="docs-support-card-title">Stuck on something?</p>
+  <p class="docs-support-card-text">Email us and a person on the team will help.</p>
+  <p class="docs-support-card-link"><a href="mailto:support@blowhorn.ai?subject=Docs%20question%3A%20Connect%20an%20AI%20assistant%20over%20MCP">support@blowhorn.ai</a></p>
+</div>
+
+      </main>
+      <aside class="docs-toc" aria-label="On this page"><div class="td-toc" data-proofer-ignore>
+<div class="td-toc-title">
+      <span class="td-toc-title__text">On this page</span>
+      <a class="td-toc-title__link" title="Top of page" href="#"><span class="visually-hidden">Top of page</span></a>
+      <button type="button" class="td-toc-toggle" data-toc-toggle aria-expanded="true"><span class="td-toc-toggle__label visually-hidden">Hide table of contents</span></button>
+    </div>
+    <nav id="TableOfContents" aria-label="On this page">
+  <ul>
+    <li><a href="#choose-how-to-start-the-server">Choose how to start the server</a>
+      <ul>
+        <li><a href="#use-the-blowhorn-mcp-command">Use the blowhorn-mcp command</a></li>
+        <li><a href="#start-it-with-npx">Start it with npx</a></li>
+        <li><a href="#fallback-the-apps-own-python">Fallback: the app's own Python</a></li>
+        <li><a href="#fallback-a-checkout">Fallback: a checkout</a></li>
+      </ul>
+    </li>
+    <li><a href="#connect-your-client">Connect your client</a>
+      <ul>
+        <li><a href="#claude-desktop">Claude Desktop</a></li>
+        <li><a href="#claude-code">Claude Code</a></li>
+        <li><a href="#chatgpt">ChatGPT</a></li>
+        <li><a href="#openai-codex-cli">OpenAI Codex CLI</a></li>
+        <li><a href="#cursor">Cursor</a></li>
+        <li><a href="#vs-code-with-github-copilot">VS Code with GitHub Copilot</a></li>
+        <li><a href="#windsurf-devin-desktop">Windsurf (Devin Desktop)</a></li>
+        <li><a href="#gemini-cli">Gemini CLI</a></li>
+        <li><a href="#zed">Zed</a></li>
+        <li><a href="#cline">Cline</a></li>
+        <li><a href="#goose">Goose</a></li>
+        <li><a href="#muse">Muse</a></li>
+        <li><a href="#grok">Grok</a></li>
+        <li><a href="#grok-bot">Grok Bot</a></li>
+      </ul>
+    </li>
+    <li><a href="#authentication">Authentication</a>
+      <ul>
+        <li><a href="#local-server-or-hosted-gateway">Local server or hosted gateway</a></li>
+        <li><a href="#get-a-blowhorn-api-token">Get a Blowhorn API token</a></li>
+        <li><a href="#opening-the-gateway-url-in-a-browser">Opening the gateway URL in a browser</a></li>
+        <li><a href="#revoke-a-leaked-token">Revoke a leaked token</a></li>
+      </ul>
+    </li>
+    <li><a href="#example-prompts-and-workflows">Example prompts and workflows</a>
+      <ul>
+        <li><a href="#draft-and-queue-a-post">Draft and queue a post</a></li>
+        <li><a href="#check-analytics">Check analytics</a></li>
+        <li><a href="#amplify-a-post">Amplify a post</a></li>
+        <li><a href="#manage-profiles">Manage profiles</a></li>
+      </ul>
+    </li>
+    <li><a href="#dry-run-first">Dry run first</a>
+      <ul>
+        <li><a href="#hidden-tools">Hidden tools</a></li>
+      </ul>
+    </li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#related">Related</a></li>
+  </ul>
+</nav>
+  </div>
+
+<div class="tells-docs-card docs-rail-card docs-rail-card-toc">
+  <p class="label">Free tool</p>
+  <p class="tells-docs-card-title">Am I a Bot?</p>
+  <p class="tells-docs-card-text">See what sites can read about your Chrome profile.</p>
+  <p class="tells-docs-card-link"><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=docs">Run the check<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"></path></svg></a></p>
+</div>
+
+<div class="docs-support-card card-dispatch docs-rail-card docs-rail-card-toc">
+  <p class="label">Support</p>
+  <p class="docs-support-card-title">Stuck on something?</p>
+  <p class="docs-support-card-text">Email us and a person on the team will help.</p>
+  <p class="docs-support-card-link"><a href="mailto:support@blowhorn.ai?subject=Docs%20question%3A%20Connect%20an%20AI%20assistant%20over%20MCP">support@blowhorn.ai</a></p>
+</div>
+
+      </aside>
+    </div><footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-panel glass">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <a class="footer-logo" href="/" aria-label="Blowhorn home">
+                <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="200" height="50">
+                <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="200" height="50">
+              </a>
+              <p class="footer-tagline">Your voice, at full volume.</p>
+              <nav class="footer-social" aria-label="Blowhorn on social media">
+                <ul>
+                  <li><a href="https://x.com/blowhorn_ai" target="_blank" rel="noopener noreferrer" aria-label="X"><img src="/assets/platforms/x-logo-black.png" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.youtube.com/@blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/platforms/youtube-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.facebook.com/BlowhornAI" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="/assets/platforms/facebook-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://github.com/blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/platforms/github-invertocat-black.svg" alt="" width="20" height="20"></a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="footer-news">
+              <form class="newsletter" name="newsletter" method="post" action="https://api.blowhorn.ai/api/subscribe">
+              <label class="newsletter-label ui" for="newsletter-email">Subscribe to our newsletter</label>
+              <div class="newsletter-row">
+                <input type="email" id="newsletter-email" name="email" autocomplete="email" placeholder="Email address" required>
+                <button class="button button-primary" type="submit">Subscribe</button>
+              </div>
+              <input type="hidden" name="source_page" value="/docs/how-to/set-up/connect-mcp-client/">
+              <p class="signup-honeypot" aria-hidden="true">
+                <label for="newsletter-email-website">Website</label>
+                <input id="newsletter-email-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </p>
+            </form>
+
+            </div>
+          </div>
+          <nav class="footer-cols" aria-label="Footer">
+            <div class="footer-col">
+              <h2 class="footer-title">Product</h2>
+              <ul>
+                <li><a href="/download/">Download</a></li>
+                <li><a href="/pricing/">Pricing</a></li>
+                <li><a href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">Browser extension</a></li>
+                <li><a href="https://github.com/blowhorn-ai/blowhorn-site/releases">Releases</a></li>
+                <li><a href="/#platforms">Platforms</a></li>
+                <li><a href="/integrations/actions/">Action matrix</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Resources</h2>
+              <ul>
+                <li><a href="/resources/">Resources</a></li>
+                <li><a href="/resources/videos/">Videos</a></li>
+                <li><a href="/resources/articles/">Articles</a></li>
+                <li><a href="/docs/">Docs</a></li>
+                <li><a href="/docs/reference/support/">Get help</a></li>
+                <li><a href="/field-manual/">Field Manual</a></li>
+                <li><a href="/major/">Meet Major</a></li>
+                <li><a href="/brand/">Brand</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">Trust</h2>
+              <ul>
+                <li><a href="/legal/">Trust Center</a></li>
+                <li><a href="/legal/privacy/">Privacy</a></li>
+                <li><a href="/legal/terms/">Terms</a></li>
+                <li><a href="mailto:security@blowhorn.ai">Security</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h2 class="footer-title">AI native</h2>
+              <ul>
+                <li><a href="/ai/">AI native</a></li>
+                <li><a href="/ai/blowhorn-axi/">blowhorn-axi</a></li>
+                <li><a href="/ai/mcp/">MCP server</a></li>
+                <li><a href="/agents/">Agent guides</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-tools">
+              <h2 class="footer-title">Free tools</h2>
+              <ul>
+                <li><a href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">Am I a Bot?</a></li>
+                <li><a href="https://tells.blowhorn.ai/checks/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">What each check means</a></li>
+                <li><a href="https://tells.blowhorn.ai/agents/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=footer">For AI agents and scripts</a></li>
+              </ul>
+            </div>
+            <div class="footer-col footer-col-wide">
+              <h2 class="footer-title">Compare</h2>
+              <ul>
+                <li><a href="/compare/">How we compare</a></li>
+                <li><a href="/compare/buffer/" aria-label="Blowhorn vs Buffer">Buffer</a></li>
+                <li><a href="/compare/hootsuite/" aria-label="Blowhorn vs Hootsuite">Hootsuite</a></li>
+                <li><a href="/compare/socialbee/" aria-label="Blowhorn vs SocialBee">SocialBee</a></li>
+                <li><a href="/compare/postiz/" aria-label="Blowhorn vs Postiz">Postiz</a></li>
+                <li><a href="/compare/taplio/" aria-label="Blowhorn vs Taplio">Taplio</a></li>
+                <li><a href="/compare/expandi/" aria-label="Blowhorn vs Expandi">Expandi</a></li>
+                <li><a href="/compare/phantombuster/" aria-label="Blowhorn vs PhantomBuster">PhantomBuster</a></li>
+                <li><a href="/compare/mokumokuren/" aria-label="Blowhorn vs mokumokuren">mokumokuren</a></li>
+                <li><a href="/compare/native-scheduling/" aria-label="Blowhorn vs native scheduling">Native scheduling</a></li>
+                <li><a href="/versus/">All comparisons</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom caption">
+          <span>&copy; 2026 Layer5, Inc.</span>
+          <a class="status-link" href="https://layer5.statuspage.io" target="_blank" rel="noreferrer">Status <span class="pulse-icon" aria-hidden="true"></span></a>
+          <button type="button" class="footer-consent" data-consent-open aria-controls="consent">Cookie preferences</button>
+          <span class="footer-tm">LinkedIn, X, Reddit, Hacker News, Slack, Bluesky, GitHub, YouTube, Instagram, TikTok and Facebook are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by any of them.</span>
+        </div>
+      </div>
+    </footer>
+    <section id="consent" class="consent glass" aria-labelledby="consent-title" hidden>
+      <h2 id="consent-title" class="consent-title">Cookies</h2>
+      <p class="consent-text">Yes, we use cookies. Yes, you can eat them, if you can find them. Do you want us to <a href="/legal/privacy/#google-analytics">remember you</a> or pretend we've never met?</p>
+      <div class="consent-actions">
+        <button type="button" class="button button-primary consent-button" data-consent="granted">Accept</button>
+        <button type="button" class="button button-secondary consent-button" data-consent="denied">Decline</button>
+      </div>
+      <button type="button" class="consent-close" data-consent="denied" aria-label="Close and decline">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </section>
+
+
+<script src="/js/docs.min.d24fabcf227598ab61a5aa1e4171a8298794e0bbdce94fde8e66bde0b366a3f3.js" integrity="sha256-0k&#43;rzyJ1mKthpaoeQXGoKYeU4Lvc6U/ejma94LNmo/M=" crossorigin="anonymous" defer></script>
+
+
+    <script type="application/json" id="docs-events">{"$schema":"../schemas/docs_events.schema.json","attribution_params":["first_source","first_medium","first_campaign","first_content","first_term","first_referrer_host","landing_guide","landing_page"],"clients":{"chatgpt":"ChatGPT","claude-code":"Claude Code","claude-desktop":"Claude Desktop","cline":"Cline","cursor":"Cursor","gemini-cli":"Gemini CLI","goose":"Goose","openai-codex-cli":"OpenAI Codex CLI","vs-code":"VS Code with GitHub Copilot","vs-code-with-github-copilot":"VS Code with GitHub Copilot","windsurf-devin-desktop":"Windsurf (Devin Desktop)","zed":"Zed"},"consent_event":"blowhorn:consent","consent_key":"blowhorn-consent","default_client":"general","events":{"docs_guide_view":{"description":"A tracked guide was viewed after consent: once per page load.","params":["page_path","guide","client"]},"docs_outbound_click":{"description":"A link to npm, an MCP registry or a Blowhorn download was followed.","params":["page_path","client","link_kind","link_url"]},"docs_snippet_copy":{"description":"The copy button on a code card was pressed. Never carries the copied text.","params":["page_path","client","snippet_kind","snippet_title"]}},"internal_hosts":["blowhorn.ai","www.blowhorn.ai"],"outbound":[{"hosts":["npmjs.com","www.npmjs.com","registry.npmjs.org"],"kind":"npm"},{"hosts":["registry.modelcontextprotocol.io"],"kind":"registry"},{"hosts":["github.com"],"kind":"registry","paths":["^/mcp(/|$)"]},{"hosts":["github.com"],"kind":"download","paths":["^/blowhorn-ai/[^/]+/releases(/|$)"]},{"hosts":["blowhorn.ai","www.blowhorn.ai"],"kind":"download","paths":["^/download/"]}],"pages":["/docs/how-to/set-up/connect-mcp-client/","/docs/reference/mcp-server/","/docs/reference/python-client/","/docs/tutorials/first-mcp-connection/","/docs/explanation/mcp-and-safety/","/ai/mcp/"],"snippet_kinds":{"bash":"shell","console":"shell","json":"json","sh":"shell","shell":"shell","text":"text","toml":"toml","yaml":"yaml","yml":"yaml","zsh":"shell"},"storage_key":"blowhorn-docs-attribution","utm_params":["utm_source","utm_medium","utm_campaign","utm_content","utm_term"]}</script>
+    <script src="/js/docs-attribution.min.1be585bb90d12fd1bc9a08fea053d087e031b32eced81aeba9f8f18390a7c3ad.js" integrity="sha256-G&#43;WFu5DRL9G8mgj&#43;oFPQh&#43;Axsy7O2Brrqfjxg5Cnw60=" crossorigin="anonymous" defer></script>
+
+  </body>
+</html>
