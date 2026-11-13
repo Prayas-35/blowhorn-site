@@ -90,7 +90,8 @@ queue is cleared from your computer once Cloud accepts it; one Cloud
 refuses stays queued and is retried with a growing delay, at most a
 day apart.
 
-You can turn reports off: Settings has a "Send failure reports" row,
+You can turn reports off: Posture has a "Send failure reports" switch
+in the "Where your sign-ins live" card,
 and `blowhorn config set defaults.diagnostics.enabled false` does the
 same from the command line. Off means nothing is queued or sent.
 The contact support dialog, at a failure line, sends a separate

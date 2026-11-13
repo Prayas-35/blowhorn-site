@@ -187,6 +187,9 @@ blowhorn content upsert [OPTIONS]
 | `--payload` | string |  | JSON object of Content column: value pairs in the queue's own column names, for example `{"Platform":"x","Profile":"company","Message Text":"hello","Approved?":"yes"}` |
 | `--activity` | integer |  | Activity number to update in place; omit to create a new activity |
 | `--expected-fingerprint` | string |  | Refuse the write if the post's fingerprint (from `content get` or `content list`) no longer matches |
+| `--thread-id` | string |  | Thread this new activity joins, as the root item's id (the id a root's upsert returned) |
+| `--reply-to-id` | string |  | Item this new activity answers directly, by item id; needs `--thread-id` |
+| `--thread-index` | integer |  | Position of this new activity in its thread, counting from 1 (the root carries no thread fields and counts as 0); needs `--thread-id` |
 | `--json` | boolean | `false` | Emit machine-readable JSON output (the shape the desktop app's Content screen reads) |
 | `--platform` | string | `all` | Platform filter for `blowhorn content`: `content list` keeps the activities whose Platform column names this platform, and no other content subcommand reads it. One of: bluesky, github, hn, linkedin, reddit, slack, x, all (`all` applies no filter, so every activity is listed) |
 | `--pace` | string |  | Accepted by `blowhorn content upsert` because `--pace` is a global flag, but this command does no paced work -- it sleeps between nothing -- so the value changes nothing about how it runs and appears only in the Pace column of the -v summary. Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |

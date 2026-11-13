@@ -28,7 +28,10 @@ and waits for your **Continue**:
   `~/.local/bin`: `blowhorn` (the CLI), `blowhorn-axi` and `blowhorn-mcp`.
   `blowhorn-mcp` starts the MCP server that comes inside the app when an AI
   assistant asks for it; nothing runs in the background. These belong to the
-  whole computer, not to a Chrome profile. The app writes none of them
+  whole computer, not to a Chrome profile. When Chrome is set to use a
+  custom data directory, the same helper is also written under that
+  directory's `NativeMessagingHosts`, because a Chrome run with a custom
+  data directory reads only its own folder. The app writes none of them
   before you choose Continue; once they exist it keeps them current on each
   launch.
 - **In Google Chrome:** the Blowhorn extension, only in the profiles you

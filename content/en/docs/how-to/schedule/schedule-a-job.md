@@ -65,7 +65,7 @@ page, open the routine after adding it and change its page.
 Open a job (click it, or focus it and press Enter) and its details appear in a
 dialog, a box over the screen. Open its **What**, **When** or **Rules** row to
 change it in place, or choose **Do it now** to run it without waiting for its
-time. The pill beside its title puts it **On hold** or back **In effect**. With "dry fire" on, a run rehearses the routine and claims nothing. When the account is not connected, the preview says the activity is blocked and why, in the same words a real run would meet.
+time. The pill beside its title puts it **On hold** or back **In effect**. The title bar's **On watch** / **Off watch** switch is that routine's own duty hold. With "dry fire" on, a run rehearses the routine and claims nothing. When the account is not connected, the preview says the activity is blocked and why, in the same words a real run would meet.
 
 ## From the command line
 

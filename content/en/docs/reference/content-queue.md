@@ -51,7 +51,9 @@ Content screen runs the same verb from the approve control beside a
 waiting activity - the app's calls run as the person at it, so the
 record is the same either way. The record names the approver's signed-in
 identity from the cloud session cache when there is one, else the local
-user name, with the time. The record is a record, not a claim: no payload
+user name, with the time. The desktop app shows an email there as the
+display name of the profile whose person has that email, and shows no name
+when no profile matches; the stored record is unchanged. The record is a record, not a claim: no payload
 can set it, editing an approved activity keeps it, un-approving an
 activity clears it, and approving an already-approved or missing activity
 is refused. An agent-signalled caller is refused by the command itself,
@@ -72,6 +74,10 @@ in every mode: approval is a person's act.
 
 Clearing an unread activity's "Date Promoted" tries the activity again. Neither a
 retry nor a drop is a run's to decide: the run records, you decide.
+
+## Threads
+
+Activities that answer one another form a thread: one root, then its replies in order. The Activity screen groups each thread under its root, with a `thread · N` line you can expand and collapse. The root carries no thread fields; a reply names the root, the activity it answers, and its position from 1. The fields are set when the activity is created and never change afterwards. See [Content item contract](/docs/reference/content-item-contract/).
 
 ## Related
 
