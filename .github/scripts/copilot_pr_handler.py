@@ -46,7 +46,12 @@ def api_request(method: str, path: str, body: dict | None = None) -> dict:
         raise RuntimeError(
             f"GitHub API {method} {path} failed: {error.reason}"
         ) from error
-    result = json.loads(payload) if payload else {}
+    try:
+        result = json.loads(payload) if payload else {}
+    except json.JSONDecodeError as error:
+        raise RuntimeError(
+            f"GitHub API {method} {path} returned invalid JSON"
+        ) from error
     if result.get("errors"):
         raise RuntimeError(f"GitHub API {method} {path} returned errors: {result['errors']}")
     return result
