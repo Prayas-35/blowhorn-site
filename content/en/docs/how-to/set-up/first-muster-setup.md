@@ -89,7 +89,7 @@ when a new version of Blowhorn needs something your earlier setup did not do.
   [Map Chrome profiles](/docs/how-to/set-up/map-chrome-profiles/).
 - **Getting ready:** Blowhorn finds your Chrome profiles, then says what it
   installs - the Chrome extension in the profiles you marked in use, plus a
-  helper, the `blowhorn` command and the `blowhorn-mcp` server for the whole
+  helper, the `blowhorn`, `blowhorn-axi` and `blowhorn-mcp` commands for the whole
   computer - and waits for your **Continue** before writing anything. It
   adds its extension only to the profiles you marked in use on Confirm
   troops, one at a time: Chrome opens Blowhorn's page in each, and you click

@@ -1,7 +1,7 @@
 ---
 title: "blowhorn desktop"
 linkTitle: "desktop"
-description: "blowhorn desktop: build, install, start, status."
+description: "blowhorn desktop: activity-kinds, build, install, start, status."
 weight: 108
 ---
 
@@ -11,10 +11,37 @@ The `blowhorn desktop` commands. Each one's `--help` prints the same text.
 
 | Command | What it does |
 | --- | --- |
+| [`desktop activity-kinds`](#blowhorn-desktop-activity-kinds) | List the activity kinds (command and platform) this organization has ever run, from the run ledger in the store. |
 | [`desktop build`](#blowhorn-desktop-build) | Package the Electron desktop app as an ad-hoc-signed universal macOS build. |
 | [`desktop install`](#blowhorn-desktop-install) | Install the Electron desktop app dependencies with pnpm (pnpm install `--frozen-lockfile`). |
 | [`desktop start`](#blowhorn-desktop-start) | Launch the Electron desktop app through pnpm dev; refuse when one is already running. |
 | [`desktop status`](#blowhorn-desktop-status) | Show whether desktop dependencies and packaged output are present. |
+
+## blowhorn desktop activity-kinds
+
+List the activity kinds (command and platform) this organization has ever run, from the run ledger in the store: one read of the organization's run records, reduced to the distinct pairs, so the desktop app can tell what has been tried on any computer, not just this one. An organization with no recorded runs -- or a store that cannot be reached -- answers an empty list, not an error, so the desktop falls back to this computer's own ledger unchanged.
+
+```text
+blowhorn desktop activity-kinds [OPTIONS]
+```
+
+| Flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--json` | boolean | `false` | Emit machine-readable JSON output |
+| `--platform` | string |  | Accepted and ignored by `blowhorn desktop`: this command never acts on a platform, so `--platform` has no effect here -- including a value inherited from `BLOWHORN_PLATFORM` or defaults.platform in .blowhorn.yaml |
+| `--pace` | string |  | Accepted by `blowhorn desktop activity-kinds` because `--pace` is a global flag, but this command does no paced work -- it sleeps between nothing -- so the value changes nothing about how it runs and appears only in the Pace column of the -v summary. Resolved as CLI flag, then `BLOWHORN_PACE`, then defaults.pace in .blowhorn.yaml (normal when none is set); an unrecognized value is rejected before anything runs |
+| `--risk-profile` | string |  | Accepted by `blowhorn desktop activity-kinds` because `--risk-profile` is a global flag, but this command does no gated work -- no Risk Profile hold, cap or pace applies to it -- so the value changes nothing about how it runs. A value after the command word wins over one before it; an unrecognized value is rejected before anything runs |
+
+Also takes the [shared flags](/docs/reference/cli/shared-flags/): `--config`, `--log-dir`, `--profile`, `--exclude`, `--headless`, `--chrome-launch`, `--headed`, `--dry-run`, `--verbose`.
+
+Examples:
+
+```bash
+blowhorn desktop activity-kinds --json
+blowhorn desktop activity-kinds
+```
+
+Output: json with `--json`, text otherwise.
 
 ## blowhorn desktop build
 

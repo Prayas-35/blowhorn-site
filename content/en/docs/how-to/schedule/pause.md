@@ -109,10 +109,14 @@ touches your account. In the app every scope is one duty switch, reading
   the card shows who took it off duty, when and why, and this computer's row is
   held until the fleet is back on duty.
 - **This order** (`--activity N`) - the duty switch on the item's row in the
-  Routines list or on its calendar chip, reading **On duty** or **Off duty**.
-  While it is held, the item's details (click the item and it opens in a
-  dialog, a box over the screen) show who held it, when and why where the
-  **When** row opens, with **Resume**.
+  Routines list or on its calendar chip, reading **On duty** or **Off duty**,
+  and the same hold in the item's details as **On watch** or **Off watch**.
+  Off watch opens an optional reason under the switch: **Save** sends the
+  reason, **Skip** sends none, and Escape sends nothing. Clicking away keeps
+  the reason open and sends nothing. If the hold cannot be written, the reason
+  stays so you can press Save or Skip again. While it is held, the item's
+  details (click the item and it opens in a dialog, a box over the screen)
+  show who held it, when and why where the **When** row opens, with **Resume**.
 
 There is no switch for another computer: take leave on that computer from
 its own Blowhorn app, or take leave for the whole fleet.

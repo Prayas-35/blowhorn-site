@@ -53,6 +53,8 @@ present`, `not unregistered` or `failed`:
    running.
 2. **The Chrome native host.** The manifest under Chrome's
    `NativeMessagingHosts`, the launcher and the bridge socket beside it.
+   When the install wrote a second copy of the manifest for a custom Chrome
+   data directory, that copy is removed too.
 3. **The every-profile install entries.** The external-extensions file and
    Blowhorn's own entry in the managed policy, removed with the same
    administrator prompt that wrote them; other keys in that file stay.

@@ -115,11 +115,14 @@ then clear "Date Promoted" to try again or leave it. See
 ## Failures inside Blowhorn
 
 A failure Blowhorn has no specific sentence for still prints one sentence
-and a `Details:` line, then exits 1. The `Details:` line names the error log,
-`~/Library/Application Support/Blowhorn/logs/blowhorn-errors.log`. The log
-holds the full error with anything that looks like a password, token or
-cookie removed. Share that log when you report a problem. Add `--debug`, or
-set `BLOWHORN_DEBUG=1`, to see the full error on the terminal as well.
+and a `Details:` line, then exits 1. The `Details:` line names the file it
+wrote, `blowhorn-errors.log`, under `accounts/<your account id>/` (or
+`machine/` before sign-in) in Blowhorn's log directory. On an installed Mac
+that directory is
+`~/Library/Application Support/Blowhorn/home/data/logs/`. The log holds the
+full error with anything that looks like a password, token or cookie
+removed. Share that log when you report a problem. Add `--debug`, or set
+`BLOWHORN_DEBUG=1`, to see the full error on the terminal as well.
 
 `Blowhorn's browser engine didn't start, so nothing was done.`: the browser
 engine bundled with Blowhorn exited before the run could use it. Nothing was
