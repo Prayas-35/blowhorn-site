@@ -41,6 +41,12 @@ immediately instead of waiting for the pass. A Risk Profile hold, including
 while a profile is warming up, keeps that run from starting until you confirm
 or pass `--ignore-risk`. A limit the platform publishes still applies.
 
+## Param values
+
+A param whose type the activity catalog fixes is refused when it does not parse, with the same wording on every surface. An integer param (`limit`, `lookback`, `older_than`, `sample`) must be a whole number, and a boolean param (`headless`, `headed`, `verbose`, `apply`, and the reconcile flag) must be true or false (`1`, `true`, `yes`, `on`, `y`, and their false counterparts). `blowhorn schedule upsert`, the MCP `schedule_upsert` tool, and the desktop editor all refuse the write, so a typo like `limit=2o` never stores a silent 0. An activity already stored with such a value loads as invalid: the pass skips it, and `schedule list` and `schedule why` name the bad param, until a corrected upsert replaces it. An empty param value is absent, and the run takes the flag's default.
+
+A new write must also carry every param the activity catalog marks required for its command (`follow` needs `target`, for example). `blowhorn schedule upsert`, the MCP `schedule_upsert` tool, and the desktop editor refuse a write without one in the same words, for example `Missing param “target” for command “follow”: an unattended run cannot do without it`, because a scheduled run has no one to ask and would fail every time. The rule applies to new writes only: an activity stored before it still loads and runs.
+
 ## Recurrence
 
 | Word | Means |

@@ -57,8 +57,11 @@ After setup, both walks also check the console a new person sees:
   Chrome profile confirm mapped.
 - **New activity:** `blowhorn schedule destinations` reports no blog set up
   for the local organization, and the picker offers no organization
-  blog action. The unit tests cover an organization that has one.
-- **Next run:** saving a daily Accept LinkedIn invitations from that picker
+  blog action. The unit tests cover an organization that has one. It offers
+  only platforms with a connected account: Slack, and LinkedIn with the
+  planted cookie; without it the tile reads **Connect LinkedIn**.
+- **Next run:** without the planted cookie, the walk first connects a
+  LinkedIn account in the local Cloud. Saving a daily Accept LinkedIn invitations from that picker
   stores one enabled routine in the local Cloud, and **Activity > Routines**
   lists it with its next run at the time the step typed. Home names no next run. The rail's status line
   never shows a countdown: it says what this computer is doing, and otherwise it

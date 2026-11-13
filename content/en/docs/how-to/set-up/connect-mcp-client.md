@@ -105,8 +105,8 @@ command in any entry on this page for `npx` with the arguments
 On a client's command line, the same swap is `-- npx -y blowhorn-mcp`.
 It still needs the Blowhorn app installed and opened once.
 
-To pin the launcher, add its version: `npx -y blowhorn-mcp@1.0.0`. The
-latest is 1.0.0. To check that the package you run is the one listed,
+To pin the launcher, add its version, for example `npx -y blowhorn-mcp@1.0.2`.
+To check that the package you run is the one listed,
 run these two commands, which print the npm version and the registry entry:
 
 ```sh

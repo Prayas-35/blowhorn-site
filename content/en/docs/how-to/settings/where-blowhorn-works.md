@@ -12,8 +12,8 @@ tab of its own. Your Blowhorn account has one setting for where that tab lives:
   on, in the Blowhorn tab group.
 - **In its own window, mostly behind yours.** One window of Blowhorn's own, the same size
   as the window you used last and a little to its right, so an edge of it shows,
-  opened without taking focus. Your window stays in front, your tab stays selected, and Blowhorn keeps reusing the
-  same window until you close it or Chrome quits. Its tab sits in its own
+  opened without taking focus. Your window stays in front, your tab stays selected, and Blowhorn closes the
+  window when a run ends, unless you put a tab of your own in it or it is waiting for you. Its tab sits in its own
   Blowhorn tab group.
 
 On a Mac, a page in a tab you are not looking at reads its window size as zero,
