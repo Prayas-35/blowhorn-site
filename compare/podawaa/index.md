@@ -41,4 +41,4 @@ An exchange guarantees activity, not interest. The comment that matters is the o
 
 **What does LinkedIn say about pods?** On 13 Mar 2026 LinkedIn wrote that engagement pods are not allowed and that it limits the reach of automated comments. Every platform has rules about automation and coordinated activity; read them, whichever tool you use.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

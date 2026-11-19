@@ -44,4 +44,4 @@ Recycling evergreen posts keeps a feed alive. It doesn't start a discussion. Blo
 
 **Does Publer have a unified inbox?** No unified inbox; replies happen in native apps. Blowhorn does not claim a care desk either: it amplifies one message through many real profiles.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

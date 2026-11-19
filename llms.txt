@@ -3,10 +3,12 @@
 > Blowhorn is a social media console that takes one message and broadcasts, reposts and amplifies it across every profile and platform your community runs, on autopilot. Runs on your computer.
 
 ## Pages
-- [Blowhorn: one message, many ears](https://blowhorn.ai/index.md): Scripted where it counts. AI where it helps. Every post, reply and amplify runs exactly as written. Drafts, agents and assistants plug in through MCP and a scriptable CLI.
+- [Blowhorn: one message, many ears](https://blowhorn.ai/index.md): Blowhorn is a social media console. Write one post, and it posts, reposts, and amplifies it across your LinkedIn, X, Reddit, Hacker News, Bluesky, GitHub, and Slack profiles, from your own browser, as you.
+- [Try Blowhorn in your browser](https://blowhorn.ai/demo/index.md): A hands-on simulation of the Blowhorn queue. Pick a formation, build a queue, and watch the schedule fill in. Nothing is posted, and nothing leaves your browser.
+- [Pricing](https://blowhorn.ai/pricing/index.md): Blowhorn is free during early access, with no limits on voices or platforms. Paid plans aren't set yet. Here's what a voice is and how plans will count them.
+- [Your voice, on every front](https://blowhorn.ai/showcase/index.md): Blowhorn is a social media console that runs on your own computer. See what it does, how the four formations work, and where it posts.
 - [Brand](https://blowhorn.ai/brand/index.md): The Blowhorn logo, wordmark, colors, type, Major Blowhorn and Old Thunderlung, with the rules for using them and two kits to download.
 - [Meet Major Blowhorn](https://blowhorn.ai/major/index.md): The life, legend and loud opinions of Major Blowhorn, Blowhorn's drill sergeant rooster, and his horn, Old Thunderlung. Dispatches from the barracks, updated as his story unfolds.
-- [Pricing](https://blowhorn.ai/pricing/index.md): Start free. Solo is $19 a month, Pro is $39 a month for 10 profiles, Team is $35 a seat a month. Pay yearly and get two months free.
 - [Blowhorn newsletter](https://blowhorn.ai/newsletter/index.md): Sign up for the Blowhorn newsletter.
 
 ## AI native
@@ -78,10 +80,10 @@
 - [Terms](https://blowhorn.ai/legal/terms/index.md): The terms between you and Layer5, Inc. for the Blowhorn website, the Blowhorn app for macOS and the Blowhorn Chrome extension.
 
 ## Integrations
-- [Integrations](https://blowhorn.ai/integrations/index.md): Every network Blowhorn reaches. LinkedIn, X, Reddit and Hacker News through your own browser. Slack and Bluesky through their APIs. GitHub reactions on issues, never posts. Coming soon named as such.
+- [Integrations](https://blowhorn.ai/integrations/index.md): Every network Blowhorn reaches. LinkedIn, X, Reddit, Hacker News, YouTube, Instagram, TikTok and Facebook through your own browser. Slack and Bluesky through their APIs. GitHub reactions on issues, never posts.
 
 
-- [Action matrix](https://blowhorn.ai/integrations/actions/index.md): Every Blowhorn action on every platform in one grid. Post, comment, reply, amplify, follow and more on LinkedIn, X, Reddit, Hacker News, Slack, Bluesky and GitHub, with coming-soon platforms marked.
+- [Action matrix](https://blowhorn.ai/integrations/actions/index.md): Every Blowhorn action on every platform in one grid. Post, comment, reply, amplify, follow and more on LinkedIn, X, Reddit, Hacker News, Slack, Bluesky, GitHub, YouTube, Instagram, TikTok and Facebook.
 
 ## Agentic AI Marketing
 - [Agentic AI Marketing](https://blowhorn.ai/agents/index.md): Run your marketing from the AI agent you already code with. Blowhorn's CLI does everything the desktop app does, so Claude Code, OpenCode, Pi, Codex, Grok and DeepSeek can schedule and amplify for you.
@@ -120,6 +122,7 @@
 - [API reference](https://blowhorn.ai/docs/reference/api/index.md): The operations Blowhorn defines, with their request fields and responses.
 - [Explanation](https://blowhorn.ai/docs/explanation/index.md): Understand why: context and trade-offs, no procedures.
 
+- [Content item contract](https://blowhorn.ai/docs/reference/content-item-contract/index.md): What a content item carries: row number, fingerprint, rules of engagement, and thread identity.
 - [Choose your rules of engagement](https://blowhorn.ai/docs/how-to/settings/choose-your-rules-of-engagement/index.md): Your pace. Your risk. Your call. What Safety on, Weapons tight and Weapons free change in your day, and which one to pick.
 - [Connect an assistant and send your first post](https://blowhorn.ai/docs/tutorials/first-mcp-connection/index.md): Add the Blowhorn MCP server to Claude Desktop, read your profiles and queue, and queue a post that waits for your approval.
 - [Install the app](https://blowhorn.ai/docs/how-to/set-up/install-the-app/index.md): Download the signed Mac app from blowhorn.ai and verify it.
@@ -146,7 +149,7 @@
 - [Post to Reddit and Bluesky](https://blowhorn.ai/docs/how-to/publish/post-to-reddit-and-bluesky/index.md): Queue Reddit posts and Bluesky posts, threads, and reposts.
 - [blowhorn config](https://blowhorn.ai/docs/reference/cli/config/index.md): blowhorn config: get, path, set, show.
 - [blowhorn content](https://blowhorn.ai/docs/reference/cli/content/index.md): blowhorn content: approve, delete, get, list, posts, upsert.
-- [blowhorn desktop](https://blowhorn.ai/docs/reference/cli/desktop/index.md): blowhorn desktop: build, install, start, status.
+- [blowhorn desktop](https://blowhorn.ai/docs/reference/cli/desktop/index.md): blowhorn desktop: activity-kinds, build, install, start, status.
 - [blowhorn find](https://blowhorn.ai/docs/reference/cli/find/index.md): Search Bluesky and GitHub for posts, issues, and pull requests matching a query, with optional date, author, and relevancy filters.
 - [blowhorn follow](https://blowhorn.ai/docs/reference/cli/follow/index.md): Follow accounts on X, Bluesky, or GitHub.
 - [Post to Hacker News](https://blowhorn.ai/docs/how-to/publish/post-to-hacker-news/index.md): Submit links and text posts, comment, and stay within the daily cap.
@@ -188,7 +191,7 @@
 - [Change your defaults](https://blowhorn.ai/docs/how-to/settings/defaults/index.md): Set pace, excluded profiles, dry-run default, notifications and logs, in the app or the config file.
 - [Change how the app looks](https://blowhorn.ai/docs/how-to/settings/appearance/index.md): Pick the app's theme, make the side rail and the + button solid or tinted glass, choose whether the desktop shows through, and see how times follow your Mac's clock.
 - [Choose how Blowhorn reaches Chrome](https://blowhorn.ai/docs/how-to/settings/launch-mode/index.md): Stay on the extension default, or attach to your Chrome or launch Blowhorn's own. Advanced.
-- [Choose where Blowhorn works in Chrome](https://blowhorn.ai/docs/how-to/settings/where-blowhorn-works/index.md): Keep Blowhorn's tab beside yours, or give it a window of its own mostly behind yours, in the app or from the command line.
+- [Choose where Blowhorn works in Chrome](https://blowhorn.ai/docs/how-to/settings/where-blowhorn-works/index.md): Keep Blowhorn's tab beside yours, split beside your tab, or give it a window of its own mostly behind yours, in the app or from the command line.
 - [Watch, pause or take over a run in Chrome](https://blowhorn.ai/docs/how-to/manage/watch-and-take-over-a-run/index.md): Open the Blowhorn side panel to see what Blowhorn is doing in Chrome, pause or stop it, and take over for a sign-in or a check.
 - [Troubleshooting](https://blowhorn.ai/docs/how-to/troubleshoot/troubleshooting/index.md): Start from the symptom: find the fix for what Blowhorn just told you.
 - [Turn anonymous usage data on or off](https://blowhorn.ai/docs/how-to/settings/share-usage-data/index.md): Choose whether your Blowhorn account shares anonymous usage data for product improvement, in the app or from the command line.
@@ -225,10 +228,10 @@
 - [Slack](https://blowhorn.ai/docs/reference/platforms/slack/index.md): What Blowhorn can do on Slack, and how each action behaves there.
 - [Bluesky](https://blowhorn.ai/docs/reference/platforms/bluesky/index.md): What Blowhorn can do on Bluesky, and how each action behaves there.
 - [GitHub](https://blowhorn.ai/docs/reference/platforms/github/index.md): What Blowhorn can do on GitHub, and how each action behaves there.
-- [YouTube](https://blowhorn.ai/docs/reference/platforms/youtube/index.md): YouTube in Blowhorn: coming soon.
-- [Instagram](https://blowhorn.ai/docs/reference/platforms/instagram/index.md): Instagram in Blowhorn: coming soon.
-- [TikTok](https://blowhorn.ai/docs/reference/platforms/tiktok/index.md): TikTok in Blowhorn: coming soon.
-- [Facebook](https://blowhorn.ai/docs/reference/platforms/facebook/index.md): Facebook in Blowhorn: coming soon.
+- [YouTube](https://blowhorn.ai/docs/reference/platforms/youtube/index.md): What Blowhorn can do on YouTube, and how each action behaves there.
+- [Instagram](https://blowhorn.ai/docs/reference/platforms/instagram/index.md): What Blowhorn can do on Instagram, and how each action behaves there.
+- [TikTok](https://blowhorn.ai/docs/reference/platforms/tiktok/index.md): What Blowhorn can do on TikTok, and how each action behaves there.
+- [Facebook](https://blowhorn.ai/docs/reference/platforms/facebook/index.md): What Blowhorn can do on Facebook, and how each action behaves there.
 - [How Blowhorn works](https://blowhorn.ai/docs/explanation/how-it-works/index.md): The app, the engine, the extension, the background service, and your account.
 - [Where your data lives](https://blowhorn.ai/docs/explanation/your-data/index.md): What stays on your computer, what your account keeps in sync, and what the extension reads.
 - [Who can post as whom](https://blowhorn.ai/docs/explanation/eligibility/index.md): A credential is permission, a handle is not; a browser mapping is identity, not permission.
@@ -249,7 +252,15 @@
 - [Articles](https://blowhorn.ai/resources/articles/index.md): Product intelligence, tips and field notes from the Blowhorn team: how to read your results, schedule well and stay inside every platform's rules.
 - [Videos](https://blowhorn.ai/resources/videos/index.md): Blowhorn videos - short films and walkthroughs on what Blowhorn does and how to get the most from it, organised by category.
 - [Getting started](https://blowhorn.ai/resources/videos/getting-started/index.md): Start here - what Blowhorn is, how it works, and the films that introduce it.
+- [Comparisons](https://blowhorn.ai/resources/videos/comparisons/index.md): Short films on how Blowhorn differs from a named tool, one competitor at a time.
+- [Features](https://blowhorn.ai/resources/videos/features/index.md): Short films on what Blowhorn can do, from actions beyond the API to a remote team working as one army.
 
+- [Amazon blocked Meta's Muse. Here is how it knew.](https://blowhorn.ai/resources/articles/how-amazon-detects-muse/index.md): Twelve days after Meta launched Muse, Amazon cut it off. Amazon never said how it spots the agent, but the evidence …
+- [Beyond the API](https://blowhorn.ai/resources/videos/features/beyond-the-api/index.md): Platform APIs keep some actions for approved partners. Blowhorn works the way you do, so it isn't limited to what those APIs expose.
+- [Getting the most from your Blowhorn subscription](https://blowhorn.ai/resources/articles/getting-the-most-from-your-subscription/index.md): One thing is metered: voices. Everything else is not. Nineteen ways to lean on that shape, from the General and the rest …
+- [Not a bot. It's you.](https://blowhorn.ai/resources/videos/getting-started/not-a-bot/index.md): Platforms are done with bots. Blowhorn isn't one: it's you, on your own computers, under your own profiles, with your people beside you and you in command.
+- [Remote team, one army](https://blowhorn.ai/resources/videos/features/remote-team/index.md): Every teammate runs Blowhorn on their own computer, signed in as themselves. You see the whole fleet and every result in one place.
+- [Blowhorn vs Buffer](https://blowhorn.ai/resources/videos/comparisons/blowhorn-vs-buffer/index.md): Buffer holds your token and publishes from its cloud. Blowhorn runs as you, on your own computer, under your own profile.
 - [Failed posts are data: reading failure reasons and fixing the cause](https://blowhorn.ai/resources/articles/failed-posts-are-data/index.md): A failed post is a report, not just a red mark. The reason on the activity names the cause, and the fix follows from the …
 - [Pace is a feature: typing delay, concurrency and approval gates](https://blowhorn.ai/resources/articles/pace-is-a-feature/index.md): Speed feels like efficiency until a platform reads it as automation. Typing delay, concurrency and approval gates are …
 - [The open web is closing. Show up where your audience is.](https://blowhorn.ai/resources/articles/the-open-web-is-closing/index.md): AI answers now reuse Reddit's posts without sending the click, and Reddit is answering with logins and its app. Here is …
@@ -304,19 +315,20 @@
 - [Blowhorn for many profiles](https://blowhorn.ai/solutions/multi-profile/index.md): Run many brand, founder and project profiles from one desk: each in its own real browser profile, no fake fingerprints, from one coordinated queue.
 
 ## Use cases
-- [Use cases](https://blowhorn.ai/use-cases/index.md): Blowhorn use cases: launch-day amplification, open source release announcements, conference promotion, careful LinkedIn outreach, team amplification, and agent publishing, from one queue.
+- [Use cases](https://blowhorn.ai/use-cases/index.md): Blowhorn use cases: launch-day amplification, open source release announcements, conference promotion, LinkedIn hygiene, team amplification, and agent publishing, from one queue.
 
 
 - [Blowhorn for launch day](https://blowhorn.ai/use-cases/launch-day/index.md): Plan a product launch so the announcement goes out everywhere at the right moment, and every profile you add amplifies it in the first hour.
 - [Blowhorn for open source releases](https://blowhorn.ai/use-cases/open-source-release/index.md): Announce a release or project milestone on Slack, Hacker News, Reddit, LinkedIn, X and Bluesky, and rally GitHub reactions, from one queue, as yourself.
 - [Blowhorn for conferences](https://blowhorn.ai/use-cases/conference/index.md): Promote a talk, booth or meetup before, during and after the event, from one queue, while any awake computer covers the schedule.
-- [Blowhorn for careful LinkedIn outreach](https://blowhorn.ai/use-cases/linkedin-outreach/index.md): Careful LinkedIn outreach from your own browser: invite to your page, connect mentees, accept invitations and withdraw stale invites, at human pace, with built-in caps.
+- [Blowhorn for LinkedIn hygiene](https://blowhorn.ai/use-cases/linkedin-outreach/index.md): Careful LinkedIn hygiene from your own browser: invite to your page, connect mentees, accept invitations and withdraw stale invites, at human pace, with built-in caps.
 - [Blowhorn for team amplification](https://blowhorn.ai/use-cases/team-amplification/index.md): Get teammates and supporters behind every company post: each posts as themselves, in the first hour, from one coordinated queue, with no 100-seat minimum.
 - [Blowhorn for agent publishing](https://blowhorn.ai/use-cases/agent-publishing/index.md): Let Claude Code, Codex, Cursor or your coding agent of choice draft, dry-run and schedule posts through the Blowhorn CLI, with you approving every post before it goes out.
 
 ## Tags
 - [Tags](https://blowhorn.ai/tags/)
 - [Agents](https://blowhorn.ai/tags/agents/)
+- [Compare](https://blowhorn.ai/tags/compare/)
 - [Desktop-App](https://blowhorn.ai/tags/desktop-app/)
 - [In-Product-Intelligence](https://blowhorn.ai/tags/in-product-intelligence/)
 - [Overview](https://blowhorn.ai/tags/overview/)

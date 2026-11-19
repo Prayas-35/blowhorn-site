@@ -42,4 +42,4 @@ Sendible proves the work got done: scheduled, approved, reported, all under the 
 
 **Is Sendible better than Blowhorn?** For agencies that need white-label client dashboards and reporting across the mainstream networks, yes. For amplifying a few posts that really matter through real people on the networks where developers talk, we think Blowhorn is the better fit.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

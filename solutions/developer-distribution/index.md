@@ -34,5 +34,5 @@
 
 **How does it post to each network?** LinkedIn, X, Reddit and Hacker News: Blowhorn types in your own browser, signed in as you. Slack, Bluesky and GitHub go through their APIs.
 
-**What about Instagram, TikTok, Facebook and YouTube?** Coming soon.
+**What about Instagram, TikTok, Facebook and YouTube?** Blowhorn works on them in your own browser, signed in as you.
 

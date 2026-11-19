@@ -4,7 +4,7 @@
 
 
 Each action links to its usage on that platform's page. For the
-at-a-glance grid, including coming-soon platforms, see the
+at-a-glance grid, see the
 [action matrix](/integrations/actions/).
 
 
@@ -26,7 +26,9 @@ at-a-glance grid, including coming-soon platforms, see the
 | [Amplify](/docs/reference/platforms/x/#action-amplify) | X (Twitter) | Retweets or quotes a post from each of your profiles. |
 | [Amplify](/docs/reference/platforms/reddit/#action-amplify) | Reddit | Upvotes a post from each of your profiles. |
 | [Amplify](/docs/reference/platforms/bluesky/#action-amplify) | Bluesky | Reposts a post from each of your profiles. |
+| [React](/docs/reference/platforms/slack/#action-react) | Slack | Adds an emoji reaction to a message. A reaction already there is left as-is. Take it back with --remove. |
 | [React](/docs/reference/platforms/github/#action-react) | GitHub | Adds the five upbeat reactions (+1, laugh, hooray, heart, rocket) to an issue or pull request from each of your profiles. Running it again adds none of them twice. GitHub doesn't publish posts; it needs an issue or pull request link. |
+| [Star](/docs/reference/platforms/github/#action-star) | GitHub | Stars each named repository from every selected profile, over the REST API. A repository already starred is counted apart, never starred twice. GitHub only. Repositories are named on the command line; star cannot be scheduled. |
 | [Follow](/docs/reference/platforms/x/#action-follow) | X (Twitter) | Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself, skipping anyone you already follow. At most 400 follows per profile a day, and 15 in any 15 minutes, counted from that profile's follow log on this computer. |
 | [Follow](/docs/reference/platforms/bluesky/#action-follow) | Bluesky | Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself. |
 | [Follow](/docs/reference/platforms/github/#action-follow) | GitHub | Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself. |
@@ -34,7 +36,7 @@ at-a-glance grid, including coming-soon platforms, see the
 | [Accept](/docs/reference/platforms/linkedin/#action-accept) | LinkedIn | Accepts the invitations people sent you, one at a time. An invitation LinkedIn flags with its "Take care when connecting" warning is skipped, never accepted. At most 20 confirmed acceptances a run, unless you set --limit. |
 | [Withdraw](/docs/reference/platforms/linkedin/#action-withdraw) | LinkedIn | Withdraws invitations you sent that have waited 21 days or more, to free room for new ones. Shows a preview until you add --apply. At most 20 confirmed withdrawals a run, unless you set --limit. LinkedIn blocks re-inviting a withdrawn person for up to three weeks. |
 | [Find](/docs/reference/platforms/bluesky/#action-find) | Bluesky | Searches Bluesky posts for the words you give it. |
-| [Find](/docs/reference/platforms/github/#action-find) | GitHub | Lists the people around a repository, so you can choose whom to reach. Lists only; it doesn't follow or react. |
+| [Find](/docs/reference/platforms/github/#action-find) | GitHub | Searches issues and pull requests by query, with repository, type, and state filters. Read-only. Issues and pull requests only, not repositories or code. |
 | [Analytics](/docs/reference/platforms/linkedin/#action-analytics) | LinkedIn | Reads your Page's analytics for a date range and saves them, so you can watch the trend. Read-only. |
 | [Analytics](/docs/reference/platforms/x/#action-analytics) | X (Twitter) | Records your follower and following counts on each run, so you can watch the trend. Read-only. |
 | [Analytics](/docs/reference/platforms/bluesky/#action-analytics) | Bluesky | Records your follower and following counts on each run, so you can watch the trend. Read-only. |

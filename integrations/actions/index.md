@@ -2,7 +2,7 @@
 
 > Every action on every platform, in one grid. Hover a dot for what it does, click it for usage.
 
-28 actions on 7 platforms. 4 more platforms coming soon.
+30 actions on 11 platforms.
 
 ## Broadcast
 
@@ -17,7 +17,8 @@ Put your words on the wire.
 Bring every profile in behind a post.
 
 - **Amplify**: [LinkedIn](/docs/reference/platforms/linkedin/#action-amplify), [X (Twitter)](/docs/reference/platforms/x/#action-amplify), [Reddit](/docs/reference/platforms/reddit/#action-amplify), [Bluesky](/docs/reference/platforms/bluesky/#action-amplify)
-- **React**: [GitHub](/docs/reference/platforms/github/#action-react)
+- **React**: [Slack](/docs/reference/platforms/slack/#action-react), [GitHub](/docs/reference/platforms/github/#action-react)
+- **Star**: [GitHub](/docs/reference/platforms/github/#action-star)
 
 ## Ranks
 

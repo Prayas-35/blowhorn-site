@@ -24,6 +24,7 @@ No limits are recorded for Slack.
 
 - **[Post](#action-post)**: Sends a message as you to a channel or to a person, as #channel, @user, a channel ID, or a channel link. Shows a preview until you confirm. Limits: One profile sends per run. A target Blowhorn can't read is refused, never sent somewhere else.
 - **[Reply](#action-reply)**: Replies in a thread when you give it the link to the message.
+- **[React](#action-react)**: Adds an emoji reaction to a message. A reaction already there is left as-is. Take it back with --remove.
 
 
 ## Slack messages

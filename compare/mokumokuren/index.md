@@ -40,4 +40,4 @@ mokumokuren and Blowhorn come from the same place: no vendor posting as you, no 
 
 **Is mokumokuren better than Blowhorn?** If you want to press send yourself every time, or post to Threads, mixi2 or Substack, yes. For scheduling and amplification on developer networks, we think Blowhorn is the better fit.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

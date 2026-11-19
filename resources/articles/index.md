@@ -3,6 +3,10 @@
 Product intelligence, tips and field notes from the Blowhorn team: how to read your results, schedule well and stay inside every platform's rules.
 
 
+- [Getting the most from your Blowhorn subscription](https://blowhorn.ai/resources/articles/getting-the-most-from-your-subscription/) - One thing is metered: voices. Everything else is not. Nineteen ways to lean on that shape, from the General and the rest of the cast.
+
+- [Amazon blocked Meta's Muse. Here is how it knew.](https://blowhorn.ai/resources/articles/how-amazon-detects-muse/) - Twelve days after Meta launched Muse, Amazon cut it off. Amazon never said how it spots the agent, but the evidence points to datacenter traffic, identical browser fingerprints, and behavior, and the Chrome extension changes which signals are left.
+
 - [Failed posts are data: reading failure reasons and fixing the cause](https://blowhorn.ai/resources/articles/failed-posts-are-data/) - A failed post is a report, not just a red mark. The reason on the activity names the cause, and the fix follows from the reason: re-sign in, shrink the run, fix the content, or wait out the platform. Retry only after a fix, never in a loop.
 
 - [Pace is a feature: typing delay, concurrency and approval gates](https://blowhorn.ai/resources/articles/pace-is-a-feature/) - Speed feels like efficiency until a platform reads it as automation. Typing delay, concurrency and approval gates are the three dials that keep a fast schedule looking human, and each one trades a little time for a lot of safety.

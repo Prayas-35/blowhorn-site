@@ -79,6 +79,22 @@ service's control connection lived inside the account's log folder, whose path i
 longer than macOS allows for one. Update Blowhorn, and the service starts on its
 own.
 
+## When the service runs but passes say Blowhorn is unreachable
+
+A pass that cannot reach your Blowhorn account is skipped and tried again on the next
+pass; the service itself is fine. Each failed attempt writes one line to that pass's log
+(and to the daily error log) saying why the connection failed:
+
+- `dns`: this Mac could not look up the address - check the network or VPN.
+- `timeout`: the request got no answer in time.
+- `tls`: the secure connection was refused or intercepted - a proxy or VPN is the usual cause.
+- `refused` or `reset`: something closed the connection.
+- `other`: none of the above; the line also names the error's type.
+
+The Service log on the Troubleshooting tab shows the end of the launcher's own error file,
+which is never cleared, so lines from an earlier version can sit beside today's.
+Check the **written** time and the version before reading one as current.
+
 ## A separate data folder
 
 A run that sets `BLOWHORN_USER_DATA_DIR` (a test, a packaged check, or a second

@@ -37,5 +37,5 @@
 
 **Where does the schedule live?** In your Blowhorn account, so every computer you sign in on works from the same queue. Your account coordinates; it never posts.
 
-**What about Instagram, TikTok, Facebook and YouTube?** Coming soon.
+**What about Instagram, TikTok, Facebook and YouTube?** Blowhorn works on them in your own browser, signed in as you.
 

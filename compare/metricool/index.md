@@ -43,4 +43,4 @@ Metricool tells you which post landed. Blowhorn is built for the post before tha
 
 **Does Metricool have an inbox Blowhorn lacks?** Yes. Metricool has a unified inbox per brand for Facebook, Instagram and YouTube. Blowhorn does not claim a care desk: it amplifies one message through many real profiles.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

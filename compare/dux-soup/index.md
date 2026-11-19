@@ -44,4 +44,4 @@ Visits and connects start a relationship, they are not the whole of one. Blowhor
 
 **What changed at Dux-Soup?** Dux-Soup now sells its LinkedIn tool as STACKED, a desktop app or a cloud tier. The old browser-extension plans are no longer sold. [STACKED pricing](https://www.dux-soup.com/pricing/plans)
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

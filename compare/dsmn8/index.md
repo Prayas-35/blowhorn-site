@@ -45,4 +45,4 @@ Advocacy works because real people are trusted. DSMN8 governs that trust for lar
 
 **Does DSMN8 publish to Hacker News, Reddit or GitHub?** Not assessed in the research behind this page, checked 2026-11-03. Its Slack surface is internal distribution and notification only, not public publishing.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

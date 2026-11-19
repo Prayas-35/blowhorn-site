@@ -29,7 +29,7 @@ Postiz pricing as of Oct 2026: Standard $29 (5 channels), Team $39, Pro $49, Ult
 | LinkedIn outreach | No | Page invites, connect, accept, withdraw |
 | AI agents | Hosted MCP, CLI, skill, marketplace connectors | MCP server, AI skills and a full CLI with --json and --dry-run on writes. Your agent drives, you hold pause |
 | Bought engagement | None | None. Blowhorn sells no followers, likes or reposts |
-| Price | Per channel count | Free plan available, see pricing |
+| Price | Per channel count | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -43,4 +43,4 @@ Postiz and Blowhorn agree more than they disagree: neither sells engagement. Our
 
 **Does Blowhorn have an MCP server?** Yes. A local MCP server ships with the desktop app (blowhorn-mcp, one tool per command, with the risky ones hidden until you opt in). Every write is a dry run until the assistant confirms it, and an agent can never approve its own content. Postiz is ahead on hosted MCP today; Blowhorn's hosted server is coming soon.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

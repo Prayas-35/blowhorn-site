@@ -36,7 +36,7 @@ Expandi pricing as of Oct 2026: $99 a seat a month, or $79 a seat billed annuall
 | Amplify one post | No pods, but Post Engagement campaigns target people who engaged with a post | Sound wave: one scheduled message, amplified by every profile in your account, including profiles teammates and supporters add |
 | Bought engagement | None sold, no pods | None. Blowhorn sells no followers, likes or reposts |
 | Safety | Cloud, dedicated IP, warm-up, limit ranges; Expandi itself says no tool guarantees protection | Human-paced with caps, quiet hours and a dry run, built to keep your profile within each platform's limits |
-| Price | Per seat, one LinkedIn account per seat; Business plus Agency on custom quote | Free plan available, see pricing |
+| Price | Per seat, one LinkedIn account per seat; Business plus Agency on custom quote | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -52,4 +52,4 @@ Outbound volume fills a pipeline. Discussion builds a reputation. Platforms are 
 
 **Does Expandi amplify my posts?** Not the way Blowhorn does. Expandi has no pod network and sells no engagement, but its Post Engagement campaigns target people who liked or commented on a post. Blowhorn's sound wave sends one message out through every profile in your account, as themselves.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

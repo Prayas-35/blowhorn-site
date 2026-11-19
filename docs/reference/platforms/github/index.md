@@ -43,8 +43,9 @@ No limits are recorded for GitHub.
 
 
 - **[React](#action-react)**: Adds the five upbeat reactions (+1, laugh, hooray, heart, rocket) to an issue or pull request from each of your profiles. Running it again adds none of them twice. Limits: GitHub doesn't publish posts; it needs an issue or pull request link.
+- **[Star](#action-star)**: Stars each named repository from every selected profile, over the REST API. A repository already starred is counted apart, never starred twice. Limits: GitHub only. Repositories are named on the command line; star cannot be scheduled.
 - **[Follow](#action-follow)**: Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself.
-- **[Find](#action-find)**: Lists the people around a repository, so you can choose whom to reach. Limits: Lists only; it doesn't follow or react.
+- **[Find](#action-find)**: Searches issues and pull requests by query, with repository, type, and state filters. Limits: Read-only. Issues and pull requests only, not repositories or code.
 
 
 ## Related

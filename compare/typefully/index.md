@@ -42,4 +42,4 @@ Great writing earns attention. It earns a lot more when the people who know you 
 
 **Can I write in Typefully and amplify with Blowhorn?** Yes. Publish where you like, then point Blowhorn's amplify at the post.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

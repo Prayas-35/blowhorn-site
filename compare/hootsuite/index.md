@@ -30,7 +30,7 @@ Hootsuite pricing as of Oct 2026: Standard $99, Professional $199, Advanced $399
 | Hacker News, GitHub, Slack | No | Yes |
 | AI agents | Wisdom AI in every plan, plus MCP connectors | MCP server, AI skills and a full CLI with --json and --dry-run on writes. AI drafts, you decide |
 | Bought engagement | None; paid boosts are ads, clearly labeled | None. Blowhorn sells no followers, likes or reposts |
-| Price | Per user, per month | Free plan available, see pricing |
+| Price | Per user, per month | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -46,4 +46,4 @@ Hootsuite's boost is paid advertising, and ads are a fair, labeled trade. What B
 
 **Can my team amplify without an Enterprise contract?** Yes. A sound wave amplifies from every profile in your Blowhorn account, with no enterprise tier needed. Hootsuite's advocacy product sits on Enterprise.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

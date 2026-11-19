@@ -1,12 +1,11 @@
 # YouTube
 
 
-> YouTube in Blowhorn: coming soon.
+> What Blowhorn can do on YouTube, and how each action behaves there.
 
 
-**Coming soon.** YouTube isn't available in Blowhorn yet. When it is, Blowhorn
-will work on YouTube in your own signed-in Google Chrome, and this page will list what
-it can do there.
+Blowhorn works on YouTube in your own signed-in Google Chrome,
+and this page lists what it can do there.
 
 <!-- BEGIN generated limits: release/scripts/capabilities_docs/build.py; do not edit -->
 
@@ -16,7 +15,8 @@ The limits Blowhorn knows for YouTube.
 
 | Limit | Value |
 |---|---|
-| Title | 5000 |
+| Post | 5000 |
+| Title | 100 |
 
 <!-- END generated limits -->
 

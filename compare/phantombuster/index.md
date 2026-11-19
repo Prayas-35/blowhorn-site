@@ -29,7 +29,7 @@ PhantomBuster pricing as of Oct 2026: Start $56, Grow $128, Scale $352 a month, 
 | Networks | LinkedIn (plus email) | LinkedIn, X, Reddit, Hacker News, GitHub, Bluesky, Slack. Instagram, TikTok, Facebook and YouTube coming soon |
 | Amplify one post | No | Sound wave: one scheduled message, amplified by every profile in your account, including profiles teammates and supporters add |
 | Bought engagement | None | None. Blowhorn sells no followers, likes or reposts |
-| Price | Per seat or license | Free plan available, see pricing |
+| Price | Per seat or license | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -41,4 +41,4 @@ Lists and enrichment are about finding people. Blowhorn is about being worth ans
 
 **Is PhantomBuster better than Blowhorn?** For data extraction, enrichment and outreach at scale, yes. For acting as yourself from your own browser and amplifying through real people, we think Blowhorn is the better fit.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

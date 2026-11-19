@@ -42,4 +42,4 @@ Platforms are cracking down on bots, and the usual fixes look like bots too. For
 
 **Can I use Claude with Blowhorn?** Yes. See the Claude Code page in Agentic AI Marketing for a setup.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

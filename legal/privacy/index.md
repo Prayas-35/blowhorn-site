@@ -1,11 +1,11 @@
 # What Blowhorn stores, and where
 
-> Last updated 11 November 2026. This page covers this website, the Blowhorn app and its Chrome extension. Your account is covered by the [account privacy policy](https://layer5.io/company/legal/privacy/) of Layer5, Inc., which makes Blowhorn.
+> Last updated 16 November 2026. This page covers this website, the Blowhorn app and its Chrome extension. Your account is covered by the [account privacy policy](https://layer5.io/company/legal/privacy/) of Layer5, Inc., which makes Blowhorn.
 
 
 ## This website
 
-blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. That is its one script from a third party, and its cookies are the only ones the site sets. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The site's other requests to another host are the download page's release lookup, the home page's recent-activity card, and the signup forms described below. The newsletter form in the footer sends nothing unless you submit it.
+blowhorn.ai is a static site served by GitHub Pages. Its fonts, images and styles are all served from this site. If you accept the cookie notice, it uses Google Analytics to count visits. Until you accept, Google Analytics doesn't load and nothing is sent to Google. The cookies the site itself sets are the analytics cookies described below, and only after you accept. The site's other requests to another host are the download page's release lookup, the home page's recent-activity card, the signup forms described below, and, if you press play on a YouTube film, the YouTube player described below. The newsletter form in the footer sends nothing unless you submit it.
 
 - GitHub serves the pages and keeps its own server logs. Those are covered by the [GitHub privacy statement](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement).
 - The download page asks GitHub's public API for the newest release from your browser. That request reaches GitHub like any other request your browser makes, with your IP address and the usual request headers. With JavaScript off, no request is made and the download button still works.
@@ -20,6 +20,10 @@ Google Analytics 4 runs only if you choose Accept in the cookie notice.
 - How it's used: Layer5 uses the reports only to improve this site, and doesn't combine them with your Blowhorn account. Google's handling is covered by the [Google privacy policy](https://policies.google.com/privacy) and [how Google uses information from sites that use its services](https://policies.google.com/technologies/partner-sites).
 - If you accept, the site also keeps how you arrived (the campaign tags on the first page's address and the referring site's host, never the full address) in your browser's session storage (`blowhorn-docs-attribution`) and sends it with a few events on the MCP guides: a guide view, a code snippet copy and a click on an install or download link. Closing the tab or withdrawing consent removes it.
 - Your choice is kept in your browser's local storage (`blowhorn-consent`), so the notice doesn't come back. To change it, use **Cookie preferences** at the bottom of any page. If you withdraw consent, the page reloads without the tag. You can also delete the `_ga` cookies in your browser settings.
+
+### YouTube videos {#youtube-videos}
+
+Some video pages and comparison pages can play a short film hosted on YouTube. The page itself does not load YouTube. A poster and a play button are served from this site. If you press play, your browser loads the player from `www.youtube-nocookie.com` (a Google service). YouTube may then set cookies and receive your IP address and the usual request headers. Google's handling is covered by the [Google privacy policy](https://policies.google.com/privacy). If a film is not up yet, the page shows a placeholder and does not contact YouTube. With JavaScript off, the player does not load; the video's own page still describes the film.
 
 ### Newsletter signup
 

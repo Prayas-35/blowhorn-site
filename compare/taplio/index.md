@@ -28,7 +28,7 @@ Taplio pricing as of Oct 2026: Starter $39, Growth $69, Pro $199 a month ([sourc
 | Amplify one post | Auto-engagement features | Sound wave: one scheduled message, amplified by every profile in your account, including profiles teammates and supporters add |
 | AI agents | AI inside the product, plus an MCP server | AI skills and a full CLI with --json and --dry-run on writes. Your agent drives, you hold pause |
 | Bought engagement | None | None. Blowhorn sells no followers, likes or reposts |
-| Price | Per month | Free plan available, see pricing |
+| Price | Per month | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -42,4 +42,4 @@ On LinkedIn, the comments that count are the ones that start a conversation. Lin
 
 **Is Taplio risky for my LinkedIn account?** Taplio's core loop of writing, scheduling and analytics is standard fare, and Taplio asks users to keep its Pro automation conservative. But LinkedIn tightened limits on automated comments in March 2026, and several reviewers report warnings on aggressive automation. Blowhorn moves at a human pace and is built to keep your profile within each platform's limits.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

@@ -36,7 +36,7 @@ Dripify pricing as of Oct 2026: Pro $59 and Advanced $79 per user per month, bil
 | Amplify one post | No pods or post boosting in documented features | Sound wave: one scheduled message, amplified by every profile in your account, including profiles teammates and supporters add |
 | Bought engagement | None sold, no pods | None. Blowhorn sells no followers, likes or reposts |
 | Safety | Cloud, dedicated IP, pacing and daily caps; Dripify itself says no tool can guarantee LinkedIn will never restrict an account | Human-paced with caps, quiet hours and a dry run, built to keep your profile within each platform's limits |
-| Price | Per seat, one LinkedIn account per seat; Pro and Advanced, plus Enterprise on custom quote | Free plan available, see pricing |
+| Price | Per seat, one LinkedIn account per seat; Pro and Advanced, plus Enterprise on custom quote | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -52,4 +52,4 @@ A drip sequence is a script for many strangers. Blowhorn spends its effort on po
 
 **Does Dripify amplify my posts?** Not the way Blowhorn does. Dripify has no pods, no post boosting and no content scheduling in its documented features. Liking a post can be a step inside a sequence, but that is not amplification of your posts by your people.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

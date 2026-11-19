@@ -1,0 +1,420 @@
+<!DOCTYPE html><html lang="en" data-theme="reveille">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><script>
+      (function () {
+        var allowed = ["signal","reveille"], param = "theme", q = null, i;
+        try { q = new URLSearchParams(window.location.search).get(param); } catch (e) {}
+        if (!q) return;
+        for (i = 0; i < allowed.length; i++) {
+          if (allowed[i] === q) {
+            document.documentElement.setAttribute('data-theme', q);
+            return;
+          }
+        }
+      })();
+    </script>
+
+    <title>Try Blowhorn in your browser: Blowhorn</title>
+    <meta name="description" content="A hands-on simulation of the Blowhorn queue. Pick a formation, build a queue, and watch the schedule fill in. Nothing is posted, and nothing leaves your browser.">
+    <link rel="canonical" href="https://blowhorn.ai/demo/">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E2117">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/assets/brand/logo/blowhorn-favicon-32.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/brand/logo/blowhorn-apple-touch-icon-180.png">
+<link rel="stylesheet" href="/css/site.min.b4a48bd4c1d33bbfe15a0e008176e301338ff317e0491c9226eb08801da81715.css">
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      gtag('js', new Date());
+      gtag('config', 'G-2ZLYGVE3HN');
+    </script>
+    <script src="/js/consent.min.87a540c5c86603eab7872bd71d23e8f0460cec66cc2ab450f6ab59bd6a2839fe.js" data-ga-id="G-2ZLYGVE3HN" defer></script>
+
+  </head>
+  <body>
+    <a class="skip-link ui" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Blowhorn home" data-is-home="false">
+          <img class="logo-on-light" src="/assets/brand/logo/blowhorn-lockup-horizontal.svg" alt="Blowhorn" width="176" height="44">
+          <img class="logo-on-dark" src="/assets/brand/logo/blowhorn-lockup-horizontal-on-dark.svg" alt="" width="176" height="44">
+        </a>
+        <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="site-menu" hidden>
+          <span class="mm-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mm-toggle-text">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-menu" aria-label="Primary">
+          <ul class="mm-list">
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-product">Product<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-cards" id="mm-product">
+                <ul class="mm-cards">
+                  <li><a class="mm-card card-stamp" href="https://chromewebstore.google.com/detail/fcflpiagmpcfifgknledeknedfopnapf">
+                    <span class="mm-card-art">
+                      <span class="iface-art iface-art-extension" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-tab-title">Feed | LinkedIn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">linkedin.com/feed</span></span><img class="ia-pin" src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="11" height="11"><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-card"><span class="ia-who"><i class="ia-face"></i><span class="ia-line w45"></span></span><span class="ia-line w75"></span><span class="ia-line w60"></span></span>
+      <span class="ia-row sweep"><span class="ia-line w50"></span><span class="ia-pill ok">Sent as you</span></span>
+    </span>
+  </span></span>
+
+                      <img class="mm-card-chrome" src="/assets/platforms/google-chrome-logo.svg" alt="" width="28" height="28">
+                    </span>
+                    <span class="mm-card-title">Browser extension</span>
+                    <span class="mm-card-desc">Blowhorn inside your own browser, where the work happens</span>
+                    <span class="mm-card-arrow" aria-hidden="true"></span>
+                  </a></li>
+                  <li><a class="mm-card card-plain" href="https://cloud.blowhorn.ai">
+                    <span class="iface-art iface-art-web" aria-hidden="true"><span class="ia-panel ia-browser"><span class="ia-tabstrip">
+  <span class="ia-lights"><i></i><i></i><i></i></span>
+  <span class="ia-tab on"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="9" height="9"><span class="ia-tab-title">Blowhorn</span><span class="ia-tab-x"></span>
+  </span>
+  <span class="ia-tab ia-tab-bg"><i class="ia-fav f-mail"></i><span class="ia-tab-title">Inbox</span></span>
+  <span class="ia-tab-new"></span>
+</span>
+<span class="ia-toolbar">
+  <svg class="ia-nav" viewBox="0 0 30 10" width="30" height="10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 2L2 5l3 3M2 5h6"/><path class="ia-nav-off" d="M14 2l3 3-3 3M17 5h-6"/><path d="M28 5a3 3 0 1 1-1-2.2M27.4 1.2v1.8h-1.8"/></svg>
+  <span class="ia-omni"><svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M1.5 3h4M7.5 3h1M1.5 7h1M4.5 7h4"/><circle cx="6.5" cy="3" r="1"/><circle cx="3.5" cy="7" r="1"/></svg><span class="ia-mono">cloud.blowhorn.ai</span></span><span class="ia-avatar"></span>
+</span>
+<span class="ia-bookmarks"><span class="ia-bm"><i class="ia-fav f-docs"></i>Docs</span><span class="ia-bm"><i class="ia-fav f-cal"></i>Calendar</span><span class="ia-bm"><i class="ia-fav f-team"></i>Team</span></span>
+<span class="ia-page">
+      <span class="ia-page-head"><span class="ia-page-title">Activity</span><span class="ia-live"><i></i>Live</span></span>
+      <span class="ia-rows">
+        <span class="ia-row sweep"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8.3 10.6v6M12 16.6v-6M12 12.6c0-1.4 1-2.2 2.2-2.2 1.3 0 2.1.9 2.1 2.3v3.9"/><circle cx="8.3" cy="7.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+<span class="ia-state live"><i></i>Ready</span><span class="ia-prev">Launch day, 9:30</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="14" rx="7.5" ry="5.5"/><path d="M12 8.5l1.2-4.5 3.3.9M9.5 16.5c1.5 1.2 3.5 1.2 5 0"/><circle cx="17.5" cy="5" r="1.2"/></svg>
+<span class="ia-state wait"><i></i>Needs you</span><span class="ia-prev">AMA thread</span></span>
+        <span class="ia-row"><svg class="ia-mark" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+<span class="ia-state done"><i></i>Sent</span><span class="ia-prev">v1.42 is out</span></span>
+      </span>
+    </span>
+  </span></span>
+
+                    <span class="mm-card-title">Web app</span>
+                    <span class="mm-card-desc">Your queue from any browser, at cloud.blowhorn.ai</span>
+                    <span class="mm-card-arrow" aria-hidden="true"></span>
+                  </a></li>
+                  <li><a class="mm-card card-dispatch" href="/ai/blowhorn-axi/">
+                    <span class="iface-art iface-art-cli" aria-hidden="true"><span class="ia-panel ia-term">
+    <span class="ia-bar"><span class="ia-lights"><i></i><i></i><i></i></span><span class="ia-caption">zsh · blowhorn</span></span>
+    <span class="ia-code"><span class="ia-cline"><b>$</b> blowhorn post launch.md --dry-run</span><span class="ia-cline ok">✓ rehearsed · 3 voices, nothing sent</span><span class="ia-cline"><b>$</b> blowhorn post launch.md --go <span class="ia-cursor"></span></span></span>
+  </span></span>
+
+                    <span class="mm-card-title">Command line</span>
+                    <span class="mm-card-desc">Every action as a command: for you, scripts and agents</span>
+                    <span class="mm-card-arrow" aria-hidden="true"></span>
+                  </a></li>
+                  <li><a class="mm-card card-field" href="/ai/mcp/">
+                    <span class="iface-art iface-art-mcp" aria-hidden="true"><span class="ia-panel ia-diagram">
+    <span class="ia-flow">
+      <span class="ia-chip"><span class="ia-chip-name">Claude</span><span class="ia-chip-sub">assistant</span></span>
+      <span class="ia-link"><i class="ia-pulse"></i></span>
+      <span class="ia-chip ia-chip-hub"><span class="ia-chip-name">MCP</span><span class="ia-chip-sub">tools/list</span></span>
+      <span class="ia-link"><i class="ia-pulse d2"></i></span>
+      <span class="ia-chip"><img src="/assets/brand/logo/blowhorn-app-icon.svg" alt="" width="14" height="14"><span class="ia-chip-sub">Blowhorn</span></span>
+    </span>
+    <span class="ia-mono ia-diagram-note">post · amplify · schedule · approval rules on</span>
+  </span></span>
+
+                    <span class="mm-card-title">MCP server</span>
+                    <span class="mm-card-desc">Plug Blowhorn into Claude and other AI assistants</span>
+                    <span class="mm-card-arrow" aria-hidden="true"></span>
+                  </a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-solutions">Solutions<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-wide" id="mm-solutions">
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/for/">By role</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/for/devrel/"><span class="mm-link-title">DevRel</span></a></li><li><a class="mm-link" href="/for/marketing/"><span class="mm-link-title">Marketing managers</span></a></li><li><a class="mm-link" href="/for/founders/"><span class="mm-link-title">Founders</span></a></li><li><a class="mm-link" href="/for/open-source/"><span class="mm-link-title">Open source maintainers</span></a></li><li><a class="mm-link" href="/for/community/"><span class="mm-link-title">Community managers</span></a></li><li><a class="mm-link" href="/for/agencies/"><span class="mm-link-title">Agencies and consultants</span></a></li><li><a class="mm-link" href="/for/social-media/"><span class="mm-link-title">Social media managers</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/use-cases/">By use case</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/use-cases/launch-day/"><span class="mm-link-title">Launch day</span></a></li><li><a class="mm-link" href="/use-cases/open-source-release/"><span class="mm-link-title">Open source release</span></a></li><li><a class="mm-link" href="/use-cases/conference/"><span class="mm-link-title">Conference</span></a></li><li><a class="mm-link" href="/use-cases/linkedin-outreach/"><span class="mm-link-title">LinkedIn hygiene</span></a></li><li><a class="mm-link" href="/use-cases/team-amplification/"><span class="mm-link-title">Team amplification</span></a></li><li><a class="mm-link" href="/use-cases/agent-publishing/"><span class="mm-link-title">Agent publishing</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/solutions/">By category</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/solutions/developer-distribution/"><span class="mm-link-title">Developer distribution</span></a></li><li><a class="mm-link" href="/solutions/employee-advocacy/"><span class="mm-link-title">Employee advocacy</span></a></li><li><a class="mm-link" href="/solutions/distributed-teams/"><span class="mm-link-title">Distributed teams</span></a></li><li><a class="mm-link" href="/solutions/social-scheduling/"><span class="mm-link-title">Social scheduling</span></a></li><li><a class="mm-link" href="/solutions/linkedin-automation/"><span class="mm-link-title">LinkedIn automation</span></a></li><li><a class="mm-link" href="/solutions/multi-profile/"><span class="mm-link-title">Multi-profile</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title"><a href="/ai/">AI native</a></p>
+                  <ul class="mm-links"><li><a class="mm-link" href="/agents/"><span class="mm-link-title">Agentic AI marketing</span><span class="mm-link-desc">Let your AI agent run the launch</span></a></li>
+                  </ul>
+                </div>
+                <div class="mm-group">
+                  <p class="mm-group-title">Works with</p>
+                  <ul class="mm-links mm-compact"><li><a class="mm-link" href="/agents/claude-code/"><span class="mm-link-title">Claude Code</span></a></li><li><a class="mm-link" href="/agents/opencode/"><span class="mm-link-title">OpenCode</span></a></li><li><a class="mm-link" href="/agents/pi/"><span class="mm-link-title">Pi</span></a></li><li><a class="mm-link" href="/agents/codex/"><span class="mm-link-title">Codex</span></a></li><li><a class="mm-link" href="/agents/grok/"><span class="mm-link-title">Grok</span></a></li><li><a class="mm-link" href="/agents/deepseek/"><span class="mm-link-title">DeepSeek</span></a></li><li><a class="mm-link" href="/agents/cli/"><span class="mm-link-title">CLI</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="mm-item"><a class="mm-top" href="/integrations/">Integrations</a></li>
+            <li class="mm-item"><a class="mm-top" href="/compare/">Compare</a></li>
+            <li class="mm-item">
+              <button type="button" class="mm-trigger" aria-expanded="false" aria-controls="mm-resources">Resources<span class="mm-chev" aria-hidden="true"></span></button>
+              <div class="mm-panel mm-panel-links" id="mm-resources">
+                <ul class="mm-links mm-cols-3"><li><a class="mm-link" href="/docs/"><span class="mm-link-title">Docs</span><span class="mm-link-desc">Set up, how-to guides and reference</span></a></li><li><a class="mm-link" href="/resources/videos/"><span class="mm-link-title">Videos</span><span class="mm-link-desc">Short films and walkthroughs</span></a></li><li><a class="mm-link" href="/resources/articles/"><span class="mm-link-title">Articles</span><span class="mm-link-desc">Product intelligence and tips</span></a></li><li><a class="mm-link" href="/field-manual/"><span class="mm-link-title">Field Manual</span><span class="mm-link-desc">What each feed rewards and punishes</span></a></li><li><a class="mm-link" href="/docs/reference/support/"><span class="mm-link-title">Get help</span><span class="mm-link-desc">Support and troubleshooting</span></a></li><li><a class="mm-link" href="/major/"><span class="mm-link-title">Meet Major</span><span class="mm-link-desc">Our mascot and his troops</span></a></li><li><a class="mm-link" href="/brand/"><span class="mm-link-title">Brand</span><span class="mm-link-desc">Logo, colors and the brand kit</span></a></li><li><a class="mm-link" href="https://tells.blowhorn.ai/?utm_source=blowhorn.ai&amp;utm_medium=referral&amp;utm_campaign=tells&amp;utm_content=nav"><span class="mm-link-title">Am I a Bot?</span><span class="mm-link-desc">Free check: what sites can see about your browser</span></a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mm-item"><a class="mm-top" href="/pricing/">Pricing</a></li>
+            <li class="mm-item mm-item-download"><a class="button button-secondary mm-download" href="/download/">Download</a></li>
+          </ul>
+        </nav>
+        <a class="button button-secondary site-cta" href="/download/">Download</a>
+      </div>
+    </header>
+    <script src="/js/nav.min.f9cb0a1cf5fb98c0ffc9bd2b8aff48c463061d31197aea2cfe97924da2a9a643.js" defer></script>
+<main id="main" class="page demo-page">
+      <div class="wrap">
+        <header class="page-head">
+          <p class="label">Interactive demo</p>
+          <h1 class="display">Try Blowhorn in your browser</h1>
+          <p class="body-lg muted">A hands-on simulation of the real queue. Pick a formation, build a queue, and watch the schedule fill in. Nothing is posted, and nothing leaves your browser.</p>
+        </header>
+        <noscript><p class="muted">This demo needs JavaScript to run the simulation. The tour below still shows how Blowhorn works.</p></noscript>
+
+        <ol class="steps">
+          <li class="step"><span class="step-num" aria-hidden="true">1</span><p class="step-text"><b>Pick a formation.</b> Four ways to run your fleet.</p></li>
+          <li class="step"><span class="step-num" aria-hidden="true">2</span><p class="step-text"><b>Build your queue.</b> Add a sample post, or write your own.</p></li>
+          <li class="step"><span class="step-num" aria-hidden="true">3</span><p class="step-text"><b>Run the schedule.</b> Watch each post go out in turn.</p></li>
+        </ol>
+      </div>
+
+      <section class="section" aria-labelledby="pick-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Step 1</p>
+            <h2 id="pick-title" class="h2">Pick a formation</h2>
+            <p class="muted">Four ways to run your fleet. Each one changes who sends each post in the schedule below.</p>
+          </div>
+          <div class="tabs" data-tabs data-tabs-group="demo-machine" data-tabs-id="demo-machine">
+  <div class="tabs-list">
+    <a class="tabs-tab is-on" id="demo-machine-tab-muster" href="#demo-machine-muster" data-tab="muster">Muster</a>
+    <a class="tabs-tab" id="demo-machine-tab-battalion-map" href="#demo-machine-battalion-map" data-tab="battalion-map">Battalion Map</a>
+    <a class="tabs-tab" id="demo-machine-tab-one-thunder" href="#demo-machine-one-thunder" data-tab="one-thunder">One Thunder</a>
+    <a class="tabs-tab" id="demo-machine-tab-call-to-arms" href="#demo-machine-call-to-arms" data-tab="call-to-arms">Call to Arms</a>
+  </div>
+  <div class="tabs-panel" id="demo-machine-muster" data-tab-panel="muster" data-tab-index="0">
+    <h3 class="h3">Muster</h3><p>Every computer you own is a recruit.</p><p>Install Blowhorn on one computer or fifty. Each one enlists, reports for duty and takes orders from you or your AI agent.</p><p class="muted">In this simulation, each post goes out from the next computer in your roll call.</p>
+  </div>
+  <div class="tabs-panel" id="demo-machine-battalion-map" data-tab-panel="battalion-map" data-tab-index="1">
+    <h3 class="h3">Battalion Map</h3><p>Your squad, on one map.</p><p>Install Blowhorn on every computer you have. Each one shows up as a unit, reports in and takes the next order.</p><p class="muted">In this simulation, each post goes out from a unit on your map, reporting in turn.</p>
+  </div>
+  <div class="tabs-panel" id="demo-machine-one-thunder" data-tab-panel="one-thunder" data-tab-index="2">
+    <h3 class="h3">One Thunder</h3><p>Many voices. One thunder.</p><p>Your teammates, your computers, the brother in arms at the next desk. Major gathers every voice into one call, right on time.</p><p class="muted">In this simulation, each post goes out from the next voice in your crew.</p>
+  </div>
+  <div class="tabs-panel" id="demo-machine-call-to-arms" data-tab-panel="call-to-arms" data-tab-index="3">
+    <h3 class="h3">Call to Arms</h3><p>From one recruit to a full squad.</p><p>Install Blowhorn on one computer, then the next. Bring your team and your agents. Then Major sounds the call.</p><p class="muted">In this simulation, each post sounds the next beat: Enlist, Muster, Rally, Thunder.</p>
+  </div>
+  <p class="visually-hidden">Formations</p>
+</div>
+          <p aria-live="polite">Formation: <b data-demo-pick-name>Muster</b>. <span data-demo-pick-line>Every computer you own is a recruit.</span></p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="queue-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Step 2</p>
+            <h2 id="queue-title" class="h2">Build your queue</h2>
+            <p class="muted">Add a sample post, or write your own. Your queue lives only in this page.</p>
+          </div>
+          <ul class="grid grid-3 section-body">
+            <li class="card card-field">
+              <p class="label">LinkedIn</p>
+              <p>Your launch post should not depend on one laptop being awake. One queue, every computer you own.</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="LinkedIn" data-demo-text="Your launch post should not depend on one laptop being awake. One queue, every computer you own.">Add to queue</button></p>
+            </li>
+            <li class="card card-plain">
+              <p class="label">X</p>
+              <p>Write it once. Deploy to every front.</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="X" data-demo-text="Write it once. Deploy to every front.">Add to queue</button></p>
+            </li>
+            <li class="card card-stamp">
+              <p class="label">Bluesky</p>
+              <p>Real voices make a sound wave. One message, every profile you run, at the moment you pick.</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="Bluesky" data-demo-text="Real voices make a sound wave. One message, every profile you run, at the moment you pick.">Add to queue</button></p>
+            </li>
+            <li class="card card-dispatch">
+              <p class="label">Reddit</p>
+              <p>We built Blowhorn to post as you, from your own computer, at a human pace. Ask us anything.</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="Reddit" data-demo-text="We built Blowhorn to post as you, from your own computer, at a human pace. Ask us anything.">Add to queue</button></p>
+            </li>
+            <li class="card card-field">
+              <p class="label">Hacker News</p>
+              <p>Show HN: a social console that runs on your own computer, not a vendor server</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="Hacker News" data-demo-text="Show HN: a social console that runs on your own computer, not a vendor server">Add to queue</button></p>
+            </li>
+            <li class="card card-plain">
+              <p class="label">Slack</p>
+              <p>Launch day: the announcement, the thread and the follow-up, queued once.</p>
+              <p><button type="button" class="button button-secondary" data-demo-add data-demo-platform="Slack" data-demo-text="Launch day: the announcement, the thread and the follow-up, queued once.">Add to queue</button></p>
+            </li>
+          </ul>
+          <form class="section-body" data-demo-form>
+            <p>
+              <label for="demo-custom-text">Write your own post</label><br>
+              <textarea id="demo-custom-text" rows="3" maxlength="280" placeholder="Say it once, and let the queue carry it."></textarea>
+            </p>
+            <p>
+              <label for="demo-custom-platform">Platform</label><br>
+              <select id="demo-custom-platform">
+                <option>LinkedIn</option>
+                <option>X</option>
+                <option>Bluesky</option>
+                <option>Reddit</option>
+                <option>Hacker News</option>
+                <option>Slack</option>
+              </select>
+            </p>
+            <p><button type="submit" class="button button-secondary">Add to queue</button></p>
+          </form>
+          <div class="card card-plain section-body">
+            <h3 class="h3">Your queue</h3>
+            <p class="muted" data-demo-empty>Your queue is empty. Add a post above.</p>
+            <ol data-demo-queue></ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="schedule-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Step 3</p>
+            <h2 id="schedule-title" class="h2">Run the schedule</h2>
+            <p class="muted">Each post in your queue takes the next slot, starting tomorrow at 9:00. Press run and watch them go out.</p>
+          </div>
+          <div class="compare-scroll card-plain section-body">
+            <table>
+              <caption class="visually-hidden">Schedule for your queue. Example rows until you add posts.</caption>
+              <thead>
+                <tr><th scope="col">Time</th><th scope="col">Platform</th><th scope="col">Post</th><th scope="col">From</th><th scope="col">Status</th></tr>
+              </thead>
+              <tbody data-demo-schedule>
+                <tr><td>Tomorrow, 9:00 AM</td><td>X</td><td>Write it once. Deploy to every front.</td><td>Desk rig</td><td>Example</td></tr>
+                <tr><td>Tomorrow, 10:30 AM</td><td>Bluesky</td><td>Real voices make a sound wave. One message, every profile you run, at the moment you pick.</td><td>Laptop</td><td>Example</td></tr>
+                <tr><td>Tomorrow, 12:00 PM</td><td>LinkedIn</td><td>Your launch post should not depend on one laptop being awake. One queue, every computer you own.</td><td>Studio box</td><td>Example</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="hero-actions section-body">
+            <button type="button" class="button button-primary" data-demo-run>Run the simulation</button>
+            <button type="button" class="button button-secondary" data-demo-reset>Reset</button>
+          </p>
+          <p aria-live="polite" data-demo-summary></p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="next-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Next step</p>
+            <h2 id="next-title" class="display">Ready for the real thing</h2>
+            <p class="body-lg muted">The real Blowhorn runs the same queue on your own computer, through your Chrome profiles.</p>
+          </div>
+          <p class="hero-actions">
+            <a class="button button-secondary" href="/download/">Download</a>
+            <a class="button button-secondary" href="/showcase/">See the showcase</a>
+            <a class="button button-secondary" href="/docs/">Read the docs</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-panel glass">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <p class="footer-tagline">Your voice, at full volume.</p>
+              <nav class="footer-social" aria-label="Blowhorn on social media">
+                <ul>
+                  <li><a href="https://x.com/blowhorn_ai" target="_blank" rel="noopener noreferrer" aria-label="X"><img src="/assets/platforms/x-logo-black.png" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.youtube.com/@blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/platforms/youtube-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://www.facebook.com/BlowhornAI" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="/assets/platforms/facebook-simple-icons.svg" alt="" width="20" height="20"></a></li>
+                  <li><a href="https://github.com/blowhorn-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/platforms/github-invertocat-black.svg" alt="" width="20" height="20"></a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="footer-news">
+              <form class="newsletter" name="newsletter" method="post" action="https://api.blowhorn.ai/api/subscribe">
+              <label class="newsletter-label ui" for="newsletter-email">Subscribe to our newsletter</label>
+              <div class="newsletter-row">
+                <input type="email" id="newsletter-email" name="email" autocomplete="email" placeholder="Email address" required>
+                <button class="button button-primary" type="submit">Subscribe</button>
+              </div>
+              <input type="hidden" name="source_page" value="/demo/">
+              <p class="signup-honeypot" aria-hidden="true">
+                <label for="newsletter-email-website">Website</label>
+                <input id="newsletter-email-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </p>
+            </form>
+
+            </div>
+          </div>
+          <nav class="footer-links" aria-label="Footer">
+            <ul>
+              <li><a href="/docs/">Docs</a></li>
+              <li><a href="/pricing/">Pricing</a></li>
+              <li><a href="/brand/">Brand</a></li>
+              <li><a href="/trust-center/">Trust Center</a></li>
+              <li><a class="status-link" href="https://layer5.statuspage.io" target="_blank" rel="noreferrer">Status <span class="pulse-icon" aria-hidden="true"></span></a></li>
+              <li><button type="button" class="footer-consent" data-consent-open aria-controls="consent">Cookie preferences</button></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom caption">
+          <span>&copy; 2026 Layer5, Inc.</span>
+          <span>All product names are trademarks of their respective owners. Blowhorn is not affiliated with or endorsed by them.</span>
+        </div>
+      </div>
+    </footer>
+    <section id="consent" class="consent glass" aria-labelledby="consent-title" hidden>
+      <h2 id="consent-title" class="consent-title">Cookies</h2>
+      <p class="consent-text">Yes, we use cookies. Yes, you can eat them, if you can find them. Do you want us to <a href="/legal/privacy/#google-analytics">remember you</a> or pretend we've never met?</p>
+      <div class="consent-actions">
+        <button type="button" class="button button-primary consent-button" data-consent="granted">Accept</button>
+        <button type="button" class="button button-secondary consent-button" data-consent="denied">Decline</button>
+      </div>
+      <button type="button" class="consent-close" data-consent="denied" aria-label="Close and decline">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </section>
+
+
+    <script src="/js/demo-bundle.min.9952ef57505d1e3bec74f337c301cf18b5172e8ac942af9f8de715797db2ee95.js" defer></script>
+
+    <script src="/js/code-card.min.681cde1d563b320da97fa3f2c094be9469b193e726a2734eb3eb264d3a5e33e4.js" defer></script>
+    <script type="application/json" id="docs-events">{"$schema":"../schemas/docs_events.schema.json","attribution_params":["first_source","first_medium","first_campaign","first_content","first_term","first_referrer_host","landing_guide","landing_page"],"clients":{"chatgpt":"ChatGPT","claude-code":"Claude Code","claude-desktop":"Claude Desktop","cline":"Cline","cursor":"Cursor","gemini-cli":"Gemini CLI","goose":"Goose","openai-codex-cli":"OpenAI Codex CLI","vs-code":"VS Code with GitHub Copilot","vs-code-with-github-copilot":"VS Code with GitHub Copilot","windsurf-devin-desktop":"Windsurf (Devin Desktop)","zed":"Zed"},"consent_event":"blowhorn:consent","consent_key":"blowhorn-consent","default_client":"general","events":{"docs_guide_view":{"description":"A tracked guide was viewed after consent: once per page load.","params":["page_path","guide","client"]},"docs_outbound_click":{"description":"A link to npm, an MCP registry or a Blowhorn download was followed.","params":["page_path","client","link_kind","link_url"]},"docs_snippet_copy":{"description":"The copy button on a code card was pressed. Never carries the copied text.","params":["page_path","client","snippet_kind","snippet_title"]}},"internal_hosts":["blowhorn.ai","www.blowhorn.ai"],"outbound":[{"hosts":["npmjs.com","www.npmjs.com","registry.npmjs.org"],"kind":"npm"},{"hosts":["registry.modelcontextprotocol.io"],"kind":"registry"},{"hosts":["github.com"],"kind":"registry","paths":["^/mcp(/|$)"]},{"hosts":["github.com"],"kind":"download","paths":["^/blowhorn-ai/[^/]+/releases(/|$)"]},{"hosts":["blowhorn.ai","www.blowhorn.ai"],"kind":"download","paths":["^/download/"]}],"pages":["/docs/how-to/set-up/connect-mcp-client/","/docs/reference/mcp-server/","/docs/reference/python-client/","/docs/tutorials/first-mcp-connection/","/docs/explanation/mcp-and-safety/","/ai/mcp/"],"snippet_kinds":{"bash":"shell","console":"shell","json":"json","sh":"shell","shell":"shell","text":"text","toml":"toml","yaml":"yaml","yml":"yaml","zsh":"shell"},"storage_key":"blowhorn-docs-attribution","utm_params":["utm_source","utm_medium","utm_campaign","utm_content","utm_term"]}</script>
+    <script src="/js/docs-attribution.min.1be585bb90d12fd1bc9a08fea053d087e031b32eced81aeba9f8f18390a7c3ad.js" integrity="sha256-G&#43;WFu5DRL9G8mgj&#43;oFPQh&#43;Axsy7O2Brrqfjxg5Cnw60=" crossorigin="anonymous" defer></script>
+  </body>
+</html>

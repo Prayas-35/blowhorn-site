@@ -39,4 +39,4 @@ Thunderclap's lesson is that identical posts fired at the same minute look like 
 
 **Is Blowhorn a Thunderclap alternative?** In spirit, yes: one message, many voices. In method, no: real people acting as themselves, at a human pace, not identical simultaneous posts.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

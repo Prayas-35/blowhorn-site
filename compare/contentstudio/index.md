@@ -30,7 +30,7 @@ ContentStudio pricing as of Oct 2026: Standard $19, Advanced $49 and Agency Unli
 | Facebook, Instagram, TikTok, YouTube | Yes, live today | Coming soon; TikTok in development |
 | Repost, follow and outreach actions | No stated feature | Yes: reply, amplify, follow, invite and connect on supported platforms |
 | AI agents | Hosted MCP server, REST API, CLI and agent skill | MCP server, REST API, AI skills and a full CLI with --json and --dry-run on writes. Your agent drives, you hold pause |
-| Pricing model | Per plan, never per seat | Free $0 forever; per seat only on Team |
+| Pricing model | Per plan, never per seat | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -44,4 +44,4 @@ ContentStudio publishes from its cloud while your laptop stays closed. Blowhorn 
 
 **Does Blowhorn support Instagram?** Not yet. Instagram, Facebook and YouTube are coming soon; TikTok is in development.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

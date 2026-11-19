@@ -622,7 +622,7 @@ startup:
 
 Until Cloud answers on `mcp.blowhorn.ai` itself, an interim transport proxy
 runs at `https://mcp.blowhorn.ai/mcp` (`hosted/` in blowhorn-ai/blowhorn-mcp).
-It forwards each MCP request to Blowhorn's `/mcp` and Cloud's answer
+It forwards each MCP request to Cloud's `/mcp` and Cloud's answer
 back. Cloud owns the tools, token checks and activity events. The Worker
 serves RFC 9728 protected-resource metadata locally (both
 `/.well-known/oauth-protected-resource` and
@@ -692,8 +692,9 @@ The server is listed in the
 [official MCP Registry](https://registry.modelcontextprotocol.io/) as
 `io.github.blowhorn-ai/blowhorn`, status `active`, and its launcher is on
 npm as [`blowhorn-mcp`](https://www.npmjs.com/package/blowhorn-mcp).
-The latest version is 1.0.0 on both. The registry has 0.1.1 through
-1.0.0; npm has 0.1.0 through 1.0.0.
+The registry lists versions from 0.1.1 on, and npm from 0.1.0 on. As of
+2026-11-13 the latest is 1.0.2 on both; the commands below print the
+current one.
 
 Version 1.0.0 is the first stable release of the launcher. It adds no
 launcher features over 0.1.4. It moves the launcher and the registry

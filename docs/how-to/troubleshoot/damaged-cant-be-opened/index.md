@@ -79,30 +79,40 @@ To see which version you have, select Blowhorn in Applications and choose
 
 ## If an update left an old copy behind
 
-An in-app update keeps the previous version as a hidden copy in
-Applications, named `.Blowhorn-backup-<id>.app`, until the new version
-starts. Every copy carries Blowhorn's identity, so anything that opens
-Blowhorn without naming a path, a `blowhorn` command included, can open an
-old or broken copy instead and get this dialog.
+An in-app update keeps the previous version until the new one starts, in
+`~/Library/Caches/ai.blowhorn.desktop/update-backup-<id>`. That folder is not
+an application, so nothing opens it by mistake. Older versions of Blowhorn
+kept it in Applications, as a hidden copy named `.Blowhorn-backup-<id>.app`.
+Every such copy carries Blowhorn's identity, so anything that opens Blowhorn
+without naming a path, a `blowhorn` command included, can open an old or
+broken copy instead and get this dialog.
 
-Blowhorn removes these copies itself each time it starts. When it can't,
-usually because another account on this computer owns the copy, it shows
-the copy's path once, with a **copy command** button. To remove one by
-hand:
+Blowhorn moves any hidden copy out of Applications and removes it, and clears
+old backups from the cache, each time it starts. If a copy can't be removed
+it tries again on the next start, and only if that fails too does it show the
+copy's path and what macOS said, with a **copy command** button. It says
+another account owns the copy only when that is true. To remove one by hand:
 
-1. List the hidden copies:
+1. List the leftover copies:
 
    ```bash
-   ls -a /Applications ~/Applications | grep -E '^\.Blowhorn-(backup|update)-'
+   ls -a /Applications ~/Applications ~/Library/Caches/ai.blowhorn.desktop | grep -E '^(\.Blowhorn-(backup|update)-|update-backup-)'
    ```
 
-2. Tell macOS to forget each one, then delete it. Replace the path with
-   the one you found, whether it is `.Blowhorn-backup-` or
-   `.Blowhorn-update-`. `sudo` asks for an administrator password:
+2. For each hidden `.app` copy in Applications, whether it is
+   `.Blowhorn-backup-` or `.Blowhorn-update-`, tell macOS to forget it.
+   Replace the path with the one you found:
 
    ```bash
    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -u '/Applications/.Blowhorn-backup-<id>.app'
+   ```
+
+3. Delete each copy. Replace the path with the one you found.
+   `sudo` asks for an administrator password:
+
+   ```bash
    sudo rm -rf '/Applications/.Blowhorn-backup-<id>.app'
+   sudo rm -rf ~/Library/Caches/ai.blowhorn.desktop/update-backup-<id>
    ```
 
 Never delete `/Applications/Blowhorn.app` itself this way.

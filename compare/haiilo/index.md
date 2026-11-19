@@ -45,4 +45,4 @@ Haiilo is right that employees carry more trust than a brand page. Blowhorn brin
 
 **Does Haiilo publish to Hacker News, Reddit or GitHub?** Not listed in the vendor knowledge-base list checked 2026-11-03. Slack and Teams are internal distribution to employees, not public advocacy publishing.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

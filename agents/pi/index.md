@@ -85,6 +85,7 @@ Slack's API, never the browser. [Slack docs](https://blowhorn.ai/docs/reference/
 
 - **[Post](https://blowhorn.ai/docs/reference/platforms/slack/#action-post)**: Sends a message as you to a channel or to a person, as #channel, @user, a channel ID, or a channel link. Shows a preview until you confirm. Limits: One profile sends per run. A target Blowhorn can't read is refused, never sent somewhere else.
 - **[Reply](https://blowhorn.ai/docs/reference/platforms/slack/#action-reply)**: Replies in a thread when you give it the link to the message.
+- **[React](https://blowhorn.ai/docs/reference/platforms/slack/#action-react)**: Adds an emoji reaction to a message. A reaction already there is left as-is. Take it back with --remove.
 
 ### Bluesky
 
@@ -103,8 +104,9 @@ Bluesky's API, never the browser. [Bluesky docs](https://blowhorn.ai/docs/refere
 GitHub's API, never the browser. [GitHub docs](https://blowhorn.ai/docs/reference/platforms/github/)
 
 - **[React](https://blowhorn.ai/docs/reference/platforms/github/#action-react)**: Adds the five upbeat reactions (+1, laugh, hooray, heart, rocket) to an issue or pull request from each of your profiles. Running it again adds none of them twice. Limits: GitHub doesn't publish posts; it needs an issue or pull request link.
+- **[Star](https://blowhorn.ai/docs/reference/platforms/github/#action-star)**: Stars each named repository from every selected profile, over the REST API. A repository already starred is counted apart, never starred twice. Limits: GitHub only. Repositories are named on the command line; star cannot be scheduled.
 - **[Follow](https://blowhorn.ai/docs/reference/platforms/github/#action-follow)**: Name a target account. With --limit 0, follow that account, or several comma-separated. With a positive limit, follow up to that many of the target's followers, never the target itself.
-- **[Find](https://blowhorn.ai/docs/reference/platforms/github/#action-find)**: Lists the people around a repository, so you can choose whom to reach. Limits: Lists only; it doesn't follow or react.
+- **[Find](https://blowhorn.ai/docs/reference/platforms/github/#action-find)**: Searches issues and pull requests by query, with repository, type, and state filters. Limits: Read-only. Issues and pull requests only, not repositories or code.
 
 ## Frequently Asked Questions {#questions}
 

@@ -64,7 +64,10 @@ blowhorn schedule resume
 
 The flagless pause writes a local file beside your config, so it works even
 when everything else is broken, and it survives a crash, a restart and a
-reboot. The service keeps running but claims nothing and exits 0.
+reboot. The service keeps running but claims nothing and exits 0. A pause
+you set while this computer is offline still counts: the local file is the
+record for this computer, and the change is carried into the next pass's
+record once your account answers again, so the other computers see it.
 Due times carry forward: a recurring activity that fell due during the pause runs
 once on resume, not once per missed interval.
 
@@ -97,26 +100,35 @@ computer sharing it honours them on its next claim; the flagless pause never
 touches your account. In the app every scope is one duty switch, reading
 **On duty** or **Off duty**:
 
-- **This computer** - the rail's switch and the popover's **This computer**
-  switch, the flagless pause above.
-- **The fleet** (every computer sharing your schedule, `--all`) - the
-  **Entire fleet** row on Home's Fleet card, **Take leave for the fleet** in
+- **This computer** - the rail's switch, the popover's **This computer**
+  switch, and this computer's row on Home's Fleet card, the flagless pause above.
+- **The fleet** (every computer running your activities, `--all`) - the
+  switch in the header of Home's Fleet card, **Take leave for the fleet** in
   Posture, or the popover's **Fleet** switch, which takes no reason. On Home,
-  the switch opens an optional reason under the row with two buttons: **Save**
+  the switch opens an optional reason under the header with two buttons: **Save**
   takes leave with the reason you typed, and **Skip** takes leave with no reason.
   Escape closes the reason and takes nothing. Clicking away keeps it open and
   takes nothing either. If the leave cannot be written, the reason stays put so
   you can press Save or Skip again. While the fleet is off duty,
-  the card shows who took it off duty, when and why, and this computer's row is
-  held until the fleet is back on duty.
+  the card names who took it off duty by their photo and first name (the photo
+  opens their public profile), shows the reason in quotes when one was given,
+  and a Since line with the full date and time on hover; when the account that
+  took leave cannot be named, it says "someone on your team". Each computer's
+  switch is held until the fleet is back on duty.
 - **This order** (`--activity N`) - the duty switch on the item's row in the
-  Routines list or on its calendar chip, reading **On duty** or **Off duty**.
-  While it is held, the item's details (click the item and it opens in a
-  dialog, a box over the screen) show who held it, when and why where the
-  **When** row opens, with **Resume**.
+  Routines list or on its calendar chip, reading **On duty** or **Off duty**,
+  and the same hold in the item's details as **On watch** or **Off watch**.
+  Off watch opens an optional reason under the switch: **Save** sends the
+  reason, **Skip** sends none, and Escape sends nothing. Clicking away keeps
+  the reason open and sends nothing. If the hold cannot be written, the reason
+  stays so you can press Save or Skip again. While it is held, the item's
+  details (click the item and it opens in a dialog, a box over the screen)
+  show who held it, when and why where the **When** row opens, with **Resume**.
 
-There is no switch for another computer: take leave on that computer from
-its own Blowhorn app, or take leave for the whole fleet.
+Home's Fleet card puts one switch on every computer in the list. This
+computer's switch is the same as the rail's. Another computer's switch shows
+the duty it last reported and is held: take leave on that computer from its
+own Blowhorn app, or take leave for the whole fleet.
 
 Lifting one scope leaves the other two as they were. A held activity still reads
 `due: yes` beside `paused: yes` in `blowhorn schedule list`: due keeps meaning

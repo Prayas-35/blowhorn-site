@@ -30,7 +30,7 @@ Your assistant can draft the week's posts from your content calendar. Blowhorn d
 
 **Does Blowhorn log in as me from its servers?** No. It does the typing and clicking in your own browser, signed in as you. No vendor server logs in as you.
 
-**What about Instagram, TikTok, Facebook and YouTube?** Coming soon. Today the queue covers LinkedIn, X, Reddit, Hacker News, Bluesky, GitHub and Slack.
+**What about Instagram, TikTok, Facebook and YouTube?** Blowhorn works on them in your own browser, signed in as you, like LinkedIn, X, Reddit and Hacker News.
 
 **Can my team amplify the launch?** Yes. Teammates and supporters add their own profiles to your account and join the wave. Multi-user team invites: Coming soon.
 

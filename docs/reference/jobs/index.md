@@ -41,6 +41,12 @@ immediately instead of waiting for the pass. A Risk Profile hold, including
 while a profile is warming up, keeps that run from starting until you confirm
 or pass `--ignore-risk`. A limit the platform publishes still applies.
 
+## Param values
+
+A param whose type the activity catalog fixes is refused when it does not parse, with the same wording on every surface. An integer param (`limit`, `lookback`, `older_than`, `sample`) must be a whole number, and a boolean param (`headless`, `headed`, `verbose`, `apply`, and the reconcile flag) must be true or false (`1`, `true`, `yes`, `on`, `y`, and their false counterparts). `blowhorn schedule upsert`, the MCP `schedule_upsert` tool, and the desktop editor all refuse the write, so a typo like `limit=2o` never stores a silent 0. An activity already stored with such a value loads as invalid: the pass skips it, and `schedule list` and `schedule why` name the bad param, until a corrected upsert replaces it. An empty param value is absent, and the run takes the flag's default.
+
+A new write must also carry every param the activity catalog marks required for its command (`follow` needs `target`, for example). `blowhorn schedule upsert`, the MCP `schedule_upsert` tool, and the desktop editor refuse a write without one in the same words, for example `Missing param “target” for command “follow”: an unattended run cannot do without it`, because a scheduled run has no one to ask and would fail every time. The rule applies to new writes only: an activity stored before it still loads and runs.
+
 ## Recurrence
 
 | Word | Means |
@@ -97,6 +103,19 @@ passes the other Posture checks for that one run and still stops at the
 platform's own limit. The limits themselves
 are listed under
 [A limit the platform publishes is the one hard stop](/docs/how-to/settings/choose-your-rules-of-engagement/#a-limit-the-platform-publishes-is-the-one-hard-stop).
+
+## Visibility
+
+An activity may carry its own visibility: write `visibility=private`
+in its Params and that activity's completed runs stay inside your org,
+never appearing in the public activity feed on blowhorn.ai. Leave the
+entry out, or set it to `public`, and the activity follows your
+account's [Share my activity publicly](/docs/how-to/settings/share-activity/)
+setting. The account setting still wins: with it off, nothing from any
+activity appears in the feed. A word that is not `public` or `private`
+is refused when you save the activity. There is no separate control for
+it on the activity yet; the account switch in Settings is the only
+switch.
 
 ## Pause scopes
 

@@ -79,11 +79,16 @@ annotated in the template:
   feeds and recency sorting need one), `layout` (always `video`),
   `duration` (`m:ss`, shown on the card).
 - `videoType`: `local` for a file the site hosts itself, with `mp4` and
-  `webm` paths under `assets/video/` and a 16:9 poster image. `youtube` is
-  reserved: YouTube embeds and YouTube-hosted poster images are new outside
-  hosts, so the first embedded video ships with a privacy-page update in the
-  same change, per the site's third-party rule. Self-hosted videos need no
-  privacy update, and their posters are the site's own files.
+  `webm` paths under `assets/video/` and a 16:9 poster image. `youtube` for
+  a film hosted on YouTube, with `youtubeId` set to the video id, or to
+  `TODO_YOUTUBE_ID` until the film is uploaded. A `TODO_YOUTUBE_ID`
+  placeholder does not contact YouTube. Real ids play only after the reader
+  presses play, through the `youtube` shortcode (or the same facade on a
+  comparison page). Posters must be files this site hosts; never use a
+  YouTube-hosted thumbnail. The privacy page and `check-third-party.py`
+  already disclose `www.youtube-nocookie.com` for this facade. Self-hosted
+  videos still need no YouTube disclosure, and their posters are the site's
+  own files.
 - `column`: exactly one of `desk-of-the-general`, `boot-camp` or
   `from-the-field`, as for articles above.
 - `categories`: the display name of the category folder the file lives in.

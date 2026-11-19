@@ -46,6 +46,22 @@ blowhorn auth share-activity-publicly --on
 `--json` prints the same facts for a script. `--dry-run` with `--on` or
 `--off` reads the account and sends nothing.
 
+## One activity
+
+One activity can opt itself out while the account stays on: set
+`visibility=private` in that activity's Params. From the command line:
+
+```bash
+blowhorn schedule upsert --activity 7 --payload '{"Params":"visibility=private"}' --json
+```
+
+In the app, open the activity and add `visibility=private` to its raw
+params. Leave the entry out, or set it to `public`, and the activity
+follows the account setting above. The account setting still wins over
+the activity: with the account off, nothing from any activity appears
+in the feed, whatever an activity says. A word that is not `public` or
+`private` is refused when you save the activity.
+
 ## Related
 
 - [Turn anonymous usage data on or off](/docs/how-to/settings/share-usage-data/) - the other switch

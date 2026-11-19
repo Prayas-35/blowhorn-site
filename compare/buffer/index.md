@@ -30,7 +30,7 @@ Buffer pricing as of Oct 2026: Free (10 posts a channel); Essentials $5 a channe
 | Works with every computer switched off | Yes | No. As long as one of your computers is awake, the schedule runs |
 | AI agents | Hosted MCP server on every plan, public API, plus AI Assistant on every plan | MCP server, AI skills and a full CLI with --json and --dry-run on writes. AI drafts, you decide |
 | Bought engagement | None | None. Blowhorn sells no followers, likes or reposts |
-| Price | Per channel | Free plan available, see pricing |
+| Price | Per channel | Free during early access |
 
 ## Strong signal, not bought numbers
 
@@ -46,4 +46,4 @@ Buffer is honest software and it sells no engagement either, so this one is abou
 
 **Does Blowhorn post while every computer is switched off?** No. As long as one computer set up for the profile is awake, the schedule runs. With every computer switched off, nothing goes out. That is the honest trade for posting as you, from your own browser.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

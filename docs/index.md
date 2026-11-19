@@ -91,22 +91,18 @@
   <a class="platform" href="reference/platforms/youtube/">
     <span class="logo-tile"><img src="../assets/platforms/youtube-simple-icons.svg" alt="" width="28" height="28"></span>
     <span class="ui">YouTube</span>
-    <span class="caption">Coming soon</span>
   </a>
   <a class="platform" href="reference/platforms/instagram/">
     <span class="logo-tile"><img src="../assets/platforms/instagram-simple-icons.svg" alt="" width="28" height="28"></span>
     <span class="ui">Instagram</span>
-    <span class="caption">Coming soon</span>
   </a>
   <a class="platform" href="reference/platforms/tiktok/">
     <span class="logo-tile"><img src="../assets/platforms/tiktok-simple-icons.svg" alt="" width="28" height="28"></span>
     <span class="ui">TikTok</span>
-    <span class="caption">Coming soon</span>
   </a>
   <a class="platform" href="reference/platforms/facebook/">
     <span class="logo-tile"><img src="../assets/platforms/facebook-simple-icons.svg" alt="" width="28" height="28"></span>
     <span class="ui">Facebook</span>
-    <span class="caption">Coming soon</span>
   </a>
 </div>
 

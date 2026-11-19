@@ -45,4 +45,4 @@ Automating more invites and visits gets more numbers. Blowhorn caps itself and s
 
 **Does Linked Helper keep working when my computer sleeps?** On its local version, no: the vendor says the computer has to be on and running the app, unless you run it on a server you control. Blowhorn has the same rule in another shape: it needs at least one of your computers awake.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

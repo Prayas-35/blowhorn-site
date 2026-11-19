@@ -42,4 +42,4 @@ Separate identities are a legitimate need for ad ops, testing and e-commerce. Bl
 
 **Is Blowhorn an antidetect browser?** No. Blowhorn uses your real browser, signed in as you, and hands CAPTCHAs and 2FA back to you. Curious what sites can see about your browser? [Run the free check at Blowhorn Tells](https://tells.blowhorn.ai/)
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

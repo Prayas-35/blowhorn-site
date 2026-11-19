@@ -43,4 +43,4 @@ AuthoredUp helps you write a post worth discussing. Blowhorn helps the discussio
 
 **Can I use AuthoredUp and Blowhorn together?** Yes. Write and polish the post in AuthoredUp, then let Blowhorn publish it across your networks and sound the wave across your profiles.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

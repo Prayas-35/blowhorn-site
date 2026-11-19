@@ -43,4 +43,4 @@ Later helps a brand look good. Blowhorn helps a message get answered. On develop
 
 **Does Blowhorn support Instagram?** Not yet. Instagram, TikTok, Facebook and YouTube are Coming soon.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

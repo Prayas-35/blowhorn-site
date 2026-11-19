@@ -39,4 +39,4 @@ Doing research by hand doesn't scale, which is what Comet is for. For a voice th
 
 **Is Comet better than Blowhorn?** As a browser, yes, it's a different and broader product. For a scheduled, multi-profile social operation, we think Blowhorn is the better fit.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)

@@ -41,7 +41,11 @@ here and the next pass claims again.
 `/Applications/Blowhorn.app` is one app for every macOS user on the Mac.
 While another user on this Mac has Blowhorn open, or has its background
 service running after quitting it, the update says so and waits: it installs
-once they quit it and their service stops.
+once they quit it and their service stops. If `/Applications/Blowhorn.app`
+belongs to another account on this Mac, or your account can't write to the
+Applications folder, the update is not started and says why before anything
+is downloaded: update from the account that owns it, or reinstall Blowhorn
+from yours.
 
 ## What you see while it updates
 

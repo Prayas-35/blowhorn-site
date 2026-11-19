@@ -43,4 +43,4 @@ Bought followers and likes move a number. They rarely move a person. X's rules p
 
 **Is Thunderclap.com better than Blowhorn?** If a fast number is what you need, it does what it says. If you want real people and real conversation, we think Blowhorn is the better fit.
 
-[Download Blowhorn for Mac](https://blowhorn.ai/download/)
+[Download](https://blowhorn.ai/download/)
