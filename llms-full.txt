@@ -845,6 +845,8 @@ description: How Blowhorn handles your data, sessions and accounts, in plain lan
 
 Curious what websites can read about your browser? [Blowhorn Tells](https://tells.blowhorn.ai/) is our free "Am I a Bot?" check. It shows the bot-detection and fingerprint signals a site can see, in plain words. The site keeps no copy, and its own page says exactly which outside services see your IP address.
 
+{{< cookie-preferences >}}
+
 ## Report a security issue
 
 If you think you have found a security vulnerability in Blowhorn, send the details privately to [security@blowhorn.ai](mailto:security@blowhorn.ai) rather than opening a public issue. We acknowledge and analyze each report within 10 working days and keep the reporter updated while it is addressed. The [security policy](https://github.com/blowhorn-ai/blowhorn-site/blob/master/SECURITY.md) explains what to report and how fixes are disclosed.
@@ -882,7 +884,7 @@ Google Analytics 4 runs only if you choose Accept in the cookie notice.
 - If you accept: your browser loads Google's tag (gtag.js) from `www.googletagmanager.com` on each page. It sends Google which pages you view, how you arrived, and roughly where you are and what device and browser you use, along with your IP address and the usual request headers. It sets first-party cookies named `_ga` and `_ga_<id>` on blowhorn.ai so that repeat visits can be counted. Advertising storage stays denied.
 - How it's used: Layer5 uses the reports only to improve this site, and doesn't combine them with your Blowhorn account. Google's handling is covered by the [Google privacy policy](https://policies.google.com/privacy) and [how Google uses information from sites that use its services](https://policies.google.com/technologies/partner-sites).
 - If you accept, the site also keeps how you arrived (the campaign tags on the first page's address and the referring site's host, never the full address) in your browser's session storage (`blowhorn-docs-attribution`) and sends it with a few events on the MCP guides: a guide view, a code snippet copy and a click on an install or download link. Closing the tab or withdrawing consent removes it.
-- Your choice is kept in your browser's local storage (`blowhorn-consent`), so the notice doesn't come back. To change it, use **Cookie preferences** at the bottom of any page. If you withdraw consent, the page reloads without the tag. You can also delete the `_ga` cookies in your browser settings.
+- Your choice is kept in your browser's local storage (`blowhorn-consent`), so the notice doesn't come back. To change it, use **Cookie preferences** on the [Trust Center page](/legal/#cookie-preferences). If you withdraw consent, the page reloads without the tag. You can also delete the `_ga` cookies in your browser settings.
 
 ### YouTube videos {#youtube-videos}
 
